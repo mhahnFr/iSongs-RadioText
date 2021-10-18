@@ -38,7 +38,69 @@ class (iSongsRDS) in the AWT-EventQueue thread. This class is a subclass of
 JFrame and it implements the ActionListener interface. The constructor creates
 a new application window and positions it at the same position and with the
 same size as the last time. There is a window listener, which saves the current
-window settings when the window is closed. Once
-In order to get the currently broadcasted radio text from iTunes, I wrote a
-small AppleScript which simply returned to contents of the appopriate variable
-of iTunes.
+window settings when the window is closed. Once everything is settled up, a
+timer is started, which triggers the system to check wether a (new) song is
+broadcasted. In order to get the currently broadcasted radio text from iTunes,
+I wrote a small AppleScript which simply returned to contents of the appopriate
+variable of iTunes. If the script returns the currently broadcasted radio text,
+the Interpreter object scans for the specific pattern in that string to see
+wether it contains song inormtions. If there is no content in that variable or
+if it is indicating that iTunes has no such variable (at the moment), the
+system to check the JSON file from the webplayer is activated. It parses the
+JSON file, which simply includes some HTML pieces which are containing the song
+informations. If the detected song differs from the one that is currently
+displayed, it will be shown in the application window. In order to not block
+the GUI thread, those tasks are running in a seperate thread.
+
+### The save title button
+If the user clicks on the button to save the currently shown title, the current
+song informations are saved temporary and a file containing these informations
+is written in the indicated directory. This task runs also in its own thread.
+The writing status is displayed in the title bar of the application window.
+This task is however run on the AWT-EventQueue.
+
+### The script
+The script to get the song informations can be saved anywhere, or it can be
+missing at all.
+
+### The multi-threading
+To make the execution of this application run more smoothly, I used the
+ScheduledExecutorService. It is initialized with two threads. All task are
+added to the queue of that service, so they can be runned concurrently. As
+there are at most two tasks running parallel, I decided to use only two threads
+of that service. All GUI tasks are passed to the AWT-EventQueue to respect the
+Java threading guidelines.
+
+The benefits of the multithreading in this application are to be able to write
+song informations to a file, meanwhile refreshing the title informations
+without loosing the optionally written out informations and to keep the GUI
+reactive while using it to display the progress of writing.
+
+### The settings
+All relevant variables can be changed in the settings window.
+ - The URL to the JSON file can be adjusted,
+ - wether it should be checked,
+ - where to write the files containing the song informations,
+ - the delay to wait between checking for the currently broadcasted song.
+Finally, there is a button to reset all settings.
+
+Those varaibles are not the only ones to be saved, the position and the width
+of the application window are also saved.
+
+### The parsing
+The song information in the radio text is exspected to be in the following
+format: ``<title name> / <interpreter name>``. More explicitly, the parser
+checks wether a slash preceeded and followed by a space is present. If that is
+the case, the last occurance of such is used to determine the name of the song
+and its interpreter.
+
+I did not include a JSON parsing library nor wrote it myself, as the JSON file
+is only containing a few HTML pieces, which I also do not parse in a
+traditional way. All I did is to hardcode the pattern, where to find the song
+informations.
+
+## Final notes
+The application is optimized for macOS, hence the usage of an AppleScript, but
+it also runs on any other system when only the JSON file is used as input.
+
+© 2014, 2019 [mhahnFr](https://www.github.com/mhahnFr)
