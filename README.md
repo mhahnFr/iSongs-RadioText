@@ -26,9 +26,9 @@ file, if the user wants to.
 
 ## Graphical user interface
 The GUI of the application is kept quite simple: There is a single window
-containing two text labels showing the name and the interpreter of the curently
+containing two text labels showing the name and the interpreter of the currently
 broadcasted song, underneath them one can find a button to write the
-infomormations of the title to a file. The title bar of the window serves as
+informations of the song to a file. The title bar of the window serves as
 status label. Also there is a window which displays the settings of the
 application and allows the user to edit them.
 
@@ -43,9 +43,9 @@ timer is started, which triggers the system to check wether a (new) song is
 broadcasted. In order to get the currently broadcasted radio text from iTunes,
 I wrote a small AppleScript which simply returned to contents of the appopriate
 variable of iTunes. If the script returns the currently broadcasted radio text,
-the Interpreter object scans for the specific pattern in that string to see
-wether it contains song inormtions. If there is no content in that variable or
-if it is indicating that iTunes has no such variable (at the moment), the
+an parser object scans for the specific pattern in that string to see
+wether it contains song informations. If there is no content in that variable
+or if it is indicating that iTunes has no such variable (at the moment), the
 system to check the JSON file from the webplayer is activated. It parses the
 JSON file, which simply includes some HTML pieces which are containing the song
 informations. If the detected song differs from the one that is currently
@@ -55,7 +55,7 @@ the GUI thread, those tasks are running in a seperate thread.
 ### The save title button
 If the user clicks on the button to save the currently shown title, the current
 song informations are saved temporary and a file containing these informations
-is written in the indicated directory. This task runs also in its own thread.
+is written into the indicated directory. This task also runs in its own thread.
 The writing status is displayed in the title bar of the application window.
 This task is however run on the AWT-EventQueue.
 
@@ -72,9 +72,9 @@ of that service. All GUI tasks are passed to the AWT-EventQueue to respect the
 Java threading guidelines.
 
 The benefits of the multithreading in this application are to be able to write
-song informations to a file, meanwhile refreshing the title informations
+song informations to a file, meanwhile refresh the title informations
 without loosing the optionally written out informations and to keep the GUI
-reactive while using it to display the progress of writing.
+reactive while using it to display the progress of the writing.
 
 ### The settings
 All relevant variables can be changed in the settings window.
@@ -82,7 +82,7 @@ All relevant variables can be changed in the settings window.
  - wether it should be checked,
  - where to write the files containing the song informations,
  - the delay to wait between checking for the currently broadcasted song.
-Finally, there is a button to reset all settings.
+ - Finally, there is a button to reset all settings.
 
 Those varaibles are not the only ones to be saved, the position and the width
 of the application window are also saved.
