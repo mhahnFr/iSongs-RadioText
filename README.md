@@ -27,6 +27,8 @@ The application should also be capable to save the title informations to a
 file, if the user wants to.
 
 ## Graphical user interface
+<p><img src="https://raw.githubusercontent.com/mhahnFr/iSongs-RadioText/master/screenshots/main_gui.png" alt=""/></p>
+
 The GUI of the application is kept quite simple: There is a single window
 containing two text labels showing the name and the interpreter of the currently
 broadcasted song, underneath them one can find a button to write the
@@ -79,6 +81,8 @@ without loosing the optionally written out informations and to keep the GUI
 reactive while using it to display the progress of the writing.
 
 ### The settings
+<p><img src="https://raw.githubusercontent.com/mhahnFr/iSongs-RadioText/master/screenshots/settings.png" alt=""/></p>
+
 All relevant variables can be changed in the settings window.
  - The URL to the JSON file can be adjusted,
  - wether it should be checked,
