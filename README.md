@@ -3,7 +3,9 @@ This repository contains a project whose intial idea goes back to 2014. It is
 an extraction from a project that I started 2013 for learning purposes. This
 repository contains the reimplemented version from 2019, when I completely
 rewrote it. The main changements were to add some Java best practices and some
-multi-threading.
+multi-threading. Also, I updated it to use the newest JRE of that time, so in
+order to compile the project or run the release, Java in version 9 or higher is
+needed.
 
 ## Idea
 The initial idea was to create an application which parsed the broadcasted
