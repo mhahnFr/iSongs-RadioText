@@ -90,7 +90,7 @@ All relevant variables can be changed in the settings window.
  - the delay to wait between checking for the currently broadcasted song.
  - Finally, there is a button to reset all settings.
 
-Those varaibles are not the only ones to be saved, the position and the width
+Those variables are not the only ones to be saved, the position and the width
 of the application window are also saved.
 
 ### The parsing
