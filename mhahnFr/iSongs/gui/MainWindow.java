@@ -57,6 +57,7 @@ public class MainWindow extends JFrame {
 
     private void showSettings() {
         final var settingsWindow = new SettingsWindow(this);
+        settingsWindow.setLocationRelativeTo(this);
         settingsWindow.setVisible(true);
     }
 
