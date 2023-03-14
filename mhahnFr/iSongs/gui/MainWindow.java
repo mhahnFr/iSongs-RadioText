@@ -1,5 +1,6 @@
 package iSongs.gui;
 
+import iSongs.core.Constants;
 import mhahnFr.utils.gui.DarkComponent;
 
 import javax.swing.*;
@@ -11,7 +12,7 @@ public class MainWindow extends JFrame {
     private final List<DarkComponent<? extends JComponent>> components = new ArrayList<>();
 
     public MainWindow() {
-//        super(Constants.NAME);
+        super(Constants.NAME);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         final var hasSettings = false;// Settings.getInstance().hasSettings();
