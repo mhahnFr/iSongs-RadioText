@@ -3,13 +3,14 @@ package iSongs.gui;
 import iSongs.core.Constants;
 import iSongs.core.Settings;
 import mhahnFr.utils.gui.DarkComponent;
+import mhahnFr.utils.gui.DarkModeListener;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainWindow extends JFrame {
+public class MainWindow extends JFrame implements DarkModeListener {
     private final List<DarkComponent<? extends JComponent>> components = new ArrayList<>();
 
     public MainWindow() {
@@ -45,6 +46,16 @@ public class MainWindow extends JFrame {
         getContentPane().add(panel);
 
         restoreBounds();
+
+        Settings.getInstance().addDarkModeListener(this);
+        darkModeToggled(Settings.getInstance().getDarkMode());
+    }
+
+    @Override
+    public void darkModeToggled(boolean dark) {
+        for (final var component : components) {
+            component.setDark(dark);
+        }
     }
 
     private void addSettingsHook() {
@@ -83,6 +94,8 @@ public class MainWindow extends JFrame {
 
     @Override
     public void dispose() {
+        Settings.getInstance().removeDarkModeListener(this);
+
         if (!Settings.getInstance().setWindowX(getX())
                                    .setWindowY(getY())
                                    .setWindowWidth(getWidth())

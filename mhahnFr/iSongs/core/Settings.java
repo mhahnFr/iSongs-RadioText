@@ -1,12 +1,16 @@
 package iSongs.core;
 
 import iSongs.iSongs;
+import mhahnFr.utils.gui.DarkModeListener;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.prefs.Preferences;
 
 public class Settings {
     private static Settings instance;
     private final Preferences preferences = Preferences.userNodeForPackage(iSongs.class);
+    private final List<DarkModeListener> listeners = new ArrayList<>();
 
     private Settings() {}
 
@@ -24,6 +28,17 @@ public class Settings {
 
     public int getWindowY() {
         return preferences.getInt(Key.WINDOW_Y, -1);
+    }
+
+    public boolean getDarkMode() {
+        return preferences.getInt(Key.DARK_MODE, 0) == 1;
+    }
+
+    public void setDarkMode(final boolean dark) {
+        preferences.putInt(Key.DARK_MODE, dark ? 1 : 0);
+        for (final var listener : listeners) {
+            listener.darkModeToggled(dark);
+        }
     }
 
     public Settings setWindowHeight(final int height) {
@@ -54,6 +69,14 @@ public class Settings {
         return true;
     }
 
+    public void addDarkModeListener(final DarkModeListener listener) {
+        listeners.add(listener);
+    }
+
+    public void removeDarkModeListener(final DarkModeListener listener) {
+        listeners.remove(listener);
+    }
+
     public static Settings getInstance() {
         if (instance == null) {
             instance = new Settings();
@@ -68,5 +91,6 @@ public class Settings {
         public static final String WINDOW_WIDTH  = BUNDLE_ID + ".windowWidth";
         public static final String WINDOW_X      = BUNDLE_ID + ".windowX";
         public static final String WINDOW_Y      = BUNDLE_ID + ".windowY";
+        public static final String DARK_MODE     = BUNDLE_ID + ".darkMode";
     }
 }

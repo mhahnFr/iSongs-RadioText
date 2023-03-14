@@ -1,7 +1,9 @@
 package iSongs.gui;
 
 import iSongs.core.Constants;
+import iSongs.core.Settings;
 import mhahnFr.utils.gui.DarkComponent;
+import mhahnFr.utils.gui.DarkModeListener;
 import mhahnFr.utils.gui.DarkTextComponent;
 import mhahnFr.utils.gui.HintTextField;
 
@@ -11,13 +13,11 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SettingsWindow extends JDialog {
+public class SettingsWindow extends JDialog implements DarkModeListener {
     private final List<DarkComponent<? extends JComponent>> components = new ArrayList<>();
 
     public SettingsWindow(final JFrame owner) {
         super(owner, Constants.NAME + ": Einstellungen", true);
-
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         final var panel = new DarkComponent<>(new JPanel(new BorderLayout()), components).getComponent();
             final var darkBox = new DarkComponent<>(new JCheckBox("Dark"), components).getComponent();
@@ -63,6 +63,27 @@ public class SettingsWindow extends JDialog {
 
         getContentPane().add(panel);
 
+        final var settings = Settings.getInstance();
+        darkBox.setSelected(settings.getDarkMode());
+        darkBox.addItemListener(__ -> settings.setDarkMode(darkBox.isSelected()));
+
+        settings.addDarkModeListener(this);
+        darkModeToggled(settings.getDarkMode());
+
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         pack();
+    }
+
+    @Override
+    public void darkModeToggled(boolean dark) {
+        for (final var component : components) {
+            component.setDark(dark);
+        }
+    }
+
+    @Override
+    public void dispose() {
+        Settings.getInstance().removeDarkModeListener(this);
+        super.dispose();
     }
 }
