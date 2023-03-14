@@ -1,6 +1,7 @@
 package iSongs.gui;
 
 import iSongs.core.Constants;
+import iSongs.core.Settings;
 import mhahnFr.utils.gui.DarkComponent;
 
 import javax.swing.*;
@@ -15,8 +16,6 @@ public class MainWindow extends JFrame {
         super(Constants.NAME);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        final var hasSettings = false;// Settings.getInstance().hasSettings();
-
         final var panel = new DarkComponent<>(new JPanel(new GridLayout(4, 1)), components).getComponent();
             final var label = new DarkComponent<>(new JLabel(" Aktueller Titel:"), components).getComponent();
 
@@ -27,7 +26,7 @@ public class MainWindow extends JFrame {
 
             final var saveButton = new JButton("Titel merken");
             final JComponent toAdd;
-            if (hasSettings) {
+            if (hasSettings()) {
                 toAdd = saveButton;
             } else {
                 toAdd = new DarkComponent<>(new JPanel(), components).getComponent();
@@ -45,8 +44,39 @@ public class MainWindow extends JFrame {
         restoreBounds();
     }
 
-    private void restoreBounds() {
+    private boolean hasSettings() {
         // TODO
-        pack();
+        return true;
+    }
+
+    private void restoreBounds() {
+        final var settings = Settings.getInstance();
+
+        final int x      = settings.getWindowX(),
+                  y      = settings.getWindowY(),
+                  width  = settings.getWindowWidth(),
+                  height = settings.getWindowHeight();
+
+        if (width < 0 || height < 0) {
+            pack();
+        }
+        if (x < 0 || y < 0) {
+            setLocationRelativeTo(null);
+        }
+    }
+
+    @Override
+    public void dispose() {
+        if (!Settings.getInstance().setWindowX(getX())
+                                   .setWindowY(getY())
+                                   .setWindowWidth(getWidth())
+                                   .setWindowHeight(getHeight())
+                                   .flush()) {
+            JOptionPane.showMessageDialog(this,
+                    "Konnte UI-State nicht speichern!",
+                    Constants.NAME,
+                    JOptionPane.ERROR_MESSAGE);
+        }
+        super.dispose();
     }
 }
