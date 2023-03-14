@@ -25,13 +25,16 @@ public class MainWindow extends JFrame {
             final var interpreter = new DarkComponent<>(new JLabel("Laden...", SwingConstants.CENTER), components).getComponent();
 
             final var saveButton = new JButton("Titel merken");
+            saveButton.addActionListener(__ -> saveTitle());
             final JComponent toAdd;
             if (hasSettings()) {
+                addSettingsHook();
                 toAdd = saveButton;
             } else {
                 toAdd = new DarkComponent<>(new JPanel(), components).getComponent();
                 toAdd.setLayout(new BoxLayout(toAdd, BoxLayout.X_AXIS));
                     final var settingsButton = new JButton("Einstellungen");
+                    settingsButton.addActionListener(__ -> showSettings());
                 toAdd.add(settingsButton);
                 toAdd.add(saveButton);
             }
@@ -44,9 +47,21 @@ public class MainWindow extends JFrame {
         restoreBounds();
     }
 
+    private void addSettingsHook() {
+        Desktop.getDesktop().setPreferencesHandler(__ -> showSettings());
+    }
+
     private boolean hasSettings() {
+        return Desktop.getDesktop().isSupported(Desktop.Action.APP_PREFERENCES);
+    }
+
+    private void showSettings() {
+        final var settingsWindow = new SettingsWindow(this);
+        settingsWindow.setVisible(true);
+    }
+
+    private void saveTitle() {
         // TODO
-        return true;
     }
 
     private void restoreBounds() {
