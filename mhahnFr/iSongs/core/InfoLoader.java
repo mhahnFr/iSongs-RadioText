@@ -17,10 +17,13 @@ import java.util.concurrent.TimeUnit;
 public class InfoLoader {
     private final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(2);
     private final Runnable trackUpdater;
+    private final WriteCallback writeCallback;
     private ScheduledFuture<?> updateFuture;
 
-    public InfoLoader(final Runnable trackUpdater) {
-        this.trackUpdater = trackUpdater;
+    public InfoLoader(final Runnable      trackUpdater,
+                      final WriteCallback writeCallback) {
+        this.trackUpdater  = trackUpdater;
+        this.writeCallback = writeCallback;
     }
 
     public void start() {
@@ -44,7 +47,22 @@ public class InfoLoader {
         // TODO
     }
 
-    public void saveTrack() throws IOException {
+    public void saveSong() {
+        executorService.schedule(this::saveSongImpl, 0, TimeUnit.NANOSECONDS);
+    }
+
+    private void saveSongImpl() {
+        Pair<String, String> song = null;
+        Exception e               = null;
+        try {
+            song = saveTrack();
+        } catch (Exception exception) {
+            e = exception;
+        }
+        writeCallback.songWritten(song, e);
+    }
+
+    private Pair<String, String> saveTrack() throws IOException {
         if (!hasTrack()) {
             throw new IllegalStateException("No track recognized!");
         }
@@ -52,11 +70,13 @@ public class InfoLoader {
         if (path == null || path.isBlank()) {
             throw new IllegalStateException("Save folder not set!");
         }
-        final var buffer = "titel:" + "<title>" + System.lineSeparator() +
-                           "interpreter:" + "<interpreter>";
+        final var song = getCurrentSong();
+        final var buffer = "titel:" + song.getFirst() + System.lineSeparator() +
+                           "interpreter:" + song.getSecond();
         try (final var writer = new BufferedWriter(new FileWriter(createFileName()))) {
             writer.write(buffer);
         }
+        return song;
     }
 
     public boolean hasTrack() {
