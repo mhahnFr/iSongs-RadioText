@@ -10,15 +10,12 @@ import mhahnFr.utils.gui.HintTextField;
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import java.awt.*;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SettingsWindow extends JDialog implements DarkModeListener {
     private final List<DarkComponent<? extends JComponent>> components = new ArrayList<>();
     private final JLabel folderChangeLabel;
-    private final JSpinner delaySpinner;
     private final JTextField urlField;
 
     public SettingsWindow(final JFrame owner) {
@@ -53,7 +50,7 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
                 final var delayPanel = new DarkComponent<>(new JPanel(new GridLayout(2, 1)), components).getComponent();
                     final var delayLabel = new DarkComponent<>(new JLabel("Delay:"), components).getComponent();
 
-                    delaySpinner = new DarkComponent<>(new JSpinner(), components).getComponent();
+                    final var delaySpinner = new DarkComponent<>(new JSpinner(), components).getComponent();
                 delayPanel.add(delayLabel);
                 delayPanel.add(delaySpinner);
                 delayPanel.setBorder(new EtchedBorder());
@@ -75,7 +72,7 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
         urlField.setText(settings.getURL());
 
         delaySpinner.setValue(settings.getDelay());
-        delaySpinner.addChangeListener(__ -> settings.setDelay((Long) delaySpinner.getValue()));
+        delaySpinner.addChangeListener(__ -> settings.setDelay((Integer) delaySpinner.getValue()));
 
         folderChangeLabel.setText(settings.getSavePath());
         folderChangeButton.addActionListener(__ -> chooseSaveFolder());
@@ -129,8 +126,7 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
         final var settings = Settings.getInstance();
 
         settings.removeDarkModeListener(this);
-        if (!settings.setDelay((Long) delaySpinner.getValue())
-                     .setURL(urlField.getText())
+        if (!settings.setURL(urlField.getText())
                      .flush()) {
             JOptionPane.showMessageDialog(this,
                     "Konnte Einstellungen nicht sichern!",
