@@ -1,6 +1,6 @@
-package iSongs;
+package mhahnFr.iSongs;
 
-import iSongs.gui.MainWindow;
+import mhahnFr.iSongs.gui.MainWindow;
 
 import java.awt.EventQueue;
 

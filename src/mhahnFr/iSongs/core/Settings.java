@@ -1,6 +1,6 @@
-package iSongs.core;
+package mhahnFr.iSongs.core;
 
-import iSongs.iSongs;
+import mhahnFr.iSongs.iSongs;
 import mhahnFr.utils.gui.DarkModeListener;
 
 import java.util.ArrayList;

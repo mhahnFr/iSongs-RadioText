@@ -1,8 +1,8 @@
-package iSongs.gui;
+package mhahnFr.iSongs.gui;
 
-import iSongs.core.Constants;
-import iSongs.core.InfoLoader;
-import iSongs.core.Settings;
+import mhahnFr.iSongs.core.Constants;
+import mhahnFr.iSongs.core.InfoLoader;
+import mhahnFr.iSongs.core.Settings;
 import mhahnFr.utils.Pair;
 import mhahnFr.utils.gui.DarkComponent;
 import mhahnFr.utils.gui.DarkModeListener;

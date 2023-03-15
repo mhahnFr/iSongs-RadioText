@@ -1,4 +1,4 @@
-package iSongs.core;
+package mhahnFr.iSongs.core;
 
 import java.util.Map;
 
