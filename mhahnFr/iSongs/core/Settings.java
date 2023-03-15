@@ -34,6 +34,14 @@ public class Settings {
         return preferences.getInt(Key.DARK_MODE, 0) == 1;
     }
 
+    public long getDelay() {
+        return preferences.getLong(Key.DELAY, 1000);
+    }
+
+    public void setDelay(final long delay) {
+        preferences.putLong(Key.DELAY, delay);
+    }
+
     public void setDarkMode(final boolean dark) {
         preferences.putInt(Key.DARK_MODE, dark ? 1 : 0);
         for (final var listener : listeners) {
@@ -92,5 +100,6 @@ public class Settings {
         public static final String WINDOW_X      = BUNDLE_ID + ".windowX";
         public static final String WINDOW_Y      = BUNDLE_ID + ".windowY";
         public static final String DARK_MODE     = BUNDLE_ID + ".darkMode";
+        public static final String DELAY         = BUNDLE_ID + ".delay";
     }
 }

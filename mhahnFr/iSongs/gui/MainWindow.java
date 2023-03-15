@@ -1,6 +1,7 @@
 package iSongs.gui;
 
 import iSongs.core.Constants;
+import iSongs.core.InfoLoader;
 import iSongs.core.Settings;
 import mhahnFr.utils.gui.DarkComponent;
 import mhahnFr.utils.gui.DarkModeListener;
@@ -12,6 +13,9 @@ import java.util.List;
 
 public class MainWindow extends JFrame implements DarkModeListener {
     private final List<DarkComponent<? extends JComponent>> components = new ArrayList<>();
+    private final InfoLoader loader = new InfoLoader(this::updateUI);
+    private final JLabel titleLabel;
+    private final JLabel interpreterLabel;
 
     public MainWindow() {
         super(Constants.NAME);
@@ -20,10 +24,10 @@ public class MainWindow extends JFrame implements DarkModeListener {
         final var panel = new DarkComponent<>(new JPanel(new GridLayout(4, 1)), components).getComponent();
             final var label = new DarkComponent<>(new JLabel(" Aktueller Titel:"), components).getComponent();
 
-            final var titleLabel = new DarkComponent<>(new JLabel("Laden...", SwingConstants.CENTER), components).getComponent();
+            titleLabel = new DarkComponent<>(new JLabel("Laden...", SwingConstants.CENTER), components).getComponent();
             titleLabel.setFont(titleLabel.getFont().deriveFont(Font.BOLD));
 
-            final var interpreter = new DarkComponent<>(new JLabel("Laden...", SwingConstants.CENTER), components).getComponent();
+            interpreterLabel = new DarkComponent<>(new JLabel("Laden...", SwingConstants.CENTER), components).getComponent();
 
             final var saveButton = new JButton("Titel merken");
             saveButton.addActionListener(__ -> saveTitle());
@@ -41,7 +45,7 @@ public class MainWindow extends JFrame implements DarkModeListener {
             }
         panel.add(label);
         panel.add(titleLabel);
-        panel.add(interpreter);
+        panel.add(interpreterLabel);
         panel.add(toAdd);
         getContentPane().add(panel);
 
@@ -49,12 +53,28 @@ public class MainWindow extends JFrame implements DarkModeListener {
 
         Settings.getInstance().addDarkModeListener(this);
         darkModeToggled(Settings.getInstance().getDarkMode());
+        loader.start();
     }
 
     @Override
     public void darkModeToggled(boolean dark) {
         for (final var component : components) {
             component.setDark(dark);
+        }
+    }
+
+    private void updateUI() {
+        if (!EventQueue.isDispatchThread()) {
+            EventQueue.invokeLater(this::updateUI);
+            return;
+        }
+        if (loader.hasTrack()) {
+            final var song = loader.getCurrentSong();
+            titleLabel.setText(song.getFirst());
+            interpreterLabel.setText(song.getSecond());
+        } else {
+            titleLabel.setText("Kein Titel");
+            interpreterLabel.setText("Kein Interpret");
         }
     }
 
@@ -67,9 +87,11 @@ public class MainWindow extends JFrame implements DarkModeListener {
     }
 
     private void showSettings() {
+        loader.stop();
         final var settingsWindow = new SettingsWindow(this);
         settingsWindow.setLocationRelativeTo(this);
         settingsWindow.setVisible(true);
+        loader.start();
     }
 
     private void saveTitle() {
