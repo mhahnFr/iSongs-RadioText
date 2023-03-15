@@ -49,11 +49,21 @@ public class MainWindow extends JFrame implements DarkModeListener {
         panel.add(toAdd);
         getContentPane().add(panel);
 
+        maybeAddQuitHandler();
         restoreBounds();
 
         Settings.getInstance().addDarkModeListener(this);
         darkModeToggled(Settings.getInstance().getDarkMode());
         loader.start();
+    }
+
+    private void maybeAddQuitHandler() {
+        if (Desktop.getDesktop().isSupported(Desktop.Action.APP_QUIT_HANDLER)) {
+            Desktop.getDesktop().setQuitHandler((__, response) -> {
+                saveSettings();
+                response.performQuit();
+            });
+        }
     }
 
     @Override
@@ -114,10 +124,7 @@ public class MainWindow extends JFrame implements DarkModeListener {
         }
     }
 
-    @Override
-    public void dispose() {
-        Settings.getInstance().removeDarkModeListener(this);
-
+    private void saveSettings() {
         if (!Settings.getInstance().setWindowX(getX())
                                    .setWindowY(getY())
                                    .setWindowWidth(getWidth())
@@ -128,6 +135,12 @@ public class MainWindow extends JFrame implements DarkModeListener {
                     Constants.NAME,
                     JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    @Override
+    public void dispose() {
+        Settings.getInstance().removeDarkModeListener(this);
+        saveSettings();
         super.dispose();
     }
 }
