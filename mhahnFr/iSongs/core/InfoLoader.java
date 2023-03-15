@@ -18,6 +18,7 @@ public class InfoLoader {
     private final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(2);
     private final Runnable trackUpdater;
     private final WriteCallback writeCallback;
+    private volatile Pair<String, String> currentSong;
     private ScheduledFuture<?> updateFuture;
 
     public InfoLoader(final Runnable      trackUpdater,
@@ -40,7 +41,7 @@ public class InfoLoader {
     }
 
     public Pair<String, String> getCurrentSong() {
-        return new Pair<>("<title>", "<interpreter>");
+        return currentSong;
     }
 
     private void updateTrack() {
@@ -80,7 +81,7 @@ public class InfoLoader {
     }
 
     public boolean hasTrack() {
-        return false;
+        return currentSong != null;
     }
 
     private String createFileName() {
