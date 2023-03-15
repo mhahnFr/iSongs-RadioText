@@ -15,18 +15,17 @@ import java.awt.event.FocusListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SettingsWindow extends JDialog implements DarkModeListener, FocusListener {
+public class SettingsWindow extends JDialog implements DarkModeListener {
     private final List<DarkComponent<? extends JComponent>> components = new ArrayList<>();
     private final JLabel folderChangeLabel;
     private final JSpinner delaySpinner;
     private final JTextField urlField;
-    private final JCheckBox darkBox;
 
     public SettingsWindow(final JFrame owner) {
         super(owner, Constants.NAME + ": Einstellungen", true);
 
         final var panel = new DarkComponent<>(new JPanel(new BorderLayout()), components).getComponent();
-            darkBox = new DarkComponent<>(new JCheckBox("Dark"), components).getComponent();
+            final var darkBox = new DarkComponent<>(new JCheckBox("Dark"), components).getComponent();
 
             final var centerPanel = new DarkComponent<>(new JPanel(new GridLayout(3, 1)), components).getComponent();
                 final var urlPanel = new DarkComponent<>(new JPanel(new GridLayout(2, 1)), components).getComponent();
@@ -71,9 +70,14 @@ public class SettingsWindow extends JDialog implements DarkModeListener, FocusLi
 
         final var settings = Settings.getInstance();
         darkBox.addItemListener(__ -> settings.setDarkMode(darkBox.isSelected()));
+        darkBox.setSelected(settings.getDarkMode());
 
+        urlField.setText(settings.getURL());
+
+        delaySpinner.setValue(settings.getDelay());
         delaySpinner.addChangeListener(__ -> settings.setDelay((Long) delaySpinner.getValue()));
 
+        folderChangeLabel.setText(settings.getSavePath());
         folderChangeButton.addActionListener(__ -> chooseSaveFolder());
 
         deleteButton.addActionListener(__ -> removeSettings());
@@ -86,7 +90,15 @@ public class SettingsWindow extends JDialog implements DarkModeListener, FocusLi
     }
 
     private void chooseSaveFolder() {
-        // TODO
+        final var chooser = new JFileChooser();
+        chooser.setMultiSelectionEnabled(false);
+        chooser.setFileHidingEnabled(true);
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            final var path = chooser.getSelectedFile().getAbsolutePath();
+            folderChangeLabel.setText(path);
+            Settings.getInstance().setSavePath(path);
+        }
     }
 
     private void removeSettings() {
@@ -106,28 +118,6 @@ public class SettingsWindow extends JDialog implements DarkModeListener, FocusLi
     }
 
     @Override
-    public void focusGained(FocusEvent e) {
-        final var settings = Settings.getInstance();
-
-        darkBox.setSelected(settings.getDarkMode());
-        delaySpinner.setValue(settings.getDelay());
-        urlField.setText(settings.getURL());
-        folderChangeLabel.setText(settings.getSavePath());
-    }
-
-    @Override
-    public void focusLost(FocusEvent e) {
-        if (!Settings.getInstance().setDelay((Long) delaySpinner.getValue())
-                                   .setURL(urlField.getText())
-                                   .flush()) {
-            JOptionPane.showMessageDialog(this,
-                    "Konnte Einstellungen nicht sichern!",
-                    Constants.NAME,
-                    JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    @Override
     public void darkModeToggled(boolean dark) {
         for (final var component : components) {
             component.setDark(dark);
@@ -136,7 +126,17 @@ public class SettingsWindow extends JDialog implements DarkModeListener, FocusLi
 
     @Override
     public void dispose() {
-        Settings.getInstance().removeDarkModeListener(this);
+        final var settings = Settings.getInstance();
+
+        settings.removeDarkModeListener(this);
+        if (!settings.setDelay((Long) delaySpinner.getValue())
+                     .setURL(urlField.getText())
+                     .flush()) {
+            JOptionPane.showMessageDialog(this,
+                    "Konnte Einstellungen nicht sichern!",
+                    Constants.NAME,
+                    JOptionPane.ERROR_MESSAGE);
+        }
         super.dispose();
     }
 }
