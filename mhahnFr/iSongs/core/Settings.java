@@ -38,8 +38,27 @@ public class Settings {
         return preferences.getLong(Key.DELAY, 1000);
     }
 
-    public void setDelay(final long delay) {
+    public String getURL() {
+        return preferences.get(Key.URL, "");
+    }
+
+    public String getSavePath() {
+        return preferences.get(Key.PATH, "");
+    }
+
+    public Settings setSavePath(final String path) {
+        preferences.put(Key.PATH, path);
+        return this;
+    }
+
+    public Settings setURL(final String url) {
+        preferences.put(Key.URL, url);
+        return this;
+    }
+
+    public Settings setDelay(final long delay) {
         preferences.putLong(Key.DELAY, delay);
+        return this;
     }
 
     public void setDarkMode(final boolean dark) {
@@ -101,5 +120,7 @@ public class Settings {
         public static final String WINDOW_Y      = BUNDLE_ID + ".windowY";
         public static final String DARK_MODE     = BUNDLE_ID + ".darkMode";
         public static final String DELAY         = BUNDLE_ID + ".delay";
+        public static final String URL           = BUNDLE_ID + ".url";
+        public static final String PATH          = BUNDLE_ID + ".path";
     }
 }
