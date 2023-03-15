@@ -3,6 +3,7 @@ package iSongs.gui;
 import iSongs.core.Constants;
 import iSongs.core.InfoLoader;
 import iSongs.core.Settings;
+import mhahnFr.utils.Pair;
 import mhahnFr.utils.gui.DarkComponent;
 import mhahnFr.utils.gui.DarkModeListener;
 
@@ -13,9 +14,11 @@ import java.util.List;
 
 public class MainWindow extends JFrame implements DarkModeListener {
     private final List<DarkComponent<? extends JComponent>> components = new ArrayList<>();
-    private final InfoLoader loader = new InfoLoader(this::updateUI);
+    private final InfoLoader loader = new InfoLoader(this::updateUI, this::writeCallback);
+    private final Timer savedTimer = new Timer(5000, __ -> setTitle(Constants.NAME));
     private final JLabel titleLabel;
     private final JLabel interpreterLabel;
+    private final JButton saveButton;
 
     public MainWindow() {
         super(Constants.NAME);
@@ -29,7 +32,7 @@ public class MainWindow extends JFrame implements DarkModeListener {
 
             interpreterLabel = new DarkComponent<>(new JLabel("Laden...", SwingConstants.CENTER), components).getComponent();
 
-            final var saveButton = new JButton("Titel merken");
+            saveButton = new JButton("Titel merken");
             saveButton.addActionListener(__ -> saveTitle());
             final JComponent toAdd;
             if (hasSettings()) {
@@ -51,6 +54,8 @@ public class MainWindow extends JFrame implements DarkModeListener {
 
         maybeAddQuitHandler();
         restoreBounds();
+
+        savedTimer.setRepeats(false);
 
         Settings.getInstance().addDarkModeListener(this);
         darkModeToggled(Settings.getInstance().getDarkMode());
@@ -82,10 +87,27 @@ public class MainWindow extends JFrame implements DarkModeListener {
             final var song = loader.getCurrentSong();
             titleLabel.setText(song.getFirst());
             interpreterLabel.setText(song.getSecond());
+            saveButton.setEnabled(true);
         } else {
             titleLabel.setText("Kein Titel");
             interpreterLabel.setText("Kein Interpret");
+            saveButton.setEnabled(false);
         }
+    }
+
+    private void writeCallback(final Pair<String, String> song,
+                               final Exception            error) {
+        if (!EventQueue.isDispatchThread()) {
+            EventQueue.invokeLater(() -> writeCallback(song, error));
+            return;
+        }
+        if (error == null) {
+            setTitle("\"" + song.getFirst() + "\" gesichert");
+            saveButton.setEnabled(false);
+        } else {
+            setTitle("Titel konnte nicht gesichert werden! Einstellungen überprüfen!");
+        }
+        savedTimer.restart();
     }
 
     private void addSettingsHook() {
@@ -105,7 +127,7 @@ public class MainWindow extends JFrame implements DarkModeListener {
     }
 
     private void saveTitle() {
-        // TODO
+        loader.saveSong();
     }
 
     private void restoreBounds() {
