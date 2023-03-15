@@ -140,9 +140,13 @@ public class MainWindow extends JFrame implements DarkModeListener {
 
         if (width < 0 || height < 0) {
             pack();
+        } else {
+            setSize(width, height);
         }
         if (x < 0 || y < 0) {
             setLocationRelativeTo(null);
+        } else {
+            setLocation(x, y);
         }
     }
 
