@@ -48,6 +48,10 @@ public class InfoLoader {
         if (!hasTrack()) {
             throw new IllegalStateException("No track recognized!");
         }
+        final var path = Settings.getInstance().getSavePath();
+        if (path == null || path.isBlank()) {
+            throw new IllegalStateException("Save folder not set!");
+        }
         final var buffer = "titel:" + "<title>" + System.lineSeparator() +
                            "interpreter:" + "<interpreter>";
         try (final var writer = new BufferedWriter(new FileWriter(createFileName()))) {
@@ -60,7 +64,7 @@ public class InfoLoader {
     }
 
     private String createFileName() {
-        return "TODO" + File.separator + "Song_" +
+        return Settings.getInstance().getSavePath() + File.separator + "Song_" +
                 DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM, Locale.getDefault())
                           .format(new Date());
     }
