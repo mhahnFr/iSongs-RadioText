@@ -74,11 +74,35 @@ public class SettingsWindow extends JDialog implements DarkModeListener, FocusLi
 
         delaySpinner.addChangeListener(__ -> settings.setDelay((Long) delaySpinner.getValue()));
 
+        folderChangeButton.addActionListener(__ -> chooseSaveFolder());
+
+        deleteButton.addActionListener(__ -> removeSettings());
+
         settings.addDarkModeListener(this);
         darkModeToggled(settings.getDarkMode());
 
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         pack();
+    }
+
+    private void chooseSaveFolder() {
+        // TODO
+    }
+
+    private void removeSettings() {
+        if (JOptionPane.showConfirmDialog(this,
+                "Einstellungen löschen?!",
+                Constants.NAME,
+                JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.WARNING_MESSAGE) == JOptionPane.OK_OPTION) {
+            if (!Settings.getInstance().remove() || !Settings.getInstance().flush()) {
+                JOptionPane.showMessageDialog(this,
+                        "Fehler!",
+                        Constants.NAME,
+                        JOptionPane.ERROR_MESSAGE);
+            }
+            System.exit(0);
+        }
     }
 
     @Override

@@ -96,6 +96,15 @@ public class Settings {
         return true;
     }
 
+    public boolean remove() {
+        try {
+            preferences.removeNode();
+        } catch (Exception __) {
+            return false;
+        }
+        return true;
+    }
+
     public void addDarkModeListener(final DarkModeListener listener) {
         listeners.add(listener);
     }
