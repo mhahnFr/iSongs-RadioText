@@ -17,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 public class InfoLoader {
     private final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(2);
+    private final WebPlayerDTO dto = new WebPlayerDTO();
     private final Runnable trackUpdater;
     private final WriteCallback writeCallback;
     private volatile Pair<String, String> currentSong;
@@ -54,13 +55,28 @@ public class InfoLoader {
         return null;
     }
 
-    private void updateTrack() {
-        // TODO: Error handling, optimization
-        var dto = new WebPlayerDTO();
-        try (final var reader = new BufferedInputStream(new URL(Settings.getInstance().getURL()).openStream())) {
-            new JSONParser(new StringStream(new String(reader.readAllBytes(), StandardCharsets.UTF_8))).readInto(dto);
+    private URL createUrl() {
+        try {
+            return new URL(Settings.getInstance().getURL());
         } catch (Exception __) {
-            __.printStackTrace();
+            return null;
+        }
+    }
+
+    private void updateTrack() {
+        final var url = createUrl();
+        if (url == null) {
+            currentSong = new Pair<>("Einstellungen überprüfen!", "");
+            trackUpdater.run();
+            return;
+        }
+
+        try (final var reader = new BufferedInputStream(url.openStream())) {
+            new JSONParser(new StringStream(new String(reader.readAllBytes(), StandardCharsets.UTF_8))).readInto(dto);
+        } catch (Exception e) {
+            currentSong = new Pair<>(e.getLocalizedMessage(), "");
+            e.printStackTrace();
+            trackUpdater.run();
             return;
         }
         final var playedSong = getPlayedSong(dto);
