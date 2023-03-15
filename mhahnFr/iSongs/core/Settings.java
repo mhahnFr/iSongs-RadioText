@@ -46,9 +46,8 @@ public class Settings {
         return preferences.get(Key.PATH, "");
     }
 
-    public Settings setSavePath(final String path) {
+    public void setSavePath(final String path) {
         preferences.put(Key.PATH, path);
-        return this;
     }
 
     public Settings setURL(final String url) {
@@ -56,9 +55,8 @@ public class Settings {
         return this;
     }
 
-    public Settings setDelay(final long delay) {
+    public void setDelay(final long delay) {
         preferences.putLong(Key.DELAY, delay);
-        return this;
     }
 
     public void setDarkMode(final boolean dark) {
