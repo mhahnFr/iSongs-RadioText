@@ -1,11 +1,12 @@
 package iSongs.core;
 
 import mhahnFr.utils.Pair;
+import mhahnFr.utils.StringStream;
+import mhahnFr.utils.json.JSONParser;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -44,8 +45,42 @@ public class InfoLoader {
         return currentSong;
     }
 
+    private WebPlayerDTO.PlaylistDTO.SongDTO getPlayedSong(final WebPlayerDTO dto) {
+        for (final var song : dto.playlist.data) {
+            if (song.playingMode == 1) {
+                return song;
+            }
+        }
+        return null;
+    }
+
     private void updateTrack() {
-        // TODO
+        // TODO: Error handling, optimization
+        var dto = new WebPlayerDTO();
+        try (final var reader = new BufferedInputStream(new URL(Settings.getInstance().getURL()).openStream())) {
+            new JSONParser(new StringStream(new String(reader.readAllBytes(), StandardCharsets.UTF_8))).readInto(dto);
+        } catch (Exception __) {
+            __.printStackTrace();
+            return;
+        }
+        final var playedSong = getPlayedSong(dto);
+
+        final boolean update;
+        if (playedSong == null) {
+            update = currentSong == null;
+            currentSong = null;
+        } else if (currentSong == null                              ||
+                   !currentSong.getFirst().equals(playedSong.title) ||
+                   !currentSong.getSecond().equals(playedSong.artist)) {
+            currentSong = new Pair<>(playedSong.title, playedSong.artist);
+            update = true;
+        } else {
+            update = false;
+        }
+
+        if (update) {
+            trackUpdater.run();
+        }
     }
 
     public void saveSong() {
