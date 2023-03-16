@@ -66,7 +66,7 @@ public class InfoLoader {
     private void updateTrack() {
         final var url = createUrl();
         if (url == null) {
-            currentSong = new Pair<>("Einstellungen überprüfen!", "");
+            currentSong = new Pair<>("Bitte Einstellungen überprüfen!", "");
             trackUpdater.run();
             return;
         }

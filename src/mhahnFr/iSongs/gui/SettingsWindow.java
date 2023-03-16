@@ -22,11 +22,11 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
         super(owner, Constants.NAME + ": Einstellungen", true);
 
         final var panel = new DarkComponent<>(new JPanel(new BorderLayout()), components).getComponent();
-            final var darkBox = new DarkComponent<>(new JCheckBox("Dark"), components).getComponent();
+            final var darkBox = new DarkComponent<>(new JCheckBox("Dunkelmodus aktivieren"), components).getComponent();
 
             final var centerPanel = new DarkComponent<>(new JPanel(new GridLayout(3, 1)), components).getComponent();
                 final var urlPanel = new DarkComponent<>(new JPanel(new GridLayout(2, 1)), components).getComponent();
-                    final var urlLabel = new DarkComponent<>(new JLabel("URL:"), components).getComponent();
+                    final var urlLabel = new DarkComponent<>(new JLabel("Die URL zur Datei mit den aktuellen Titelinformationen:"), components).getComponent();
 
                     urlField = new DarkTextComponent<>(new HintTextField("https://www.example.org/infos.json"), components).getComponent();
                 urlPanel.add(urlLabel);
@@ -34,13 +34,13 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
                 urlPanel.setBorder(new EtchedBorder());
 
                 final var folderPanel = new DarkComponent<>(new JPanel(new GridLayout(2, 1)), components).getComponent();
-                    final var folderDescription = new DarkComponent<>(new JLabel("Folder:"), components).getComponent();
+                    final var folderDescription = new DarkComponent<>(new JLabel("Der Ordner, in den die Titelinfos gespeichert werden sollen:"), components).getComponent();
 
                     final var folderChangePanel = new DarkComponent<>(new JPanel(new BorderLayout()), components).getComponent();
                         folderChangeLabel = new DarkComponent<>(new JLabel(), components).getComponent();
                         folderChangeLabel.setFont(folderChangeLabel.getFont().deriveFont(Font.BOLD));
 
-                        final var folderChangeButton = new JButton("Change");
+                        final var folderChangeButton = new JButton("Ändern...");
                     folderChangePanel.add(folderChangeLabel, BorderLayout.CENTER);
                     folderChangePanel.add(folderChangeButton, BorderLayout.EAST);
                 folderPanel.add(folderDescription);
@@ -48,7 +48,7 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
                 folderPanel.setBorder(new EtchedBorder());
 
                 final var delayPanel = new DarkComponent<>(new JPanel(new GridLayout(2, 1)), components).getComponent();
-                    final var delayLabel = new DarkComponent<>(new JLabel("Delay:"), components).getComponent();
+                    final var delayLabel = new DarkComponent<>(new JLabel("Intervall zwischen den Titelabfragen (in Millisekunden):"), components).getComponent();
 
                     final var delaySpinner = new DarkComponent<>(new JSpinner(), components).getComponent();
                 delayPanel.add(delayLabel);
@@ -58,7 +58,7 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
             centerPanel.add(folderPanel);
             centerPanel.add(delayPanel);
 
-            final var deleteButton = new JButton("Delete");
+            final var deleteButton = new JButton("Einstellungen löschen");
         panel.add(darkBox,      BorderLayout.NORTH);
         panel.add(centerPanel,  BorderLayout.CENTER);
         panel.add(deleteButton, BorderLayout.SOUTH);
@@ -100,14 +100,18 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
 
     private void removeSettings() {
         if (JOptionPane.showConfirmDialog(this,
-                "Einstellungen löschen?!",
-                Constants.NAME,
+                """
+                         Sollen die Einstellungen wirklich gelöscht werden?
+                         Diese Aktion ist nicht widerruflich!
+                         Das Programm wird anschließend beendet.
+                         """,
+                Constants.NAME + ": Einstellungen",
                 JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.WARNING_MESSAGE) == JOptionPane.OK_OPTION) {
             if (!Settings.getInstance().remove() || !Settings.getInstance().flush()) {
                 JOptionPane.showMessageDialog(this,
-                        "Fehler!",
-                        Constants.NAME,
+                        "Fehler beim Löschen der Einstellungen aufgetreten!",
+                        Constants.NAME + ": Einstellungen",
                         JOptionPane.ERROR_MESSAGE);
             }
             System.exit(0);
