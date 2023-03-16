@@ -31,14 +31,29 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class represents the main window of the iSongs project.
+ *
+ * @author mhahnFr
+ * @since 14.03.23
+ */
 public class MainWindow extends JFrame implements DarkModeListener {
+    /** The list with the components, enabling the dark mode.      */
     private final List<DarkComponent<? extends JComponent>> components = new ArrayList<>();
+    /** The {@link InfoLoader}.                                    */
     private final InfoLoader loader = new InfoLoader(this::updateUI, this::writeCallback);
+    /** The timer for resetting the title bar.                     */
     private final Timer savedTimer = new Timer(5000, __ -> setTitle(Constants.NAME));
+    /** The {@link JLabel} displaying the title of the song.       */
     private final JLabel titleLabel;
+    /** The {@link JLabel} displaying the interpreter of the song. */
     private final JLabel interpreterLabel;
+    /** The {@link JButton} used for saving the song.              */
     private final JButton saveButton;
 
+    /**
+     * Constructs this main window.
+     */
     public MainWindow() {
         super(Constants.NAME);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -64,7 +79,7 @@ public class MainWindow extends JFrame implements DarkModeListener {
                     settingsButton.addActionListener(__ -> showSettings());
                     toAdd.add(settingsButton);
                 }
-                toAdd.add(saveButton);
+            toAdd.add(saveButton);
         panel.add(label);
         panel.add(titleLabel);
         panel.add(interpreterLabel);
@@ -81,6 +96,10 @@ public class MainWindow extends JFrame implements DarkModeListener {
         loader.start();
     }
 
+    /**
+     * Adds a {@link java.awt.desktop.QuitHandler} saving the UI
+     * state if supported.
+     */
     private void maybeAddQuitHandler() {
         if (Desktop.getDesktop().isSupported(Desktop.Action.APP_QUIT_HANDLER)) {
             Desktop.getDesktop().setQuitHandler((__, response) -> {
@@ -97,6 +116,10 @@ public class MainWindow extends JFrame implements DarkModeListener {
         }
     }
 
+    /**
+     * Updates the UI in order to display the currently played song.
+     * This method makes sure it runs in the {@link EventQueue}.
+     */
     private void updateUI() {
         if (!EventQueue.isDispatchThread()) {
             EventQueue.invokeLater(this::updateUI);
@@ -114,6 +137,13 @@ public class MainWindow extends JFrame implements DarkModeListener {
         }
     }
 
+    /**
+     * Updates the UI after saving a song. This method makes
+     * sure it runs in the {@link EventQueue}.
+     *
+     * @param song  the saved song
+     * @param error the {@link Exception} that happened
+     */
     private void writeCallback(final Pair<String, String> song,
                                final Exception            error) {
         if (!EventQueue.isDispatchThread()) {
@@ -129,14 +159,25 @@ public class MainWindow extends JFrame implements DarkModeListener {
         savedTimer.restart();
     }
 
+    /**
+     * Adds the settings hook.
+     */
     private void addSettingsHook() {
         Desktop.getDesktop().setPreferencesHandler(__ -> showSettings());
     }
 
+    /**
+     * Returns whether the default settings action is supported.
+     *
+     * @return whether the default settings are supported
+     */
     private boolean hasSettings() {
         return Desktop.getDesktop().isSupported(Desktop.Action.APP_PREFERENCES);
     }
 
+    /**
+     * Opens a {@link SettingsWindow}. Stops the song fetching.
+     */
     private void showSettings() {
         loader.stop();
         final var settingsWindow = new SettingsWindow(this);
@@ -145,10 +186,16 @@ public class MainWindow extends JFrame implements DarkModeListener {
         loader.start();
     }
 
+    /**
+     * Saves the currently played song.
+     */
     private void saveTitle() {
         loader.saveSong();
     }
 
+    /**
+     * Restores the bounds of the window.
+     */
     private void restoreBounds() {
         final var settings = Settings.getInstance();
 
@@ -169,6 +216,9 @@ public class MainWindow extends JFrame implements DarkModeListener {
         }
     }
 
+    /**
+     * Stores the UI state.
+     */
     private void saveSettings() {
         if (!Settings.getInstance().setWindowX(getX())
                                    .setWindowY(getY())

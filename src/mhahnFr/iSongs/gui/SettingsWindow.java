@@ -32,11 +32,26 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class represents the settings window of the iSongs project.
+ *
+ * @author mhahnFr
+ * @since 14.03.23
+ */
 public class SettingsWindow extends JDialog implements DarkModeListener {
+    /** The list with the components, enabling the dark mode. */
     private final List<DarkComponent<? extends JComponent>> components = new ArrayList<>();
+    /** The label displaying the folder for saving songs.     */
     private final JLabel folderChangeLabel;
+    /** The text field for the URL to the song information.   */
     private final JTextField urlField;
 
+    /**
+     * Constructs this settings window using the given owner.
+     * This window is modal.
+     *
+     * @param owner the owner
+     */
     public SettingsWindow(final JFrame owner) {
         super(owner, Constants.NAME + ": Einstellungen", true);
 
@@ -105,6 +120,10 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
         pack();
     }
 
+    /**
+     * Opens a {@link JFileChooser} for choosing the folder where
+     * to save the songs.
+     */
     private void chooseSaveFolder() {
         final var chooser = new JFileChooser();
         chooser.setMultiSelectionEnabled(false);
@@ -117,6 +136,10 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
         }
     }
 
+    /**
+     * Prompts the user if he wishes to remove the settings.
+     * Does so, if the user wants to.
+     */
     private void removeSettings() {
         if (JOptionPane.showConfirmDialog(this,
                 """
