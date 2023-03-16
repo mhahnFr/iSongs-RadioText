@@ -17,24 +17,10 @@
  * this program, see the file LICENSE.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package mhahnFr.iSongs;
-
-import mhahnFr.iSongs.gui.MainWindow;
-
-import java.awt.EventQueue;
-
 /**
- * This class represents the main entry point of the application.
+ * This package contains the iSongs project files.
  *
  * @author mhahnFr
  * @since 14.03.23
  */
-public class iSongs {
-    public static void main(String[] args) {
-        if (System.getProperty("os.name").toLowerCase().contains("mac")) {
-            System.setProperty("apple.awt.application.appearance", "system");
-        }
-
-        EventQueue.invokeLater(() -> new MainWindow().setVisible(true));
-    }
-}
+package mhahnFr.iSongs;
