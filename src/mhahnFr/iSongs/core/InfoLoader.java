@@ -34,20 +34,44 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * This class contains the song managing functions of this
+ * application.
+ *
+ * @author mhahnFr
+ * @since 14.03.23
+ */
 public class InfoLoader {
+    /** The {@link java.util.concurrent.ExecutorService} used for the multithreading.   */
     private final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(2);
+    /** The data transfer object.                                                       */
     private final WebPlayerDTO dto = new WebPlayerDTO();
+    /** The callback called when a new song is recognized.                              */
     private final Runnable trackUpdater;
+    /** The callback called when a song has been written.                               */
     private final WriteCallback writeCallback;
+    /** The currently recognized song.                                                  */
     private volatile Pair<String, String> currentSong;
+    /** The {@link java.util.concurrent.Future} used to control the song fetching task. */
     private ScheduledFuture<?> updateFuture;
 
+    /**
+     * Initializes this {@link InfoLoader}.
+     *
+     * @param trackUpdater  the callback called when a new song is recognized
+     * @param writeCallback the callback called when a song has been written
+     */
     public InfoLoader(final Runnable      trackUpdater,
                       final WriteCallback writeCallback) {
         this.trackUpdater  = trackUpdater;
         this.writeCallback = writeCallback;
     }
 
+    /**
+     * Starts the song fetching task.
+     *
+     * @see #stop()
+     */
     public void start() {
         updateFuture = executorService.scheduleAtFixedRate(this::updateTrack,
                 0,
@@ -55,16 +79,36 @@ public class InfoLoader {
                 TimeUnit.MILLISECONDS);
     }
 
+    /**
+     * Stops the song fetching task.
+     *
+     * @see #start()
+     */
     public void stop() {
         if (updateFuture != null) {
             updateFuture.cancel(false);
         }
     }
 
+    /**
+     * Returns the currently recognized song. If no song has
+     * been recognized, {@code null} is returned.
+     *
+     * @return the currently recognized song
+     * @see #hasTrack()
+     */
     public Pair<String, String> getCurrentSong() {
         return currentSong;
     }
 
+    /**
+     * Extracts and returns the currently played song from the
+     * given data transfer object. If no song is being played
+     * currently, {@code null} is returned.
+     *
+     * @param dto the data transfer object
+     * @return the played song
+     */
     private WebPlayerDTO.PlaylistDTO.SongDTO getPlayedSong(final WebPlayerDTO dto) {
         for (final var song : dto.playlist.data) {
             if (song.playingMode == 1) {
@@ -74,6 +118,13 @@ public class InfoLoader {
         return null;
     }
 
+    /**
+     * Constructs the URL used to fetch the song information.
+     * If the URL could not be constructed, {@code null} is
+     * returned.
+     *
+     * @return the URL
+     */
     private URL createUrl() {
         try {
             return new URL(Settings.getInstance().getURL());
@@ -82,6 +133,12 @@ public class InfoLoader {
         }
     }
 
+    /**
+     * Fetches the current song information. If the song has changed,
+     * the callback is invoked.
+     *
+     * @see #trackUpdater
+     */
     private void updateTrack() {
         final var url = createUrl();
         if (url == null) {
@@ -118,10 +175,22 @@ public class InfoLoader {
         }
     }
 
+    /**
+     * Starts the task to save the song information of the
+     * currently recognized song.
+     *
+     * @see #saveSongImpl()
+     */
     public void saveSong() {
         executorService.schedule(this::saveSongImpl, 0, TimeUnit.NANOSECONDS);
     }
 
+    /**
+     * Saves the currently recognized song. After finishing,
+     * the callback is invoked.
+     *
+     * @see #writeCallback
+     */
     private void saveSongImpl() {
         Pair<String, String> song = null;
         Exception e               = null;
@@ -133,6 +202,14 @@ public class InfoLoader {
         writeCallback.songWritten(song, e);
     }
 
+    /**
+     * Writes the currently recognized song to a file. The
+     * file is placed into the folder returned by {@link Settings#getSavePath()}.
+     *
+     * @return the saved song
+     * @throws IOException if the file could not be written
+     * @throws IllegalStateException if the file cannot be written
+     */
     private Pair<String, String> saveTrack() throws IOException {
         if (!hasTrack()) {
             throw new IllegalStateException("No track recognized!");
@@ -150,10 +227,21 @@ public class InfoLoader {
         return song;
     }
 
+    /**
+     * Returns whether currently a song has been recognized.
+     *
+     * @return whether a song is recognized
+     * @see #getCurrentSong()
+     */
     public boolean hasTrack() {
         return currentSong != null;
     }
 
+    /**
+     * Creates a file name for storing a song.
+     *
+     * @return the file path
+     */
     private String createFileName() {
         return Settings.getInstance().getSavePath() + File.separator + "Song_" +
                 DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM, Locale.getDefault())
