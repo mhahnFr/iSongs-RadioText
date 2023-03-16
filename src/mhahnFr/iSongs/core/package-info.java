@@ -17,28 +17,10 @@
  * this program, see the file LICENSE.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package mhahnFr.iSongs.core;
-
-import mhahnFr.utils.Pair;
-
 /**
- * This interface defines the callback function after saving a song.
+ * This package contains the core classes of the iSongs project.
  *
  * @author mhahnFr
- * @since 15.03.23
+ * @since 14.03.23
  */
-@FunctionalInterface
-public interface WriteCallback {
-    /**
-     * Called when a song has been written. If the song could not be
-     * written, the song parameter is set to {@code null} and the
-     * {@link Exception} that happened is passed.
-     * <br>
-     * Otherwise, the written song is passed and the excpetion parameter
-     * is set to {@code null}.
-     *
-     * @param song      the song that has been written
-     * @param exception the {@link Exception} that happened while writing
-     */
-    void songWritten(final Pair<String, String> song, final Exception exception);
-}
+package mhahnFr.iSongs.core;

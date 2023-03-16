@@ -21,6 +21,12 @@ package mhahnFr.iSongs.core;
 
 import java.util.Map;
 
+/**
+ * This class represents the data model used by the web player.
+ *
+ * @author mhahnFr
+ * @since 15.03.23
+ */
 public class WebPlayerDTO {
     public static class AudioPlayerDTO {
         public static class SourceDTO {

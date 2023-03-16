@@ -19,6 +19,13 @@
 
 package mhahnFr.iSongs.core;
 
+/**
+ * This class contains the constant values of the project.
+ *
+ * @author mhahnFr
+ * @since 14.03.23
+ */
 public abstract class Constants {
+    /** The name of the application. */
     public static final String NAME = "iSongs";
 }
