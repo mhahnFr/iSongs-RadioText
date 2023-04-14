@@ -28,6 +28,8 @@ import mhahnFr.utils.gui.DarkModeListener;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -96,6 +98,12 @@ public class MainWindow extends JFrame implements DarkModeListener {
         panel.add(wrapper);
         getContentPane().add(panel);
 
+        addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                saveButton.requestFocusInWindow();
+            }
+        });
         maybeAddQuitHandler();
         restoreBounds();
 
