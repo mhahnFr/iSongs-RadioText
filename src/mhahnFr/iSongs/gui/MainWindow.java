@@ -52,7 +52,9 @@ public class MainWindow extends JFrame implements DarkModeListener {
     private final JLabel interpreterLabel;
     /** The {@link JButton} used for saving the song.              */
     private final JButton saveButton;
+    /** The {@link JButton} displaying the {@link #lastException}. */
     private final JButton errorButton;
+    /** The last {@link Exception} that happened.                  */
     private Exception lastException;
 
     /**
@@ -170,6 +172,12 @@ public class MainWindow extends JFrame implements DarkModeListener {
         savedTimer.restart();
     }
 
+    /**
+     * Shows the last error that occurred during writing a song to
+     * disk.
+     *
+     * @see #lastException
+     */
     private void showLastError() {
         if (lastException == null) {
             JOptionPane.showMessageDialog(this,
