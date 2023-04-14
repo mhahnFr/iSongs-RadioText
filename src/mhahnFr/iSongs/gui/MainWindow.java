@@ -28,6 +28,8 @@ import mhahnFr.utils.gui.DarkModeListener;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +52,8 @@ public class MainWindow extends JFrame implements DarkModeListener {
     private final JLabel interpreterLabel;
     /** The {@link JButton} used for saving the song.              */
     private final JButton saveButton;
+    private final JButton errorButton;
+    private Exception lastException;
 
     /**
      * Constructs this main window.
@@ -66,24 +70,28 @@ public class MainWindow extends JFrame implements DarkModeListener {
 
             interpreterLabel = new DarkComponent<>(new JLabel("Laden...", SwingConstants.CENTER), components).getComponent();
 
-            final var toAdd = new DarkComponent<>(new JPanel(), components).getComponent();
-                saveButton = new JButton("Titel merken");
-                saveButton.addActionListener(__ -> saveTitle());
+            final var wrapper = new DarkComponent<>(new JPanel(new BorderLayout()), components).getComponent();
+                final var toAdd = new DarkComponent<>(new JPanel(), components).getComponent();
+                    saveButton = new JButton("Titel merken");
+                    saveButton.addActionListener(__ -> saveTitle());
 
-                if (hasSettings()) {
-                    toAdd.setLayout(new FlowLayout());
-                    addSettingsHook();
-                } else {
-                    toAdd.setLayout(new BoxLayout(toAdd, BoxLayout.X_AXIS));
-                    final var settingsButton = new JButton("Einstellungen");
-                    settingsButton.addActionListener(__ -> showSettings());
-                    toAdd.add(settingsButton);
-                }
-            toAdd.add(saveButton);
+                    errorButton = new JButton("Fehler anzeigen");
+                    errorButton.addActionListener(__ -> showLastError());
+
+                    if (hasSettings()) {
+                        addSettingsHook();
+                    } else {
+                        final var settingsButton = new JButton("Einstellungen");
+                        settingsButton.addActionListener(__ -> showSettings());
+                        toAdd.add(settingsButton);
+                    }
+                toAdd.add(saveButton);
+                toAdd.add(errorButton);
+            wrapper.add(toAdd, BorderLayout.CENTER);
         panel.add(label);
         panel.add(titleLabel);
         panel.add(interpreterLabel);
-        panel.add(toAdd);
+        panel.add(wrapper);
         getContentPane().add(panel);
 
         maybeAddQuitHandler();
@@ -125,6 +133,7 @@ public class MainWindow extends JFrame implements DarkModeListener {
             EventQueue.invokeLater(this::updateUI);
             return;
         }
+        errorButton.setVisible(false);
         if (loader.hasTrack()) {
             final var song = loader.getCurrentSong();
             titleLabel.setText(song.getFirst());
@@ -155,8 +164,26 @@ public class MainWindow extends JFrame implements DarkModeListener {
             saveButton.setEnabled(false);
         } else {
             setTitle("Titel konnte nicht gesichert werden! Einstellungen überprüfen!");
+            errorButton.setVisible(true);
+            lastException = error;
         }
         savedTimer.restart();
+    }
+
+    private void showLastError() {
+        if (lastException == null) {
+            JOptionPane.showMessageDialog(this,
+                                          "Kein Fehler aufgetreten.",
+                                          Constants.NAME,
+                                          JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            final var sw = new StringWriter();
+            lastException.printStackTrace(new PrintWriter(sw));
+            JOptionPane.showMessageDialog(this,
+                                          sw,
+                                          Constants.NAME + ": Fehler",
+                                          JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
