@@ -30,7 +30,7 @@ jar {
         attributes 'Main-Class': 'mhahnFr.iSongs.iSongs'
     }
     from {
-        configurations.jutils.collect { it.isDirectory ? it : zipTree(it) }
+        configurations.jutils.collect { it.isDirectory() ? it : zipTree(it) }
     }
 }
 
