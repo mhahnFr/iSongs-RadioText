@@ -24,6 +24,7 @@ import mhahnFr.utils.StringStream;
 import mhahnFr.utils.json.JSONParser;
 
 import java.io.*;
+import java.net.URI;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
@@ -127,7 +128,7 @@ public class InfoLoader {
      */
     private URL createUrl() {
         try {
-            return new URL(Settings.getInstance().getURL());
+            return new URI(Settings.getInstance().getURL()).toURL();
         } catch (Exception __) {
             return null;
         }
