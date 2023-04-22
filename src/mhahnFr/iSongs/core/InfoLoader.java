@@ -179,38 +179,41 @@ public class InfoLoader {
      * Starts the task to save the song information of the
      * currently recognized song.
      *
-     * @see #saveSongImpl()
+     * @param song the song to be saved
+     * @see #saveSongImpl(Pair)
      */
-    public void saveSong() {
-        executorService.schedule(this::saveSongImpl, 0, TimeUnit.NANOSECONDS);
+    public void saveSong(final Pair<String, String> song) {
+        executorService.schedule(() -> saveSongImpl(song), 0, TimeUnit.NANOSECONDS);
     }
 
     /**
      * Saves the currently recognized song. After finishing,
      * the callback is invoked.
      *
+     * @param song the song to be saved
      * @see #writeCallback
      */
-    private void saveSongImpl() {
-        Pair<String, String> song = null;
-        Exception e               = null;
+    private void saveSongImpl(final Pair<String, String> song) {
+        Pair<String, String> savedSong = null;
+        Exception            e         = null;
         try {
-            song = saveTrack();
+            savedSong = saveTrack(song);
         } catch (Exception exception) {
             e = exception;
         }
-        writeCallback.songWritten(song, e);
+        writeCallback.songWritten(savedSong, e);
     }
 
     /**
      * Writes the currently recognized song to a file. The
      * file is placed into the folder returned by {@link Settings#getSavePath()}.
      *
+     * @param song the song to be saved
      * @return the saved song
      * @throws IOException if the file could not be written
      * @throws IllegalStateException if the file cannot be written
      */
-    private Pair<String, String> saveTrack() throws IOException {
+    private Pair<String, String> saveTrack(final Pair<String, String> song) throws IOException {
         if (!hasTrack()) {
             throw new IllegalStateException("No track recognized!");
         }
@@ -218,7 +221,6 @@ public class InfoLoader {
         if (path == null || path.isBlank()) {
             throw new IllegalStateException("Save folder not set!");
         }
-        final var song = getCurrentSong();
         final var buffer = "titel:" + song.getFirst() + System.lineSeparator() +
                            "interpreter:" + song.getSecond();
         try (final var writer = new BufferedWriter(new FileWriter(createFileName()))) {
