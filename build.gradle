@@ -1,0 +1,40 @@
+plugins {
+    id 'java'
+}
+
+sourceCompatibility = 19
+group 'mhahnFr'
+version '3.2'
+
+configurations {
+    jutils
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src']
+        }
+    }
+}
+
+tasks.register('deploy', Exec) {
+    dependsOn(jar)
+
+    commandLine 'jpackage', '--input', 'build/libs', '--name', project.name, '--main-jar', 'iSongs-' + version + '.jar'
+}
+
+jar {
+    dependsOn configurations.jutils
+    manifest {
+        attributes 'Main-Class': 'mhahnFr.iSongs.iSongs'
+    }
+    from {
+        configurations.jutils.collect { it.isDirectory ? it : zipTree(it) }
+    }
+}
+
+dependencies {
+    implementation project(':JUtilities')
+    jutils project(':JUtilities')
+}
