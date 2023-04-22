@@ -21,10 +21,10 @@ package mhahnFr.iSongs.gui;
 
 import mhahnFr.iSongs.core.Constants;
 import mhahnFr.iSongs.core.Settings;
-import mhahnFr.utils.gui.DarkComponent;
+import mhahnFr.utils.gui.components.DarkComponent;
 import mhahnFr.utils.gui.DarkModeListener;
-import mhahnFr.utils.gui.DarkTextComponent;
-import mhahnFr.utils.gui.HintTextField;
+import mhahnFr.utils.gui.components.DarkTextComponent;
+import mhahnFr.utils.gui.components.HintTextField;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
