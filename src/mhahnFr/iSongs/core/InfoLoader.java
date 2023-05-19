@@ -47,12 +47,14 @@ public class InfoLoader {
     private final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(2);
     /** The data transfer object.                                                       */
     private final WebPlayerDTO dto = new WebPlayerDTO();
+    /** The lock used for the {@link #currentSong}.                                     */
+    private final Object currentSongLock = new Object();
     /** The callback called when a new song is recognized.                              */
     private final Runnable trackUpdater;
     /** The callback called when a song has been written.                               */
     private final WriteCallback writeCallback;
     /** The currently recognized song.                                                  */
-    private volatile Pair<String, String> currentSong;
+    private Pair<String, String> currentSong;
     /** The {@link java.util.concurrent.Future} used to control the song fetching task. */
     private ScheduledFuture<?> updateFuture;
 
@@ -97,9 +99,22 @@ public class InfoLoader {
      *
      * @return the currently recognized song
      * @see #hasTrack()
+     * @see #setCurrentSong(Pair)
      */
     public Pair<String, String> getCurrentSong() {
-        return currentSong;
+        synchronized (currentSongLock) { return currentSong; }
+    }
+
+    /**
+     * Sets the currently played song.
+     *
+     * @param newSong the new song to be stored
+     * @see #getCurrentSong()
+     */
+    private void setCurrentSong(final Pair<String, String> newSong) {
+        synchronized (currentSongLock) {
+            currentSong = newSong;
+        }
     }
 
     /**
@@ -143,7 +158,7 @@ public class InfoLoader {
     private void updateTrack() {
         final var url = createUrl();
         if (url == null) {
-            currentSong = new Pair<>("Bitte Einstellungen überprüfen!", "");
+            setCurrentSong(new Pair<>("Bitte Einstellungen überprüfen!", ""));
             trackUpdater.run();
             return;
         }
@@ -151,21 +166,22 @@ public class InfoLoader {
         try (final var reader = new BufferedInputStream(url.openStream())) {
             new JSONParser(new StringStream(new String(reader.readAllBytes(), StandardCharsets.UTF_8))).readInto(dto);
         } catch (Exception e) {
-            currentSong = new Pair<>(e.getLocalizedMessage(), "");
+            setCurrentSong(new Pair<>(e.getLocalizedMessage(), ""));
             e.printStackTrace();
             trackUpdater.run();
             return;
         }
         final var playedSong = getPlayedSong(dto);
 
+        final var currentSong = getCurrentSong();
         final boolean update;
         if (playedSong == null) {
             update = currentSong == null;
-            currentSong = null;
+            setCurrentSong(null);
         } else if (currentSong == null                              ||
                    !currentSong.getFirst().equals(playedSong.title) ||
                    !currentSong.getSecond().equals(playedSong.artist)) {
-            currentSong = new Pair<>(playedSong.title, playedSong.artist);
+            setCurrentSong(new Pair<>(playedSong.title, playedSong.artist));
             update = true;
         } else {
             update = false;
@@ -237,7 +253,7 @@ public class InfoLoader {
      * @see #getCurrentSong()
      */
     public boolean hasTrack() {
-        return currentSong != null;
+        return getCurrentSong() != null;
     }
 
     /**
