@@ -58,8 +58,6 @@ public class MainWindow extends JFrame implements DarkModeListener {
     private final JButton errorButton;
     /** The last {@link Exception} that happened.                  */
     private Exception lastException;
-    /** The currently displayed song.                              */
-    private Pair<String, String> displayedSong;
 
     /**
      * Constructs this main window.
@@ -146,7 +144,7 @@ public class MainWindow extends JFrame implements DarkModeListener {
             return;
         }
         errorButton.setVisible(false);
-        displayedSong = loader.getCurrentSong();
+        final var displayedSong = loader.getCurrentSong();
         if (displayedSong != null) {
             titleLabel.setText(displayedSong.getFirst());
             interpreterLabel.setText(displayedSong.getSecond());
@@ -235,7 +233,7 @@ public class MainWindow extends JFrame implements DarkModeListener {
      * Saves the currently played song.
      */
     private void saveTitle() {
-        loader.saveSong(displayedSong);
+        loader.saveSong();
     }
 
     /**
