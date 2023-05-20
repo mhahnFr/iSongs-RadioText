@@ -3,7 +3,7 @@ plugins {
 }
 
 group 'mhahnFr'
-version '3.2'
+version '3.2.1'
 
 configurations {
     jutils
