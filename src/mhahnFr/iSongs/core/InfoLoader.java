@@ -176,7 +176,7 @@ public class InfoLoader {
         final var currentSong = getCurrentSong();
         final boolean update;
         if (playedSong == null) {
-            update = currentSong == null;
+            update = currentSong != null;
             setCurrentSong(null);
         } else if (currentSong == null                              ||
                    !currentSong.getFirst().equals(playedSong.title) ||
