@@ -19,7 +19,6 @@
 
 package mhahnFr.iSongs.core;
 
-import mhahnFr.iSongs.core.locale.English;
 import mhahnFr.iSongs.core.locale.Locale;
 import mhahnFr.iSongs.iSongs;
 import mhahnFr.utils.gui.DarkModeListener;
