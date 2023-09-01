@@ -25,7 +25,32 @@ public class German extends Locale {
     @Override
     public String get(final StringID id) {
         switch (id) {
-
+            case MAIN_CURRENT_TITLE:             return "Aktueller Titel";
+            case MAIN_LOADING:                   return "Laden";
+            case MAIN_SAVE_TITLE:                return "Titel merken";
+            case MAIN_SHOW_ERROR:                return "Fehler anzeigen";
+            case MAIN_SETTINGS:                  return "Einstellungen";
+            case MAIN_NO_SONG:                   return "Kein Titel";
+            case MAIN_NO_INTERPRETER:            return "Kein Interpret";
+            case MAIN_STORED:                    return "gesichert";
+            case MAIN_SAVE_ERROR:                return "Titel konnte nicht gesichert werden! Einstellungen überprüfen!";
+            case MAIN_ERROR:                     return "Fehler";
+            case MAIN_NO_ERROR:                  return "Kein Fehler aufgetreten";
+            case MAIN_UI_STATE_SAVE_ERROR:       return "Konnte UI-State nicht speichern";
+            case SETTINGS_ACTIVATE_DARK_MODE:    return "Dunkelmodus aktivieren";
+            case SETTINGS_CHOOSE_LANG:           return "Sprache wählen";
+            case SETTINGS_JSON_URI_DESC:         return "Die URL zur Datei mit den aktuellen Titelinformationen";
+            case SETTINGS_SONG_INFO_FOLDER_DESC: return "Der Ordner, in dem die Titelinfos gespeichert werden sollen";
+            case SETTINGS_CHANGE:                return "Ändern";
+            case SETTINGS_SONG_REFRESH_RATE:     return "Intervall zwischen den Titelabfragen (in Millisekunden)";
+            case SETTINGS_REMOVE:                return "Einstellungen löschen";
+            case SETTINGS_REMOVE_ERROR:          return "Fehler beim Löschen der Einstellungen aufgetreten";
+            case SETTINGS_SAVE_ERROR:            return "Konnte Einstellungen nicht sichern";
+            case SETTINGS_REMOVE_REALLY:         return """
+                                                        Sollen die Einstellungen wirklich gelöscht werden?
+                                                        Diese Aktion ist nicht widerruflich!
+                                                        Das Programm wird anschließend beendet.
+                                                        """;
         }
         throw new IllegalStateException("Missing a german word for: " + id + "!");
     }
