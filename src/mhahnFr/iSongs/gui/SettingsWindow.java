@@ -21,6 +21,9 @@ package mhahnFr.iSongs.gui;
 
 import mhahnFr.iSongs.core.Constants;
 import mhahnFr.iSongs.core.Settings;
+import mhahnFr.iSongs.core.locale.English;
+import mhahnFr.iSongs.core.locale.German;
+import mhahnFr.iSongs.core.locale.Locale;
 import mhahnFr.utils.gui.components.DarkComponent;
 import mhahnFr.utils.gui.DarkModeListener;
 import mhahnFr.utils.gui.components.DarkTextComponent;
@@ -29,6 +32,7 @@ import mhahnFr.utils.gui.components.HintTextField;
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
 import java.awt.*;
+import java.awt.event.ItemEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,7 +62,15 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
         final var panel = new DarkComponent<>(new JPanel(new BorderLayout()), components).getComponent();
             final var darkBox = new DarkComponent<>(new JCheckBox("Dunkelmodus aktivieren"), components).getComponent();
 
-            final var centerPanel = new DarkComponent<>(new JPanel(new GridLayout(3, 1)), components).getComponent();
+            final var centerPanel = new DarkComponent<>(new JPanel(new GridLayout(4, 1)), components).getComponent();
+                final var localePanel = new DarkComponent<>(new JPanel(new GridLayout(2, 1)), components).getComponent();
+                    final var localeLabel = new DarkComponent<>(new JLabel("Sprache wählen:"), components).getComponent();
+
+                    final var localeBox = new DarkComponent<>(new JComboBox<Locale>(), components).getComponent();
+                localePanel.add(localeLabel);
+                localePanel.add(localeBox);
+                localePanel.setBorder(new EtchedBorder());
+
                 final var urlPanel = new DarkComponent<>(new JPanel(new GridLayout(2, 1)), components).getComponent();
                     final var urlLabel = new DarkComponent<>(new JLabel("Die URL zur Datei mit den aktuellen Titelinformationen:"), components).getComponent();
 
@@ -88,6 +100,7 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
                 delayPanel.add(delayLabel);
                 delayPanel.add(delaySpinner);
                 delayPanel.setBorder(new EtchedBorder());
+            centerPanel.add(localePanel);
             centerPanel.add(urlPanel);
             centerPanel.add(folderPanel);
             centerPanel.add(delayPanel);
@@ -102,6 +115,10 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
         final var settings = Settings.getInstance();
         darkBox.addItemListener(__ -> settings.setDarkMode(darkBox.isSelected()));
         darkBox.setSelected(settings.getDarkMode());
+
+        localeBox.addItem(new English());
+        localeBox.addItem(new German());
+        localeBox.addItemListener(this::onLocaleChanged);
 
         urlField.setText(settings.getURL());
 
@@ -118,6 +135,12 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
 
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         pack();
+    }
+
+    private void onLocaleChanged(final ItemEvent event) {
+        if (event.getStateChange() != ItemEvent.SELECTED) return;
+
+        Settings.getInstance().setLocale((Locale) event.getItem());
     }
 
     /**
