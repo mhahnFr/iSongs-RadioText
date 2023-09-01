@@ -24,6 +24,7 @@ import mhahnFr.iSongs.core.Settings;
 import mhahnFr.iSongs.core.locale.English;
 import mhahnFr.iSongs.core.locale.German;
 import mhahnFr.iSongs.core.locale.Locale;
+import mhahnFr.iSongs.core.locale.StringID;
 import mhahnFr.utils.gui.components.DarkComponent;
 import mhahnFr.utils.gui.DarkModeListener;
 import mhahnFr.utils.gui.components.DarkTextComponent;
@@ -49,6 +50,7 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
     private final JLabel folderChangeLabel;
     /** The text field for the URL to the song information.   */
     private final JTextField urlField;
+    private Locale locale = Settings.getInstance().getLocale();
 
     /**
      * Constructs this settings window using the given owner.
@@ -57,14 +59,14 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
      * @param owner the owner
      */
     public SettingsWindow(final JFrame owner) {
-        super(owner, Constants.NAME + ": Einstellungen", true);
+        super(owner, Constants.NAME + ": " + Settings.getInstance().getLocale().get(StringID.MAIN_SETTINGS), true);
 
         final var panel = new DarkComponent<>(new JPanel(new BorderLayout()), components).getComponent();
-            final var darkBox = new DarkComponent<>(new JCheckBox("Dunkelmodus aktivieren"), components).getComponent();
+            final var darkBox = new DarkComponent<>(new JCheckBox(locale.get(StringID.SETTINGS_ACTIVATE_DARK_MODE)), components).getComponent();
 
             final var centerPanel = new DarkComponent<>(new JPanel(new GridLayout(4, 1)), components).getComponent();
                 final var localePanel = new DarkComponent<>(new JPanel(new GridLayout(2, 1)), components).getComponent();
-                    final var localeLabel = new DarkComponent<>(new JLabel("Sprache wählen:"), components).getComponent();
+                    final var localeLabel = new DarkComponent<>(new JLabel(locale.get(StringID.SETTINGS_CHOOSE_LANG) + ":"), components).getComponent();
 
                     final var localeBox = new DarkComponent<>(new JComboBox<Locale>(), components).getComponent();
                 localePanel.add(localeLabel);
@@ -72,7 +74,7 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
                 localePanel.setBorder(new EtchedBorder());
 
                 final var urlPanel = new DarkComponent<>(new JPanel(new GridLayout(2, 1)), components).getComponent();
-                    final var urlLabel = new DarkComponent<>(new JLabel("Die URL zur Datei mit den aktuellen Titelinformationen:"), components).getComponent();
+                    final var urlLabel = new DarkComponent<>(new JLabel(locale.get(StringID.SETTINGS_JSON_URI_DESC) + ":"), components).getComponent();
 
                     urlField = new DarkTextComponent<>(new HintTextField("https://www.example.org/infos.json"), components).getComponent();
                 urlPanel.add(urlLabel);
@@ -80,13 +82,13 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
                 urlPanel.setBorder(new EtchedBorder());
 
                 final var folderPanel = new DarkComponent<>(new JPanel(new GridLayout(2, 1)), components).getComponent();
-                    final var folderDescription = new DarkComponent<>(new JLabel("Der Ordner, in den die Titelinfos gespeichert werden sollen:"), components).getComponent();
+                    final var folderDescription = new DarkComponent<>(new JLabel(locale.get(StringID.SETTINGS_SONG_INFO_FOLDER_DESC) + ":"), components).getComponent();
 
                     final var folderChangePanel = new DarkComponent<>(new JPanel(new BorderLayout()), components).getComponent();
                         folderChangeLabel = new DarkComponent<>(new JLabel(), components).getComponent();
                         folderChangeLabel.setFont(folderChangeLabel.getFont().deriveFont(Font.BOLD));
 
-                        final var folderChangeButton = new JButton("Ändern...");
+                        final var folderChangeButton = new JButton(locale.get(StringID.SETTINGS_CHANGE) + "...");
                     folderChangePanel.add(folderChangeLabel, BorderLayout.CENTER);
                     folderChangePanel.add(folderChangeButton, BorderLayout.EAST);
                 folderPanel.add(folderDescription);
@@ -94,7 +96,7 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
                 folderPanel.setBorder(new EtchedBorder());
 
                 final var delayPanel = new DarkComponent<>(new JPanel(new GridLayout(2, 1)), components).getComponent();
-                    final var delayLabel = new DarkComponent<>(new JLabel("Intervall zwischen den Titelabfragen (in Millisekunden):"), components).getComponent();
+                    final var delayLabel = new DarkComponent<>(new JLabel(locale.get(StringID.SETTINGS_SONG_REFRESH_RATE) + ":"), components).getComponent();
 
                     final var delaySpinner = new DarkComponent<>(new JSpinner(), components).getComponent();
                 delayPanel.add(delayLabel);
@@ -105,7 +107,7 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
             centerPanel.add(folderPanel);
             centerPanel.add(delayPanel);
 
-            final var deleteButton = new JButton("Einstellungen löschen");
+            final var deleteButton = new JButton(locale.get(StringID.SETTINGS_REMOVE));
         panel.add(darkBox,      BorderLayout.NORTH);
         panel.add(centerPanel,  BorderLayout.CENTER);
         panel.add(deleteButton, BorderLayout.SOUTH);
@@ -165,18 +167,14 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
      */
     private void removeSettings() {
         if (JOptionPane.showConfirmDialog(this,
-                """
-                         Sollen die Einstellungen wirklich gelöscht werden?
-                         Diese Aktion ist nicht widerruflich!
-                         Das Programm wird anschließend beendet.
-                         """,
-                Constants.NAME + ": Einstellungen",
+                locale.get(StringID.SETTINGS_REMOVE_REALLY),
+                Constants.NAME + ": " + locale.get(StringID.MAIN_SETTINGS),
                 JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.WARNING_MESSAGE) == JOptionPane.OK_OPTION) {
             if (!Settings.getInstance().remove() || !Settings.getInstance().flush()) {
                 JOptionPane.showMessageDialog(this,
-                        "Fehler beim Löschen der Einstellungen aufgetreten!",
-                        Constants.NAME + ": Einstellungen",
+                        locale.get(StringID.SETTINGS_REMOVE_ERROR) + "!",
+                        Constants.NAME + ": " + locale.get(StringID.MAIN_SETTINGS),
                         JOptionPane.ERROR_MESSAGE);
             }
             System.exit(0);
@@ -198,7 +196,7 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
         if (!settings.setURL(urlField.getText())
                      .flush()) {
             JOptionPane.showMessageDialog(this,
-                    "Konnte Einstellungen nicht sichern!",
+                    locale.get(StringID.SETTINGS_SAVE_ERROR) + "!",
                     Constants.NAME,
                     JOptionPane.ERROR_MESSAGE);
         }
