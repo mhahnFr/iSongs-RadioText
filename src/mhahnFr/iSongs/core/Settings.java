@@ -41,6 +41,8 @@ public class Settings {
     /** A list with the registered {@link DarkModeListener}s. */
     private final List<DarkModeListener> listeners = new ArrayList<>();
 
+    private Locale locale = null;
+
     /**
      * The default constructor. Can only be used internally.
      */
@@ -126,11 +128,15 @@ public class Settings {
     }
 
     public Locale getLocale() {
-        return Locale.fromName(preferences.get(Key.LOCALE, ""));
+        if (locale == null) {
+            locale = Locale.fromName(preferences.get(Key.LOCALE, ""));
+        }
+        return locale;
     }
 
     public void setLocale(final Locale locale) {
         preferences.put(Key.LOCALE, locale.getName());
+        this.locale = locale;
     }
 
     /**

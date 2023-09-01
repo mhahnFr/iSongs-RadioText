@@ -25,22 +25,27 @@ package mhahnFr.iSongs.core.locale;
  * @author mhahnFr
  * @since 01.09.23
  */
-public interface Locale {
+public abstract class Locale {
     /**
      * Returns a {@link String} translating the requested sentence.
      *
      * @param id the id of the requested sentence
      * @return the translation
      */
-    String get(final StringID id);
+    public abstract String get(final StringID id);
 
-    String getName();
+    public abstract String getName();
 
-    static Locale fromName(final String name) {
+    public static Locale fromName(final String name) {
         return switch (name) {
             case German.name -> new German();
 
             default -> new English();
         };
+    }
+
+    @Override
+    public String toString() {
+        return getName();
     }
 }

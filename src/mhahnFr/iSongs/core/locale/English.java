@@ -19,7 +19,7 @@
 
 package mhahnFr.iSongs.core.locale;
 
-public class English implements Locale {
+public class English extends Locale {
     public static final String name = "English";
 
     @Override
