@@ -22,6 +22,8 @@ package mhahnFr.iSongs.gui;
 import mhahnFr.iSongs.core.Constants;
 import mhahnFr.iSongs.core.InfoLoader;
 import mhahnFr.iSongs.core.Settings;
+import mhahnFr.iSongs.core.locale.Locale;
+import mhahnFr.iSongs.core.locale.StringID;
 import mhahnFr.utils.Pair;
 import mhahnFr.utils.gui.components.DarkComponent;
 import mhahnFr.utils.gui.DarkModeListener;
@@ -58,6 +60,7 @@ public class MainWindow extends JFrame implements DarkModeListener {
     private final JButton errorButton;
     /** The last {@link Exception} that happened.                  */
     private Exception lastException;
+    private Locale locale = Settings.getInstance().getLocale();
 
     /**
      * Constructs this main window.
@@ -67,25 +70,25 @@ public class MainWindow extends JFrame implements DarkModeListener {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         final var panel = new DarkComponent<>(new JPanel(new GridLayout(4, 1)), components).getComponent();
-            final var label = new DarkComponent<>(new JLabel(" Aktueller Titel:"), components).getComponent();
+            final var label = new DarkComponent<>(new JLabel(" " + locale.get(StringID.MAIN_CURRENT_TITLE) + ":"), components).getComponent();
 
-            titleLabel = new DarkComponent<>(new JLabel("Laden...", SwingConstants.CENTER), components).getComponent();
+            titleLabel = new DarkComponent<>(new JLabel(locale.get(StringID.MAIN_LOADING) + "...", SwingConstants.CENTER), components).getComponent();
             titleLabel.setFont(titleLabel.getFont().deriveFont(Font.BOLD));
 
-            interpreterLabel = new DarkComponent<>(new JLabel("Laden...", SwingConstants.CENTER), components).getComponent();
+            interpreterLabel = new DarkComponent<>(new JLabel(locale.get(StringID.MAIN_LOADING) + "...", SwingConstants.CENTER), components).getComponent();
 
             final var wrapper = new DarkComponent<>(new JPanel(new BorderLayout()), components).getComponent();
                 final var toAdd = new DarkComponent<>(new JPanel(), components).getComponent();
-                    saveButton = new JButton("Titel merken");
+                    saveButton = new JButton(locale.get(StringID.MAIN_SAVE_TITLE));
                     saveButton.addActionListener(__ -> saveTitle());
 
-                    errorButton = new JButton("Fehler anzeigen");
+                    errorButton = new JButton(locale.get(StringID.MAIN_SHOW_ERROR));
                     errorButton.addActionListener(__ -> showLastError());
 
                     if (hasSettings()) {
                         addSettingsHook();
                     } else {
-                        final var settingsButton = new JButton("Einstellungen");
+                        final var settingsButton = new JButton(locale.get(StringID.MAIN_SETTINGS));
                         settingsButton.addActionListener(__ -> showSettings());
                         toAdd.add(settingsButton);
                     }
@@ -150,8 +153,8 @@ public class MainWindow extends JFrame implements DarkModeListener {
             interpreterLabel.setText(displayedSong.getSecond());
             saveButton.setEnabled(true);
         } else {
-            titleLabel.setText("Kein Titel");
-            interpreterLabel.setText("Kein Interpret");
+            titleLabel.setText(locale.get(StringID.MAIN_NO_SONG));
+            interpreterLabel.setText(locale.get(StringID.MAIN_NO_INTERPRETER));
             saveButton.setEnabled(false);
         }
     }
@@ -170,10 +173,10 @@ public class MainWindow extends JFrame implements DarkModeListener {
             return;
         }
         if (error == null) {
-            setTitle("\"" + song.getFirst() + "\" gesichert");
+            setTitle("\"" + song.getFirst() + "\" " + locale.get(StringID.MAIN_STORED));
             saveButton.setEnabled(false);
         } else {
-            setTitle("Titel konnte nicht gesichert werden! Einstellungen überprüfen!");
+            setTitle(locale.get(StringID.MAIN_SAVE_ERROR));
             errorButton.setVisible(true);
             lastException = error;
         }
@@ -189,7 +192,7 @@ public class MainWindow extends JFrame implements DarkModeListener {
     private void showLastError() {
         if (lastException == null) {
             JOptionPane.showMessageDialog(this,
-                                          "Kein Fehler aufgetreten.",
+                                          locale.get(StringID.MAIN_NO_ERROR) + ".",
                                           Constants.NAME,
                                           JOptionPane.INFORMATION_MESSAGE);
         } else {
@@ -197,7 +200,7 @@ public class MainWindow extends JFrame implements DarkModeListener {
             lastException.printStackTrace(new PrintWriter(sw));
             JOptionPane.showMessageDialog(this,
                                           sw,
-                                          Constants.NAME + ": Fehler",
+                                          Constants.NAME + ": " + locale.get(StringID.MAIN_ERROR),
                                           JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -269,7 +272,7 @@ public class MainWindow extends JFrame implements DarkModeListener {
                                    .setWindowHeight(getHeight())
                                    .flush()) {
             JOptionPane.showMessageDialog(this,
-                    "Konnte UI-State nicht speichern!",
+                    locale.get(StringID.MAIN_UI_STATE_SAVE_ERROR) + "!",
                     Constants.NAME,
                     JOptionPane.ERROR_MESSAGE);
         }
