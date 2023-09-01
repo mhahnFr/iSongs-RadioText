@@ -19,6 +19,8 @@
 
 package mhahnFr.iSongs.core;
 
+import mhahnFr.iSongs.core.locale.English;
+import mhahnFr.iSongs.core.locale.Locale;
 import mhahnFr.iSongs.iSongs;
 import mhahnFr.utils.gui.DarkModeListener;
 
@@ -122,6 +124,14 @@ public class Settings {
      */
     public String getSavePath() {
         return preferences.get(Key.PATH, "");
+    }
+
+    public Locale getLocale() {
+        return Locale.fromName(preferences.get(Key.LOCALE, ""));
+    }
+
+    public void setLocale(final Locale locale) {
+        preferences.put(Key.LOCALE, locale.getName());
     }
 
     /**
@@ -303,5 +313,6 @@ public class Settings {
         public static final String URL           = BUNDLE_ID + ".url";
         /** The key for the path.                  */
         public static final String PATH          = BUNDLE_ID + ".path";
+        public static final String LOCALE        = BUNDLE_ID + ".locale";
     }
 }
