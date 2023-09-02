@@ -47,6 +47,7 @@ public class German extends Locale {
             case SETTINGS_REMOVE                -> { return "Einstellungen löschen";                                       }
             case SETTINGS_REMOVE_ERROR          -> { return "Fehler beim Löschen der Einstellungen aufgetreten";           }
             case SETTINGS_SAVE_ERROR            -> { return "Konnte Einstellungen nicht sichern";                          }
+            case SETTINGS_LANGUAGE_RESTART      -> { return "Anwendung neu starten zur Anwendung der Sprachänderung";       }
             case SETTINGS_REMOVE_REALLY         -> { return """
                                                             Sollen die Einstellungen wirklich gelöscht werden?
                                                             Diese Aktion ist nicht widerruflich!

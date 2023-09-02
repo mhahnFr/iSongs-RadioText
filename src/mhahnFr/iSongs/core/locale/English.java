@@ -43,15 +43,16 @@ public class English extends Locale {
             case MAIN_NO_ERROR            -> { return "No error occurred";                       }
             case MAIN_UI_STATE_SAVE_ERROR -> { return "Could not save UI state";                 }
 
-            case SETTINGS_ACTIVATE_DARK_MODE    -> { return "Activate dark-mode";                                    }
-            case SETTINGS_CHOOSE_LANG           -> { return "Choose language";                                       }
-            case SETTINGS_JSON_URI_DESC         -> { return "URL to the file containing the song data";              }
-            case SETTINGS_SONG_INFO_FOLDER_DESC -> { return "The path where to store the song info";                 }
-            case SETTINGS_CHANGE                -> { return "Change";                                                }
-            case SETTINGS_SONG_REFRESH_RATE     -> { return "Refresh rate for fetching song data (in milliseconds)"; }
-            case SETTINGS_REMOVE                -> { return "Delete settings";                                       }
-            case SETTINGS_REMOVE_ERROR          -> { return "Error occurred while deleting settings";                }
-            case SETTINGS_SAVE_ERROR            -> { return "Could not save settings";                               }
+            case SETTINGS_ACTIVATE_DARK_MODE    -> { return "Activate dark-mode";                                     }
+            case SETTINGS_CHOOSE_LANG           -> { return "Choose language";                                        }
+            case SETTINGS_JSON_URI_DESC         -> { return "URL to the file containing the song data";               }
+            case SETTINGS_SONG_INFO_FOLDER_DESC -> { return "The path where to store the song info";                  }
+            case SETTINGS_CHANGE                -> { return "Change";                                                 }
+            case SETTINGS_SONG_REFRESH_RATE     -> { return "Refresh rate for fetching song data (in milliseconds)";  }
+            case SETTINGS_REMOVE                -> { return "Delete settings";                                        }
+            case SETTINGS_REMOVE_ERROR          -> { return "Error occurred while deleting settings";                 }
+            case SETTINGS_SAVE_ERROR            -> { return "Could not save settings";                                }
+            case SETTINGS_LANGUAGE_RESTART      -> { return "Restart the app for the language change to take effect"; }
             case SETTINGS_REMOVE_REALLY         -> { return """
                                                             Really delete settings?
                                                             This action cannot be undone.

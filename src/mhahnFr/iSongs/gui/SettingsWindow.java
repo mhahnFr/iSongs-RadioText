@@ -149,7 +149,15 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
     private void onLocaleChanged(final ItemEvent event) {
         if (event.getStateChange() != ItemEvent.SELECTED) return;
 
-        Settings.getInstance().setLocale((Locale) event.getItem());
+        final var newLocale = (Locale) event.getItem();
+        Settings.getInstance().setLocale(newLocale);
+        if (newLocale != locale) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    newLocale.get(StringID.SETTINGS_LANGUAGE_RESTART) + ".",
+                    Constants.NAME + ": " + newLocale.get(StringID.MAIN_SETTINGS),
+                    JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 
     /**
