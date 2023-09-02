@@ -60,7 +60,8 @@ public class MainWindow extends JFrame implements DarkModeListener {
     private final JButton errorButton;
     /** The last {@link Exception} that happened.                  */
     private Exception lastException;
-    private Locale locale = Settings.getInstance().getLocale();
+    /** The {@link Locale} to be used in this instance.            */
+    private final Locale locale = Settings.getInstance().getLocale();
 
     /**
      * Constructs this main window.

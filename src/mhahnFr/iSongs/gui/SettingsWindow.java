@@ -50,7 +50,8 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
     private final JLabel folderChangeLabel;
     /** The text field for the URL to the song information.   */
     private final JTextField urlField;
-    private Locale locale = Settings.getInstance().getLocale();
+    /** The {@link Locale} to be used by this instance.       */
+    private final Locale locale = Settings.getInstance().getLocale();
 
     /**
      * Constructs this settings window using the given owner.
@@ -140,6 +141,11 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
         pack();
     }
 
+    /**
+     * Handles the event of changing the language.
+     *
+     * @param event the item event
+     */
     private void onLocaleChanged(final ItemEvent event) {
         if (event.getStateChange() != ItemEvent.SELECTED) return;
 
