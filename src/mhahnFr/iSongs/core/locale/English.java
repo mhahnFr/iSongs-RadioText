@@ -19,7 +19,14 @@
 
 package mhahnFr.iSongs.core.locale;
 
+/**
+ * This class represents the english translation of this app.
+ *
+ * @author mhahnFr
+ * @since 01.09.23
+ */
 public class English extends Locale {
+    /** The localized name of the language. */
     public static final String name = "English";
 
     @Override
