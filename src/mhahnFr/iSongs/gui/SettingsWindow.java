@@ -118,8 +118,9 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
         darkBox.addItemListener(__ -> settings.setDarkMode(darkBox.isSelected()));
         darkBox.setSelected(settings.getDarkMode());
 
-        localeBox.addItem(new English());
-        localeBox.addItem(new German());
+        localeBox.addItem(locale instanceof English ? locale : new English());
+        localeBox.addItem(locale instanceof German ? locale : new German());
+        localeBox.setSelectedItem(locale);
         localeBox.addItemListener(this::onLocaleChanged);
 
         urlField.setText(settings.getURL());
