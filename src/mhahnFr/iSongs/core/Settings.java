@@ -19,6 +19,7 @@
 
 package mhahnFr.iSongs.core;
 
+import mhahnFr.iSongs.core.locale.LanguageListener;
 import mhahnFr.iSongs.core.locale.Locale;
 import mhahnFr.iSongs.iSongs;
 import mhahnFr.utils.gui.DarkModeListener;
@@ -40,6 +41,7 @@ public class Settings {
     private final Preferences preferences = Preferences.userNodeForPackage(iSongs.class);
     /** A list with the registered {@link DarkModeListener}s. */
     private final List<DarkModeListener> listeners = new ArrayList<>();
+    private final List<LanguageListener> languageListeners = new ArrayList<>();
 
     private Locale locale = null;
 
@@ -136,6 +138,9 @@ public class Settings {
 
     public void setLocale(final Locale locale) {
         preferences.put(Key.LOCALE, locale.getName());
+        if (this.locale != locale) {
+            languageListeners.forEach(listener -> listener.languageChanged(locale));
+        }
         this.locale = locale;
     }
 
@@ -276,6 +281,14 @@ public class Settings {
      */
     public void removeDarkModeListener(final DarkModeListener listener) {
         listeners.remove(listener);
+    }
+
+    public void addLanguageListener(final LanguageListener listener) {
+        languageListeners.add(listener);
+    }
+
+    public void removeLanguageListeners(final LanguageListener listener) {
+        languageListeners.remove(listener);
     }
 
     /**
