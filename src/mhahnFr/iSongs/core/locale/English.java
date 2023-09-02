@@ -30,7 +30,33 @@ public class English extends Locale {
     @Override
     public String get(final StringID id) {
         switch (id) {
+            case MAIN_CURRENT_TITLE       -> { return "Current song";                            }
+            case MAIN_LOADING             -> { return "Loading";                                 }
+            case MAIN_SAVE_TITLE          -> { return "Save song";                               }
+            case MAIN_SHOW_ERROR          -> { return "Show error";                              }
+            case MAIN_SETTINGS            -> { return "Settings";                                }
+            case MAIN_NO_SONG             -> { return "No title";                                }
+            case MAIN_NO_INTERPRETER      -> { return "No interpreter";                          }
+            case MAIN_STORED              -> { return "saved";                                   }
+            case MAIN_SAVE_ERROR          -> { return "Could not save song! Validate settings!"; }
+            case MAIN_ERROR               -> { return "Error";                                   }
+            case MAIN_NO_ERROR            -> { return "No error occurred";                       }
+            case MAIN_UI_STATE_SAVE_ERROR -> { return "Could not save UI state";                 }
 
+            case SETTINGS_ACTIVATE_DARK_MODE    -> { return "Activate dark-mode";                                    }
+            case SETTINGS_CHOOSE_LANG           -> { return "Choose language";                                       }
+            case SETTINGS_JSON_URI_DESC         -> { return "URL to the file containing the song data";              }
+            case SETTINGS_SONG_INFO_FOLDER_DESC -> { return "The path where to store the song info";                 }
+            case SETTINGS_CHANGE                -> { return "Change";                                                }
+            case SETTINGS_SONG_REFRESH_RATE     -> { return "Refresh rate for fetching song data (in milliseconds)"; }
+            case SETTINGS_REMOVE                -> { return "Delete settings";                                       }
+            case SETTINGS_REMOVE_ERROR          -> { return "Error occurred while deleting settings";                }
+            case SETTINGS_SAVE_ERROR            -> { return "Could not save settings";                               }
+            case SETTINGS_REMOVE_REALLY         -> { return """
+                                                            Really delete settings?
+                                                            This action cannot be undone.
+                                                            The application will quit afterwards.
+                                                            """; }
         }
         throw new IllegalStateException("Missing an english word for: " + id + "!");
     }
