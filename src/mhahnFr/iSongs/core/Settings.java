@@ -41,8 +41,10 @@ public class Settings {
     private final Preferences preferences = Preferences.userNodeForPackage(iSongs.class);
     /** A list with the registered {@link DarkModeListener}s. */
     private final List<DarkModeListener> listeners = new ArrayList<>();
+    /** A list with the registered {@link LanguageListener}s. */
     private final List<LanguageListener> languageListeners = new ArrayList<>();
 
+    /** The cached locale.                                    */
     private Locale locale = null;
 
     /**
@@ -129,6 +131,11 @@ public class Settings {
         return preferences.get(Key.PATH, "");
     }
 
+    /**
+     * Returns the lastly stored locale.
+     *
+     * @return the locale to be used
+     */
     public Locale getLocale() {
         if (locale == null) {
             locale = Locale.fromName(preferences.get(Key.LOCALE, ""));
@@ -136,6 +143,12 @@ public class Settings {
         return locale;
     }
 
+    /**
+     * Sets the given locale as the new locale for the app.
+     * Calls the registered language listeners with the given locale.
+     *
+     * @param locale the new locale to be used
+     */
     public void setLocale(final Locale locale) {
         preferences.put(Key.LOCALE, locale.getName());
         if (this.locale != locale) {
@@ -283,10 +296,20 @@ public class Settings {
         listeners.remove(listener);
     }
 
+    /**
+     * Registers the given {@link LanguageListener}.
+     *
+     * @param listener the listener to be registered
+     */
     public void addLanguageListener(final LanguageListener listener) {
         languageListeners.add(listener);
     }
 
+    /**
+     * Removes the given {@link LanguageListener}.
+     *
+     * @param listener the listener to be removed
+     */
     public void removeLanguageListeners(final LanguageListener listener) {
         languageListeners.remove(listener);
     }
@@ -331,6 +354,7 @@ public class Settings {
         public static final String URL           = BUNDLE_ID + ".url";
         /** The key for the path.                  */
         public static final String PATH          = BUNDLE_ID + ".path";
+        /** The key for the locale to be used.     */
         public static final String LOCALE        = BUNDLE_ID + ".locale";
     }
 }
