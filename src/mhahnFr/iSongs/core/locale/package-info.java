@@ -17,38 +17,11 @@
  * this program, see the file LICENSE.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package mhahnFr.iSongs.core.locale;
-
 /**
- * This enumeration contains the identifiers for the
- * string literals of this app.
+ * This package contains the translation related classes
+ * of this app.
  *
  * @author mhahnFr
  * @since 01.09.23
  */
-public enum StringID {
-    MAIN_CURRENT_TITLE,
-    MAIN_LOADING,
-    MAIN_SAVE_TITLE,
-    MAIN_SHOW_ERROR,
-    MAIN_SETTINGS,
-    MAIN_NO_SONG,
-    MAIN_NO_INTERPRETER,
-    MAIN_STORED,
-    MAIN_SAVE_ERROR,
-    MAIN_ERROR,
-    MAIN_NO_ERROR,
-    MAIN_UI_STATE_SAVE_ERROR,
-
-    SETTINGS_ACTIVATE_DARK_MODE,
-    SETTINGS_CHOOSE_LANG,
-    SETTINGS_JSON_URI_DESC,
-    SETTINGS_SONG_INFO_FOLDER_DESC,
-    SETTINGS_CHANGE,
-    SETTINGS_SONG_REFRESH_RATE,
-    SETTINGS_REMOVE,
-    SETTINGS_REMOVE_REALLY,
-    SETTINGS_REMOVE_ERROR,
-    SETTINGS_SAVE_ERROR,
-    SETTINGS_LANGUAGE_RESTART
-}
+package mhahnFr.iSongs.core.locale;
