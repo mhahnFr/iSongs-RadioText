@@ -19,6 +19,18 @@
 
 package mhahnFr.iSongs.core.locale;
 
+/**
+ * This interface defines the possibility to listen to
+ * language changes.
+ *
+ * @author mhahnFr
+ * @since 02.09.23
+ */
 public interface LanguageListener {
+    /**
+     * Called when the language has changed.
+     *
+     * @param newLocale the new locale to be used
+     */
     void languageChanged(final Locale newLocale);
 }
