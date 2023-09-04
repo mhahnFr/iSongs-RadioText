@@ -34,8 +34,20 @@ public abstract class Locale {
      */
     public abstract String get(final StringID id);
 
+    /**
+     * Returns the localized name of this language.
+     *
+     * @return the name of the language
+     */
     public abstract String getName();
 
+    /**
+     * Constructs and returns a {@link Locale} from the given
+     * name.
+     *
+     * @param name the name of the language
+     * @return the language object
+     */
     public static Locale fromName(final String name) {
         return switch (name) {
             case German.name -> new German();
