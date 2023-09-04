@@ -27,7 +27,7 @@ package mhahnFr.iSongs.core.locale;
  */
 public class German extends Locale {
     /** The localized name of the language. */
-    public static final String name = "German";
+    public static final String name = "Deutsch";
 
     @Override
     public String get(final StringID id) {
