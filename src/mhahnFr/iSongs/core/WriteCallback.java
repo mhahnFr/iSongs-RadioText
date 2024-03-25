@@ -1,7 +1,7 @@
 /*
  * iSongs-RadioText - Radio-text part of iSongs.
  *
- * Copyright (C) 2023  mhahnFr
+ * Copyright (C) 2023 - 2024  mhahnFr
  *
  * This file is part of the iSongs-RadioText. This program is free software:
  * you can redistribute it and/or modify it under the terms of the
@@ -34,7 +34,7 @@ public interface WriteCallback {
      * written, the song parameter is set to {@code null} and the
      * {@link Exception} that happened is passed.
      * <br>
-     * Otherwise, the written song is passed and the excpetion parameter
+     * Otherwise, the written song is passed and the exception parameter
      * is set to {@code null}.
      *
      * @param song      the song that has been written
