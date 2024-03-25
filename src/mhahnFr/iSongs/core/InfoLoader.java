@@ -1,7 +1,7 @@
 /*
  * iSongs-RadioText - Radio-text part of iSongs.
  *
- * Copyright (C) 2023  mhahnFr
+ * Copyright (C) 2023 - 2024  mhahnFr
  *
  * This file is part of the iSongs-RadioText. This program is free software:
  * you can redistribute it and/or modify it under the terms of the
@@ -19,6 +19,7 @@
 
 package mhahnFr.iSongs.core;
 
+import mhahnFr.iSongs.core.locale.StringID;
 import mhahnFr.utils.Pair;
 import mhahnFr.utils.StringStream;
 import mhahnFr.utils.json.JSONParser;
@@ -158,7 +159,7 @@ public class InfoLoader {
     private void updateTrack() {
         final var url = createUrl();
         if (url == null) {
-            setCurrentSong(new Pair<>("Bitte Einstellungen überprüfen!", ""));
+            setCurrentSong(new Pair<>(Settings.getInstance().getLocale().get(StringID.MAIN_UI_CHECK_SETTINGS), ""));
             trackUpdater.run();
             return;
         }

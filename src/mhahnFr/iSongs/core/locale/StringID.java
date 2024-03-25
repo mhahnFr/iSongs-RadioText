@@ -1,7 +1,7 @@
 /*
  * iSongs-RadioText - Radio-text part of iSongs.
  *
- * Copyright (C) 2023  mhahnFr
+ * Copyright (C) 2023 - 2024  mhahnFr
  *
  * This file is part of the iSongs-RadioText. This program is free software:
  * you can redistribute it and/or modify it under the terms of the
@@ -39,6 +39,7 @@ public enum StringID {
     MAIN_ERROR,
     MAIN_NO_ERROR,
     MAIN_UI_STATE_SAVE_ERROR,
+    MAIN_UI_CHECK_SETTINGS,
 
     SETTINGS_ACTIVATE_DARK_MODE,
     SETTINGS_CHOOSE_LANG,

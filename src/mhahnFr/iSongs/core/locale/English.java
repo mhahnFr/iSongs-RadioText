@@ -1,7 +1,7 @@
 /*
  * iSongs-RadioText - Radio-text part of iSongs.
  *
- * Copyright (C) 2023  mhahnFr
+ * Copyright (C) 2023 - 2024  mhahnFr
  *
  * This file is part of the iSongs-RadioText. This program is free software:
  * you can redistribute it and/or modify it under the terms of the
@@ -49,6 +49,7 @@ public class English extends Locale {
             case MAIN_ERROR               -> { return "Error";                                   }
             case MAIN_NO_ERROR            -> { return "No error occurred";                       }
             case MAIN_UI_STATE_SAVE_ERROR -> { return "Could not save UI state";                 }
+            case MAIN_UI_CHECK_SETTINGS   -> { return "Please check the settings!";              }
 
             case SETTINGS_ACTIVATE_DARK_MODE    -> { return "Activate dark-mode";                                     }
             case SETTINGS_CHOOSE_LANG           -> { return "Choose language";                                        }

@@ -1,7 +1,7 @@
 /*
  * iSongs-RadioText - Radio-text part of iSongs.
  *
- * Copyright (C) 2023  mhahnFr
+ * Copyright (C) 2023 - 2024  mhahnFr
  *
  * This file is part of the iSongs-RadioText. This program is free software:
  * you can redistribute it and/or modify it under the terms of the
@@ -44,6 +44,7 @@ public class German extends Locale {
             case MAIN_ERROR               -> { return "Fehler";                                                         }
             case MAIN_NO_ERROR            -> { return "Kein Fehler aufgetreten";                                        }
             case MAIN_UI_STATE_SAVE_ERROR -> { return "Konnte UI-State nicht speichern";                                }
+            case MAIN_UI_CHECK_SETTINGS   -> { return "Bitte Einstellungen überprüfen!";                                }
 
             case SETTINGS_ACTIVATE_DARK_MODE    -> { return "Dunkelmodus aktivieren";                                      }
             case SETTINGS_CHOOSE_LANG           -> { return "Sprache wählen";                                              }
@@ -54,7 +55,7 @@ public class German extends Locale {
             case SETTINGS_REMOVE                -> { return "Einstellungen löschen";                                       }
             case SETTINGS_REMOVE_ERROR          -> { return "Fehler beim Löschen der Einstellungen aufgetreten";           }
             case SETTINGS_SAVE_ERROR            -> { return "Konnte Einstellungen nicht sichern";                          }
-            case SETTINGS_LANGUAGE_RESTART      -> { return "Anwendung neu starten zur Anwendung der Sprachänderung";       }
+            case SETTINGS_LANGUAGE_RESTART      -> { return "Anwendung neu starten zur Anwendung der Sprachänderung";      }
             case SETTINGS_REMOVE_REALLY         -> { return """
                                                             Sollen die Einstellungen wirklich gelöscht werden?
                                                             Diese Aktion ist nicht widerruflich!
