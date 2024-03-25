@@ -3,7 +3,7 @@ This repository contains a project whose initial idea goes back to 2014. It is
 an extraction from a project that I started 2013 for learning purposes. This
 repository contains the reimplemented version from 2023, when it was completely
 rewritten.  
-Accordingly, Java 17 or higher is recommended for using this project.
+Accordingly, Java 19 or higher is required for using this project.
 
 ### Screenshot
 <p align="center">
@@ -48,4 +48,4 @@ The application runs cross-platform.
 
 This project is licensed under the terms of the GPL 3.0.
 
-© Copyright 2014, 2019, 2023 [mhahnFr](https://www.github.com/mhahnFr)
+© Copyright 2014, 2019, 2023 - 2024 [mhahnFr](https://github.com/mhahnFr)
