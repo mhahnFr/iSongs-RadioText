@@ -21,7 +21,8 @@ package mhahnFr.iSongs.core.appleScript;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
-import java.io.InputStream;
+import javax.script.ScriptException;
+import java.io.*;
 
 public class Script {
     private final String content;
@@ -36,14 +37,34 @@ public class Script {
         this(content, new ScriptEngineManager().getEngineByName("AppleScript"));
     }
 
-    public static Script loadScript(final String fileName) {
-        // TODO: Implement
-        return null;
+    public Object execute() throws ScriptException {
+        return engine.eval(content);
+    }
 
+    private static Script load(final InputStream stream) {
+        final String content;
+        try (final var reader = new BufferedReader(new InputStreamReader(stream))) {
+            final var buffer = new StringBuilder();
+            int c;
+            while ((c = reader.read()) != -1) {
+                buffer.append((char) c);
+            }
+            content = buffer.toString();
+        } catch (final IOException e) {
+            return null;
+        }
+        return new Script(content);
+    }
+
+    public static Script loadScript(final String fileName) {
+        try (final var stream = new FileInputStream(fileName)) {
+            return load(stream);
+        } catch (final IOException e) {
+            return null;
+        }
     }
 
     public static Script loadScript(final InputStream stream) {
-        // TODO: Implement
-        return null;
+        return load(stream);
     }
 }
