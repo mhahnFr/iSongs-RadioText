@@ -19,26 +19,28 @@
 
 package mhahnFr.iSongs.core.appleScript;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
 import java.io.*;
 
 public class Script {
     private final String content;
-    private final ScriptEngine engine;
-
-    public Script(final String content, final ScriptEngine engine) {
-        this.content = content;
-        this.engine  = engine;
-    }
 
     public Script(final String content) {
-        this(content, new ScriptEngineManager().getEngineByName("AppleScript"));
+        this.content = content;
     }
 
-    public Object execute() throws ScriptException {
-        return engine.eval(content);
+    public String execute() {
+        final String toReturn;
+        try (final var reader = Runtime.getRuntime().exec(new String[] { "osascript", "-e", content }).inputReader()) {
+            final var builder = new StringBuilder();
+            int c;
+            while ((c = reader.read()) != -1) {
+                builder.append((char) c);
+            }
+            toReturn = builder.toString();
+        } catch (final IOException e) {
+            return null;
+        }
+        return toReturn;
     }
 
     private static Script load(final InputStream stream) {
