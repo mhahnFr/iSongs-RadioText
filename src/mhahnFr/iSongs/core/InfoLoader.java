@@ -19,6 +19,7 @@
 
 package mhahnFr.iSongs.core;
 
+import mhahnFr.iSongs.core.appleScript.InfoLoaderAppleScript;
 import mhahnFr.iSongs.core.appleScript.Script;
 import mhahnFr.iSongs.core.locale.StringID;
 import mhahnFr.utils.Pair;

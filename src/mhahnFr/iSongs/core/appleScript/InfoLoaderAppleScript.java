@@ -17,9 +17,8 @@
  * this program, see the file LICENSE.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package mhahnFr.iSongs.core;
+package mhahnFr.iSongs.core.appleScript;
 
-import mhahnFr.iSongs.core.appleScript.Script;
 import mhahnFr.utils.Pair;
 
 public class InfoLoaderAppleScript {
