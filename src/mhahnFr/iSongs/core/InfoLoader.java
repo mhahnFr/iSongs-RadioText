@@ -19,6 +19,7 @@
 
 package mhahnFr.iSongs.core;
 
+import mhahnFr.iSongs.core.appleScript.Script;
 import mhahnFr.iSongs.core.locale.StringID;
 import mhahnFr.utils.Pair;
 import mhahnFr.utils.StringStream;
@@ -54,6 +55,7 @@ public class InfoLoader {
     private final Runnable trackUpdater;
     /** The callback called when a song has been written.                               */
     private final WriteCallback writeCallback;
+    private InfoLoaderAppleScript scriptLoader;
     /** The currently recognized song.                                                  */
     private Pair<String, String> currentSong;
     /** The {@link java.util.concurrent.Future} used to control the song fetching task. */
@@ -69,6 +71,18 @@ public class InfoLoader {
                       final WriteCallback writeCallback) {
         this.trackUpdater  = trackUpdater;
         this.writeCallback = writeCallback;
+    }
+
+    public void setAppleScriptEnabled(final boolean enabled) throws IOException {
+        if (enabled) {
+            if (scriptLoader == null) {
+                try (final var stream = Script.class.getClassLoader().getResourceAsStream("streamTitle.applescript")) {
+                    scriptLoader = new InfoLoaderAppleScript(Script.loadScript(stream));
+                }
+            }
+        } else {
+            scriptLoader = null;
+        }
     }
 
     /**
