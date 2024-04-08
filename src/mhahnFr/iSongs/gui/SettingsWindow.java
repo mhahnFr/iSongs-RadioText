@@ -1,7 +1,7 @@
 /*
  * iSongs-RadioText - Radio-text part of iSongs.
  *
- * Copyright (C) 2023  mhahnFr
+ * Copyright (C) 2023 - 2024  mhahnFr
  *
  * This file is part of the iSongs-RadioText. This program is free software:
  * you can redistribute it and/or modify it under the terms of the
@@ -32,6 +32,7 @@ import mhahnFr.utils.gui.components.HintTextField;
 
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.util.ArrayList;
@@ -63,7 +64,24 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
         super(owner, Constants.NAME + ": " + Settings.getInstance().getLocale().get(StringID.MAIN_SETTINGS), true);
 
         final var panel = new DarkComponent<>(new JPanel(new BorderLayout()), components).getComponent();
-            final var darkBox = new DarkComponent<>(new JCheckBox(locale.get(StringID.SETTINGS_ACTIVATE_DARK_MODE)), components).getComponent();
+            final var northPanel = new DarkComponent<>(new JPanel(new BorderLayout()), components).getComponent();
+                final var darkBox = new DarkComponent<>(new JCheckBox(locale.get(StringID.SETTINGS_ACTIVATE_DARK_MODE)), components).getComponent();
+
+                final var scriptSupportPanel = new DarkComponent<>(new JPanel(), components).getComponent();
+                // FIXME: Translations
+                scriptSupportPanel.setBorder(new TitledBorder("AppleScript support"));
+                    final var scriptSupportButtonPanel = new DarkComponent<>(new JPanel(new GridLayout(3, 1)), components).getComponent();
+                        final var scriptSupportOff = new DarkComponent<>(new JRadioButton("Off"), components).getComponent();
+
+                        final var scriptSupportMixed = new DarkComponent<>(new JRadioButton("On"), components).getComponent();
+
+                        final var scriptSupportOnly = new DarkComponent<>(new JRadioButton("Only"), components).getComponent();
+                    scriptSupportButtonPanel.add(scriptSupportOff);
+                    scriptSupportButtonPanel.add(scriptSupportMixed);
+                    scriptSupportButtonPanel.add(scriptSupportOnly);
+                scriptSupportPanel.add(scriptSupportButtonPanel);
+            northPanel.add(darkBox,            BorderLayout.NORTH);
+            northPanel.add(scriptSupportPanel, BorderLayout.CENTER);
 
             final var centerPanel = new DarkComponent<>(new JPanel(new GridLayout(4, 1)), components).getComponent();
                 final var localePanel = new DarkComponent<>(new JPanel(new GridLayout(2, 1)), components).getComponent();
@@ -109,7 +127,7 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
             centerPanel.add(delayPanel);
 
             final var deleteButton = new JButton(locale.get(StringID.SETTINGS_REMOVE));
-        panel.add(darkBox,      BorderLayout.NORTH);
+        panel.add(northPanel,   BorderLayout.NORTH);
         panel.add(centerPanel,  BorderLayout.CENTER);
         panel.add(deleteButton, BorderLayout.SOUTH);
 
