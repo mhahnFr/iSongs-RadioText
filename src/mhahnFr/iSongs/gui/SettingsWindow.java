@@ -37,6 +37,7 @@ import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * This class represents the settings window of the iSongs project.
@@ -67,21 +68,9 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
             final var northPanel = new DarkComponent<>(new JPanel(new BorderLayout()), components).getComponent();
                 final var darkBox = new DarkComponent<>(new JCheckBox(locale.get(StringID.SETTINGS_ACTIVATE_DARK_MODE)), components).getComponent();
 
-                final var scriptSupportPanel = new DarkComponent<>(new JPanel(), components).getComponent();
-                // FIXME: Translations
-                scriptSupportPanel.setBorder(new TitledBorder("AppleScript support"));
-                    final var scriptSupportButtonPanel = new DarkComponent<>(new JPanel(new GridLayout(3, 1)), components).getComponent();
-                        final var scriptSupportOff = new DarkComponent<>(new JRadioButton("Off"), components).getComponent();
-
-                        final var scriptSupportMixed = new DarkComponent<>(new JRadioButton("On"), components).getComponent();
-
-                        final var scriptSupportOnly = new DarkComponent<>(new JRadioButton("Only"), components).getComponent();
-                    scriptSupportButtonPanel.add(scriptSupportOff);
-                    scriptSupportButtonPanel.add(scriptSupportMixed);
-                    scriptSupportButtonPanel.add(scriptSupportOnly);
-                scriptSupportPanel.add(scriptSupportButtonPanel);
-            northPanel.add(darkBox,            BorderLayout.NORTH);
-            northPanel.add(scriptSupportPanel, BorderLayout.CENTER);
+                final var scriptSupportPanel = getScriptSupportPanel();
+            northPanel.add(darkBox, BorderLayout.NORTH);
+            scriptSupportPanel.ifPresent(jPanel -> northPanel.add(jPanel, BorderLayout.CENTER));
 
             final var centerPanel = new DarkComponent<>(new JPanel(new GridLayout(4, 1)), components).getComponent();
                 final var localePanel = new DarkComponent<>(new JPanel(new GridLayout(2, 1)), components).getComponent();
@@ -157,6 +146,25 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
 
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         pack();
+    }
+
+    private Optional<JPanel> getScriptSupportPanel() {
+        if (!System.getProperty("os.name").toLowerCase().contains("mac")) return Optional.empty();
+
+        final var scriptSupportPanel = new DarkComponent<>(new JPanel(), components).getComponent();
+        // FIXME: Translations
+        scriptSupportPanel.setBorder(new TitledBorder("AppleScript support"));
+            final var scriptSupportButtonPanel = new DarkComponent<>(new JPanel(new GridLayout(3, 1)), components).getComponent();
+                final var scriptSupportOff = new DarkComponent<>(new JRadioButton("Off"), components).getComponent();
+
+                final var scriptSupportMixed = new DarkComponent<>(new JRadioButton("On"), components).getComponent();
+
+                final var scriptSupportOnly = new DarkComponent<>(new JRadioButton("Only"), components).getComponent();
+            scriptSupportButtonPanel.add(scriptSupportOff);
+            scriptSupportButtonPanel.add(scriptSupportMixed);
+            scriptSupportButtonPanel.add(scriptSupportOnly);
+        scriptSupportPanel.add(scriptSupportButtonPanel);
+        return Optional.of(scriptSupportPanel);
     }
 
     /**
