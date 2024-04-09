@@ -39,10 +39,10 @@ public class InfoLoaderAppleScript {
         final Song song;
         final var index = text.indexOf(" / ");
         if (index != -1) {
-            song = new Song(text.substring(0, index), text.substring(index + 3));
+            song = new Song(text.substring(0, index).strip(), text.substring(index + 3).strip());
         } else {
             song = null;
         }
-        return new Pair<>(text, song);
+        return new Pair<>(text.strip(), song);
     }
 }
