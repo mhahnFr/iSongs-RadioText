@@ -1,7 +1,7 @@
 /*
  * iSongs-RadioText - Radio-text part of iSongs.
  *
- * Copyright (C) 2023  mhahnFr
+ * Copyright (C) 2023 - 2024  mhahnFr
  *
  * This file is part of the iSongs-RadioText. This program is free software:
  * you can redistribute it and/or modify it under the terms of the
@@ -19,6 +19,7 @@
 
 package mhahnFr.iSongs.core;
 
+import mhahnFr.iSongs.core.appleScript.ScriptSupport;
 import mhahnFr.iSongs.core.locale.LanguageListener;
 import mhahnFr.iSongs.core.locale.Locale;
 import mhahnFr.iSongs.iSongs;
@@ -141,6 +142,14 @@ public class Settings {
             locale = Locale.fromName(preferences.get(Key.LOCALE, ""));
         }
         return locale;
+    }
+
+    public ScriptSupport getScriptSupport() {
+        return ScriptSupport.valueOf(preferences.get(Key.APPLE_SCRIPT, ScriptSupport.off.name()));
+    }
+
+    public void setScriptSupport(final ScriptSupport support) {
+        preferences.put(Key.APPLE_SCRIPT, support.name());
     }
 
     /**
@@ -314,6 +323,8 @@ public class Settings {
         languageListeners.remove(listener);
     }
 
+    public static final boolean isMac = System.getProperty("os.name").toLowerCase().contains("mac");
+
     /**
      * Returns the one and only instance of this class.
      * When this method is called for the first time, the
@@ -356,5 +367,6 @@ public class Settings {
         public static final String PATH          = BUNDLE_ID + ".path";
         /** The key for the locale to be used.     */
         public static final String LOCALE        = BUNDLE_ID + ".locale";
+        public static final String APPLE_SCRIPT  = BUNDLE_ID + ".scriptSupport";
     }
 }
