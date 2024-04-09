@@ -36,6 +36,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * This class represents the main window of the iSongs project.
@@ -47,7 +48,10 @@ public class MainWindow extends JFrame implements DarkModeListener {
     /** The list with the components, enabling the dark mode.      */
     private final List<DarkComponent<? extends JComponent>> components = new ArrayList<>();
     /** The {@link InfoLoader}.                                    */
-    private final InfoLoader loader = new InfoLoader(this::updateUI, this::writeCallback);
+    private final InfoLoader loader = new InfoLoader(this::updateUI,
+                                                     this::writeCallback,
+                                                     this::radioTextCallback,
+                                                     this::errorCallback);
     /** The timer for resetting the title bar.                     */
     private final Timer savedTimer = new Timer(5000, __ -> setTitle(Constants.NAME));
     /** The {@link JLabel} displaying the title of the song.       */
@@ -158,6 +162,16 @@ public class MainWindow extends JFrame implements DarkModeListener {
             interpreterLabel.setText(locale.get(StringID.MAIN_NO_INTERPRETER));
             saveButton.setEnabled(false);
         }
+    }
+
+    private void radioTextCallback(final String value) {
+        // TODO: Care about the other info displayed there
+        setTitle(Objects.requireNonNullElse(value, "iSongs"));
+    }
+
+    private void errorCallback(final Exception e) {
+        // TODO: Implement
+        e.printStackTrace();
     }
 
     /**

@@ -54,6 +54,8 @@ public class InfoLoader {
     private final Runnable trackUpdater;
     /** The callback called when a song has been written.                               */
     private final WriteCallback writeCallback;
+    private final Callback<String> textUpdater;
+    private final Callback<Exception> errorHandler;
     private InfoLoaderAppleScript scriptLoader;
     /** The currently recognized song.                                                  */
     private Song currentSong;
@@ -67,10 +69,14 @@ public class InfoLoader {
      * @param trackUpdater  the callback called when a new song is recognized
      * @param writeCallback the callback called when a song has been written
      */
-    public InfoLoader(final Runnable      trackUpdater,
-                      final WriteCallback writeCallback) {
+    public InfoLoader(final Runnable            trackUpdater,
+                      final WriteCallback       writeCallback,
+                      final Callback<String>    textUpdater,
+                      final Callback<Exception> errorHandler) {
         this.trackUpdater  = trackUpdater;
         this.writeCallback = writeCallback;
+        this.textUpdater   = textUpdater;
+        this.errorHandler  = errorHandler;
     }
 
     public void setAppleScriptEnabled(final boolean enabled) {
@@ -79,7 +85,7 @@ public class InfoLoader {
                 try (final var stream = Script.class.getClassLoader().getResourceAsStream("streamTitle.applescript")) {
                     scriptLoader = new InfoLoaderAppleScript(Script.loadScript(stream));
                 } catch (final IOException e) {
-                    e.printStackTrace();
+                    errorHandler.update(e);
                 }
             }
         } else {
@@ -182,11 +188,9 @@ public class InfoLoader {
 
         try (final var reader = new BufferedInputStream(url.openStream())) {
             new JSONParser(new StringStream(new String(reader.readAllBytes(), StandardCharsets.UTF_8))).readInto(dto);
-        } catch (Exception e) {
-            setCurrentSong(new Pair<>(e.getLocalizedMessage(), ""));
-            e.printStackTrace();
-            trackUpdater.run();
-            return;
+        } catch (final Exception e) {
+            errorHandler.update(e);
+            return null;
         }
         final var playedSong = getPlayedSong(dto);
 
