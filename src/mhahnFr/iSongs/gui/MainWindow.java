@@ -170,8 +170,14 @@ public class MainWindow extends JFrame implements DarkModeListener {
     }
 
     private void errorCallback(final Exception e) {
-        // TODO: Implement
-        e.printStackTrace();
+        if (!EventQueue.isDispatchThread()) {
+            EventQueue.invokeLater(() -> errorCallback(e));
+            return;
+        }
+        JOptionPane.showMessageDialog(this,
+                                      "Error happened: " + e.getLocalizedMessage(),
+                                      "iSongs: Error",
+                                      JOptionPane.ERROR_MESSAGE);
     }
 
     /**
