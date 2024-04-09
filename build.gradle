@@ -53,7 +53,6 @@ tasks.register('deploy', Exec) {
                             '--description',  'Radio-Text part of iSongs',
                             '--vendor',       project.group,
                             '--about-url',    'https://github.com/mhahnFr/iSongs-RadioText',
-                            '--license-file', 'LICENSE',
                             '--icon',         'resources/icon.icns'
 }
 
