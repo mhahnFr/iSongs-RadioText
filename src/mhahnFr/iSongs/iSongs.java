@@ -1,7 +1,7 @@
 /*
  * iSongs-RadioText - Radio-text part of iSongs.
  *
- * Copyright (C) 2023  mhahnFr
+ * Copyright (C) 2023 - 2024  mhahnFr
  *
  * This file is part of the iSongs-RadioText. This program is free software:
  * you can redistribute it and/or modify it under the terms of the
@@ -19,6 +19,7 @@
 
 package mhahnFr.iSongs;
 
+import mhahnFr.iSongs.core.Settings;
 import mhahnFr.iSongs.gui.MainWindow;
 
 import java.awt.EventQueue;
@@ -31,7 +32,7 @@ import java.awt.EventQueue;
  */
 public class iSongs {
     public static void main(String[] args) {
-        if (System.getProperty("os.name").toLowerCase().contains("mac")) {
+        if (Settings.isMac) {
             System.setProperty("apple.awt.application.appearance", "system");
         }
 
