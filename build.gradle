@@ -17,6 +17,10 @@
  * this program, see the file LICENSE.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
+
+
 plugins {
     id 'java'
 }
@@ -36,14 +40,19 @@ sourceSets {
             srcDirs = ['src']
         }
         resources {
-            srcDir 'build_AS'
-            include '**/*.scpt'
+            srcDirs 'build_AS', 'scripts'
+            include '**/*.scpt', '**/*.applescript'
         }
     }
 }
 
 tasks.register('deploy', Exec) {
     dependsOn(jar)
+
+    final var compiledScripts = new File('build_AS').listFiles()
+    for (final var file : compiledScripts) {
+        Files.copy(file.toPath(), new File('build/libs/' + file.name).toPath(), StandardCopyOption.REPLACE_EXISTING)
+    }
 
     commandLine 'jpackage', '--input',        'build/libs',
                             '--name',         project.name,
