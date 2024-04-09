@@ -21,6 +21,7 @@ package mhahnFr.iSongs.core;
 
 import mhahnFr.iSongs.core.appleScript.InfoLoaderAppleScript;
 import mhahnFr.iSongs.core.appleScript.Script;
+import mhahnFr.iSongs.core.appleScript.ScriptSupport;
 import mhahnFr.iSongs.core.locale.StringID;
 import mhahnFr.utils.Pair;
 import mhahnFr.utils.StringStream;
@@ -61,6 +62,7 @@ public class InfoLoader {
     private Pair<String, String> currentSong;
     /** The {@link java.util.concurrent.Future} used to control the song fetching task. */
     private ScheduledFuture<?> updateFuture;
+    private ScriptSupport support;
 
     /**
      * Initializes this {@link InfoLoader}.
@@ -74,11 +76,13 @@ public class InfoLoader {
         this.writeCallback = writeCallback;
     }
 
-    public void setAppleScriptEnabled(final boolean enabled) throws IOException {
+    public void setAppleScriptEnabled(final boolean enabled) {
         if (enabled) {
             if (scriptLoader == null) {
                 try (final var stream = Script.class.getClassLoader().getResourceAsStream("streamTitle.applescript")) {
                     scriptLoader = new InfoLoaderAppleScript(Script.loadScript(stream));
+                } catch (final IOException e) {
+                    e.printStackTrace();
                 }
             }
         } else {
@@ -92,6 +96,7 @@ public class InfoLoader {
      * @see #stop()
      */
     public void start() {
+        setScriptSupport(Settings.getInstance().getScriptSupport());
         updateFuture = executorService.scheduleAtFixedRate(this::updateTrack,
                 0,
                 Settings.getInstance().getDelay(),
@@ -119,6 +124,11 @@ public class InfoLoader {
      */
     public Pair<String, String> getCurrentSong() {
         synchronized (currentSongLock) { return currentSong; }
+    }
+
+    private void setScriptSupport(final ScriptSupport support) {
+        setAppleScriptEnabled(support != ScriptSupport.off);
+        this.support = support;
     }
 
     /**
