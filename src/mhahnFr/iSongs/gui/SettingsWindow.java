@@ -21,6 +21,7 @@ package mhahnFr.iSongs.gui;
 
 import mhahnFr.iSongs.core.Constants;
 import mhahnFr.iSongs.core.Settings;
+import mhahnFr.iSongs.core.appleScript.ScriptSupport;
 import mhahnFr.iSongs.core.locale.English;
 import mhahnFr.iSongs.core.locale.German;
 import mhahnFr.iSongs.core.locale.Locale;
@@ -68,7 +69,7 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
             final var northPanel = new DarkComponent<>(new JPanel(new BorderLayout()), components).getComponent();
                 final var darkBox = new DarkComponent<>(new JCheckBox(locale.get(StringID.SETTINGS_ACTIVATE_DARK_MODE)), components).getComponent();
 
-                final var scriptSupportPanel = getScriptSupportPanel();
+                final var scriptSupportPanel = getScriptSupportPanel(Settings.getInstance().getScriptSupport());
             northPanel.add(darkBox, BorderLayout.NORTH);
             scriptSupportPanel.ifPresent(jPanel -> northPanel.add(jPanel, BorderLayout.CENTER));
 
@@ -148,8 +149,8 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
         pack();
     }
 
-    private Optional<JPanel> getScriptSupportPanel() {
-        if (!System.getProperty("os.name").toLowerCase().contains("mac")) return Optional.empty();
+    private Optional<JPanel> getScriptSupportPanel(final ScriptSupport selection) {
+        if (!Settings.isMac) return Optional.empty();
 
         final var scriptSupportPanel = new DarkComponent<>(new JPanel(), components).getComponent();
         // FIXME: Translations
@@ -164,6 +165,22 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
             scriptSupportButtonPanel.add(scriptSupportMixed);
             scriptSupportButtonPanel.add(scriptSupportOnly);
         scriptSupportPanel.add(scriptSupportButtonPanel);
+
+        final var group = new ButtonGroup();
+        group.add(scriptSupportOff);
+        group.add(scriptSupportMixed);
+        group.add(scriptSupportOnly);
+
+        switch (selection) {
+            case off  -> scriptSupportOff.setSelected(true);
+            case on   -> scriptSupportMixed.setSelected(true);
+            case only -> scriptSupportOnly.setSelected(true);
+        }
+
+        scriptSupportOff  .addItemListener(__ -> Settings.getInstance().setScriptSupport(ScriptSupport.off));
+        scriptSupportMixed.addItemListener(__ -> Settings.getInstance().setScriptSupport(ScriptSupport.on));
+        scriptSupportOnly .addItemListener(__ -> Settings.getInstance().setScriptSupport(ScriptSupport.only));
+
         return Optional.of(scriptSupportPanel);
     }
 
