@@ -23,7 +23,6 @@ import mhahnFr.iSongs.core.appleScript.InfoLoaderAppleScript;
 import mhahnFr.iSongs.core.appleScript.Script;
 import mhahnFr.iSongs.core.appleScript.ScriptSupport;
 import mhahnFr.iSongs.core.locale.StringID;
-import mhahnFr.utils.Pair;
 import mhahnFr.utils.StringStream;
 import mhahnFr.utils.json.JSONParser;
 
@@ -34,10 +33,8 @@ import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
+import java.util.Objects;
+import java.util.concurrent.*;
 
 /**
  * This class contains the song managing functions of this
@@ -47,7 +44,7 @@ import java.util.concurrent.TimeUnit;
  * @since 14.03.23
  */
 public class InfoLoader {
-    /** The {@link java.util.concurrent.ExecutorService} used for the multithreading.   */
+    /** The {@link ExecutorService} used for the multithreading.   */
     private final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(2);
     /** The data transfer object.                                                       */
     private final WebPlayerDTO dto = new WebPlayerDTO();
@@ -59,8 +56,8 @@ public class InfoLoader {
     private final WriteCallback writeCallback;
     private InfoLoaderAppleScript scriptLoader;
     /** The currently recognized song.                                                  */
-    private Pair<String, String> currentSong;
-    /** The {@link java.util.concurrent.Future} used to control the song fetching task. */
+    private Song currentSong;
+    /** The {@link Future} used to control the song fetching task. */
     private ScheduledFuture<?> updateFuture;
     private ScriptSupport support;
 
@@ -120,9 +117,9 @@ public class InfoLoader {
      *
      * @return the currently recognized song
      * @see #hasTrack()
-     * @see #setCurrentSong(Pair)
+     * @see #setCurrentSong(Song)
      */
-    public Pair<String, String> getCurrentSong() {
+    public Song getCurrentSong() {
         synchronized (currentSongLock) { return currentSong; }
     }
 
@@ -137,7 +134,7 @@ public class InfoLoader {
      * @param newSong the new song to be stored
      * @see #getCurrentSong()
      */
-    private void setCurrentSong(final Pair<String, String> newSong) {
+    private void setCurrentSong(final Song newSong) {
         synchronized (currentSongLock) {
             currentSong = newSong;
         }
@@ -175,12 +172,6 @@ public class InfoLoader {
         }
     }
 
-    /**
-     * Fetches the current song information. If the song has changed,
-     * the callback is invoked.
-     *
-     * @see #trackUpdater
-     */
     private void updateTrack() {
         final var url = createUrl();
         if (url == null) {
@@ -222,7 +213,7 @@ public class InfoLoader {
      * Starts the task to save the song information of the
      * currently recognized song.
      *
-     * @see #saveSongImpl(Pair)
+     * @see #saveSongImpl(Song)
      */
     public void saveSong() {
         final var currentSong = getCurrentSong();
@@ -236,9 +227,9 @@ public class InfoLoader {
      * @param song the song to be saved
      * @see #writeCallback
      */
-    private void saveSongImpl(final Pair<String, String> song) {
-        Pair<String, String> savedSong = null;
-        Exception            e         = null;
+    private void saveSongImpl(final Song song) {
+        Song      savedSong = null;
+        Exception e         = null;
         try {
             savedSong = saveTrack(song);
         } catch (Exception exception) {
@@ -256,7 +247,7 @@ public class InfoLoader {
      * @throws IOException if the file could not be written
      * @throws IllegalStateException if the file cannot be written
      */
-    private Pair<String, String> saveTrack(Pair<String, String> song) throws IOException {
+    private Song saveTrack(final Song song) throws IOException {
         if (!hasTrack()) {
             throw new IllegalStateException("No track recognized!");
         }
@@ -264,8 +255,8 @@ public class InfoLoader {
         if (path == null || path.isBlank()) {
             throw new IllegalStateException("Save folder not set!");
         }
-        final var buffer = "titel:" + song.getFirst() + System.lineSeparator() +
-                           "interpreter:" + song.getSecond();
+        final var buffer = "titel:" + song.title() + System.lineSeparator() +
+                           "interpreter:" + song.interpreter();
         try (final var writer = new BufferedWriter(new FileWriter(createFileName()))) {
             writer.write(buffer);
         }

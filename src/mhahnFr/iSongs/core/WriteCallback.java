@@ -19,8 +19,6 @@
 
 package mhahnFr.iSongs.core;
 
-import mhahnFr.utils.Pair;
-
 /**
  * This interface defines the callback function after saving a song.
  *
@@ -40,5 +38,5 @@ public interface WriteCallback {
      * @param song      the song that has been written
      * @param exception the {@link Exception} that happened while writing
      */
-    void songWritten(final Pair<String, String> song, final Exception exception);
+    void songWritten(final Song song, final Exception exception);
 }

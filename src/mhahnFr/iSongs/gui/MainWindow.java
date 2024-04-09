@@ -1,7 +1,7 @@
 /*
  * iSongs-RadioText - Radio-text part of iSongs.
  *
- * Copyright (C) 2023  mhahnFr
+ * Copyright (C) 2023 - 2024  mhahnFr
  *
  * This file is part of the iSongs-RadioText. This program is free software:
  * you can redistribute it and/or modify it under the terms of the
@@ -22,9 +22,9 @@ package mhahnFr.iSongs.gui;
 import mhahnFr.iSongs.core.Constants;
 import mhahnFr.iSongs.core.InfoLoader;
 import mhahnFr.iSongs.core.Settings;
+import mhahnFr.iSongs.core.Song;
 import mhahnFr.iSongs.core.locale.Locale;
 import mhahnFr.iSongs.core.locale.StringID;
-import mhahnFr.utils.Pair;
 import mhahnFr.utils.gui.components.DarkComponent;
 import mhahnFr.utils.gui.DarkModeListener;
 
@@ -150,8 +150,8 @@ public class MainWindow extends JFrame implements DarkModeListener {
         errorButton.setVisible(false);
         final var displayedSong = loader.getCurrentSong();
         if (displayedSong != null) {
-            titleLabel.setText(displayedSong.getFirst());
-            interpreterLabel.setText(displayedSong.getSecond());
+            titleLabel.setText(displayedSong.title());
+            interpreterLabel.setText(displayedSong.interpreter());
             saveButton.setEnabled(true);
         } else {
             titleLabel.setText(locale.get(StringID.MAIN_NO_SONG));
@@ -167,14 +167,14 @@ public class MainWindow extends JFrame implements DarkModeListener {
      * @param song  the saved song
      * @param error the {@link Exception} that happened
      */
-    private void writeCallback(final Pair<String, String> song,
-                               final Exception            error) {
+    private void writeCallback(final Song      song,
+                               final Exception error) {
         if (!EventQueue.isDispatchThread()) {
             EventQueue.invokeLater(() -> writeCallback(song, error));
             return;
         }
         if (error == null) {
-            setTitle("\"" + song.getFirst() + "\" " + locale.get(StringID.MAIN_STORED));
+            setTitle("\"" + song.title() + "\" " + locale.get(StringID.MAIN_STORED));
             saveButton.setEnabled(false);
         } else {
             setTitle(locale.get(StringID.MAIN_SAVE_ERROR));

@@ -19,6 +19,7 @@
 
 package mhahnFr.iSongs.core.appleScript;
 
+import mhahnFr.iSongs.core.Song;
 import mhahnFr.utils.Pair;
 
 public class InfoLoaderAppleScript {
@@ -28,17 +29,17 @@ public class InfoLoaderAppleScript {
         this.script = script;
     }
 
-    public Pair<String, Pair<String, String>> getScriptResult() {
+    public Pair<String, Song> getScriptResult() {
         final String text;
         try {
             text = script.execute();
         } catch (final Exception e) {
             return null;
         }
-        final Pair<String, String> song;
+        final Song song;
         final var index = text.indexOf(" / ");
         if (index != -1) {
-            song = new Pair<>(text.substring(0, index), text.substring(index + 3));
+            song = new Song(text.substring(0, index), text.substring(index + 3));
         } else {
             song = null;
         }
