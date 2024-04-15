@@ -3,18 +3,20 @@
  *
  * Copyright (C) 2023 - 2024  mhahnFr
  *
- * This file is part of the iSongs-RadioText. This program is free software:
- * you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation,
- * either version 3 of the License, or (at your option) any later version.
+ * This file is part of the iSongs-RadioText.
  *
- * This program is distributed in the hope that it will be useful,
+ * iSongs-RadioText is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * iSongs-RadioText is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along with
- * this program, see the file LICENSE.  If not, see <https://www.gnu.org/licenses/>.
+ * iSongs-RadioText, see the file LICENSE.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 package mhahnFr.iSongs.gui;
@@ -166,7 +168,7 @@ public class MainWindow extends JFrame implements DarkModeListener {
 
     private void radioTextCallback(final String value) {
         // TODO: Care about the other info displayed there
-        setTitle(Objects.requireNonNullElse(value, "iSongs"));
+        setTitle(Objects.requireNonNullElse(value, Constants.NAME));
     }
 
     private void errorCallback(final Exception e) {
@@ -175,8 +177,8 @@ public class MainWindow extends JFrame implements DarkModeListener {
             return;
         }
         JOptionPane.showMessageDialog(this,
-                                      "Error happened: " + e.getLocalizedMessage(),
-                                      "iSongs: Error",
+                                      locale.get(StringID.MAIN_ERROR_HAPPENED) + ": " + e.getLocalizedMessage(),
+                                      Constants.NAME + ": " + locale.get(StringID.MAIN_ERROR),
                                       JOptionPane.ERROR_MESSAGE);
     }
 

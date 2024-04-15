@@ -47,6 +47,7 @@ public class German extends Locale {
             case MAIN_NO_ERROR            -> { return "Kein Fehler aufgetreten";                                        }
             case MAIN_UI_STATE_SAVE_ERROR -> { return "Konnte UI-State nicht speichern";                                }
             case MAIN_UI_CHECK_SETTINGS   -> { return "Bitte Einstellungen überprüfen!";                                }
+            case MAIN_ERROR_HAPPENED      -> { return "Fehler aufgetreten";                                             }
 
             case SETTINGS_ACTIVATE_DARK_MODE    -> { return "Dunkelmodus aktivieren";                                      }
             case SETTINGS_CHOOSE_LANG           -> { return "Sprache wählen";                                              }

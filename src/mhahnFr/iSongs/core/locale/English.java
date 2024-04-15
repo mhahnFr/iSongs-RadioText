@@ -52,6 +52,7 @@ public class English extends Locale {
             case MAIN_NO_ERROR            -> { return "No error occurred";                       }
             case MAIN_UI_STATE_SAVE_ERROR -> { return "Could not save UI state";                 }
             case MAIN_UI_CHECK_SETTINGS   -> { return "Please check the settings!";              }
+            case MAIN_ERROR_HAPPENED      -> { return "Error happened";                          }
 
             case SETTINGS_ACTIVATE_DARK_MODE    -> { return "Activate dark-mode";                                     }
             case SETTINGS_CHOOSE_LANG           -> { return "Choose language";                                        }
