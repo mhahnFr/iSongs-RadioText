@@ -3,18 +3,20 @@
  *
  * Copyright (C) 2024  mhahnFr
  *
- * This file is part of the iSongs-RadioText. This program is free software:
- * you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation,
- * either version 3 of the License, or (at your option) any later version.
+ * This file is part of the iSongs-RadioText.
  *
- * This program is distributed in the hope that it will be useful,
+ * iSongs-RadioText is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * iSongs-RadioText is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along with
- * this program, see the file LICENSE.  If not, see <https://www.gnu.org/licenses/>.
+ * iSongs-RadioText, see the file LICENSE.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 import java.nio.file.Files
@@ -40,8 +42,8 @@ sourceSets {
             srcDirs = ['src']
         }
         resources {
-            srcDirs 'build_AS', 'scripts'
-            include '**/*.scpt', '**/*.applescript'
+            srcDirs 'scripts'
+            include '**/*.applescript'
         }
     }
 }
@@ -49,8 +51,9 @@ sourceSets {
 tasks.register('deploy', Exec) {
     dependsOn(jar)
 
-    final var compiledScripts = new File('build_AS').listFiles()
-    for (final var file : compiledScripts) {
+    for (final var file : appleScripts) {
+        if (!file.name.endsWith('.scpt')) continue
+
         Files.copy(file.toPath(), new File('build/libs/' + file.name).toPath(), StandardCopyOption.REPLACE_EXISTING)
     }
 
@@ -66,17 +69,11 @@ tasks.register('deploy', Exec) {
 }
 
 tasks.register('maybeAppleScript', Exec) {
-    final var buildFolder = new File('build_AS')
-    if (!buildFolder.exists()) {
-        if (!buildFolder.mkdir()) {
-            throw new RuntimeException()
-        }
-    }
     if (System.getProperty('os.name').toLowerCase().contains('mac')) {
         for (final var script : appleScripts) {
             if (!script.name.endsWith('.applescript')) continue
 
-            commandLine 'osacompile', '-xo', 'build_AS/' + script.name.substring(0, script.name.lastIndexOf('.')) + '.scpt', script
+            commandLine 'osacompile', '-xo', script.getParent() + File.separator + script.name.substring(0, script.name.lastIndexOf('.')) + '.scpt', script
         }
     }
 }
