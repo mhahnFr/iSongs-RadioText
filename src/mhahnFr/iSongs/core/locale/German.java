@@ -3,18 +3,20 @@
  *
  * Copyright (C) 2023 - 2024  mhahnFr
  *
- * This file is part of the iSongs-RadioText. This program is free software:
- * you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation,
- * either version 3 of the License, or (at your option) any later version.
+ * This file is part of the iSongs-RadioText.
  *
- * This program is distributed in the hope that it will be useful,
+ * iSongs-RadioText is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * iSongs-RadioText is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along with
- * this program, see the file LICENSE.  If not, see <https://www.gnu.org/licenses/>.
+ * iSongs-RadioText, see the file LICENSE.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 package mhahnFr.iSongs.core.locale;
@@ -61,6 +63,9 @@ public class German extends Locale {
                                                             Diese Aktion ist nicht widerruflich!
                                                             Das Programm wird anschließend beendet.
                                                             """; }
+
+            case INTERNAL_NO_TRACK_RECOGNIZED -> { return "Kein Titel erkannt!";             }
+            case INTERNAL_SAVE_FOLDER_UNSET   -> { return "Titelinfo-Ordner nicht gesetzt!"; }
         }
         throw new IllegalStateException("Missing a german word for: " + id + "!");
     }

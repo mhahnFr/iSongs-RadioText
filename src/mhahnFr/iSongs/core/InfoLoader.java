@@ -25,6 +25,7 @@ import mhahnFr.iSongs.core.appleScript.CompiledScript;
 import mhahnFr.iSongs.core.appleScript.InfoLoaderAppleScript;
 import mhahnFr.iSongs.core.appleScript.Script;
 import mhahnFr.iSongs.core.appleScript.ScriptSupport;
+import mhahnFr.iSongs.core.locale.StringID;
 import mhahnFr.utils.StringStream;
 import mhahnFr.utils.json.JSONParser;
 
@@ -284,11 +285,11 @@ public class InfoLoader {
      */
     private Song saveTrack(final Song song) throws IOException {
         if (!hasTrack()) {
-            throw new IllegalStateException("No track recognized!");
+            throw new IllegalStateException(Settings.getInstance().getLocale().get(StringID.INTERNAL_NO_TRACK_RECOGNIZED));
         }
         final var path = Settings.getInstance().getSavePath();
         if (path == null || path.isBlank()) {
-            throw new IllegalStateException("Save folder not set!");
+            throw new IllegalStateException(Settings.getInstance().getLocale().get(StringID.INTERNAL_SAVE_FOLDER_UNSET));
         }
         final var buffer = "titel:" + song.title() + System.lineSeparator() +
                            "interpreter:" + song.interpreter();
