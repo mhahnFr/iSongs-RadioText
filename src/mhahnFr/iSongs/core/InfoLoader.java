@@ -3,31 +3,34 @@
  *
  * Copyright (C) 2023 - 2024  mhahnFr
  *
- * This file is part of the iSongs-RadioText. This program is free software:
- * you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation,
- * either version 3 of the License, or (at your option) any later version.
+ * This file is part of the iSongs-RadioText.
  *
- * This program is distributed in the hope that it will be useful,
+ * iSongs-RadioText is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * iSongs-RadioText is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along with
- * this program, see the file LICENSE.  If not, see <https://www.gnu.org/licenses/>.
+ * iSongs-RadioText, see the file LICENSE.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 package mhahnFr.iSongs.core;
 
+import mhahnFr.iSongs.core.appleScript.CompiledScript;
 import mhahnFr.iSongs.core.appleScript.InfoLoaderAppleScript;
 import mhahnFr.iSongs.core.appleScript.Script;
 import mhahnFr.iSongs.core.appleScript.ScriptSupport;
-import mhahnFr.iSongs.core.locale.StringID;
 import mhahnFr.utils.StringStream;
 import mhahnFr.utils.json.JSONParser;
 
 import java.io.*;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
@@ -82,11 +85,7 @@ public class InfoLoader {
     public void setAppleScriptEnabled(final boolean enabled) {
         if (enabled) {
             if (scriptLoader == null) {
-                try (final var stream = Script.class.getClassLoader().getResourceAsStream("streamTitle.applescript")) {
-                    scriptLoader = new InfoLoaderAppleScript(Script.loadScript(stream));
-                } catch (final IOException e) {
-                    errorHandler.update(e);
-                }
+                scriptLoader = loadScriptLoader();
             }
         } else {
             scriptLoader = null;
@@ -127,6 +126,38 @@ public class InfoLoader {
      */
     public Song getCurrentSong() {
         synchronized (currentSongLock) { return currentSong; }
+    }
+
+    private InfoLoaderAppleScript loadScriptLoader() {
+        final var location = findScriptLocation("streamTitle.scpt");
+        if (location == null || !location.exists()) {
+            try (final var stream = Script.class.getClassLoader().getResourceAsStream("streamTitle.applescript")) {
+                return new InfoLoaderAppleScript(Script.loadScript(stream));
+            } catch (final IOException e) {
+                errorHandler.update(e);
+            }
+        } else {
+            return new InfoLoaderAppleScript(new CompiledScript(location));
+        }
+        return null;
+    }
+
+    private File findScriptLocation(final String fileName) {
+        final var codeSource = InfoLoader.class.getProtectionDomain().getCodeSource();
+        if (codeSource == null) {
+            return null;
+        }
+        final var location = codeSource.getLocation();
+        if (location == null) {
+            return null;
+        }
+        final File folder;
+        try {
+            folder = new File(location.toURI());
+        } catch (final URISyntaxException e) {
+            return null;
+        }
+        return new File(folder.getParentFile(), fileName);
     }
 
     private void setScriptSupport(final ScriptSupport support) {
