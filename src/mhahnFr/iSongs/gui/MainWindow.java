@@ -58,7 +58,7 @@ public class MainWindow extends JFrame implements DarkModeListener {
                                                      this::radioTextCallback,
                                                      this::errorCallback);
     /** The timer for resetting the title bar.                     */
-    private final Timer savedTimer = new Timer(5000, __ -> setTitle(Constants.NAME));
+    private final Timer savedTimer = new Timer(5000, __ -> unblockTitle());
     /** The {@link JLabel} displaying the title of the song.       */
     private final JLabel titleLabel;
     /** The {@link JLabel} displaying the interpreter of the song. */
@@ -67,10 +67,12 @@ public class MainWindow extends JFrame implements DarkModeListener {
     private final JButton saveButton;
     /** The {@link JButton} displaying the {@link #lastException}. */
     private final JButton errorButton;
-    /** The last {@link Exception} that happened.                  */
-    private Exception lastException;
     /** The {@link Locale} to be used in this instance.            */
     private final Locale locale = Settings.getInstance().getLocale();
+    /** The last {@link Exception} that happened.                  */
+    private Exception lastException;
+    private boolean blockedTitle = false;
+    private String title;
 
     /**
      * Constructs this main window.
@@ -184,10 +186,7 @@ public class MainWindow extends JFrame implements DarkModeListener {
     }
 
     private void radioTextCallback(final String value) {
-        onUIThread(() -> {
-            // TODO: Care about the other info displayed there
-            setTitle(Objects.requireNonNullElse(value, Constants.NAME));
-        });
+        onUIThread(() -> setTitle(Objects.requireNonNullElse(value, Constants.NAME)));
     }
 
     private void errorCallback(final Exception e) {
@@ -207,16 +206,37 @@ public class MainWindow extends JFrame implements DarkModeListener {
     private void writeCallback(final Song      song,
                                final Exception error) {
         onUIThread(() -> {
+            blockTitle();
             if (error == null) {
-                setTitle("\"" + song.title() + "\" " + locale.get(StringID.MAIN_STORED));
+                super.setTitle("\"" + song.title() + "\" " + locale.get(StringID.MAIN_STORED));
                 saveButton.setEnabled(false);
             } else {
-                setTitle(locale.get(StringID.MAIN_SAVE_ERROR));
+                super.setTitle(locale.get(StringID.MAIN_SAVE_ERROR));
                 errorButton.setVisible(true);
                 lastException = error;
             }
             savedTimer.restart();
         });
+    }
+
+    private void blockTitle() {
+        blockedTitle = true;
+        title = getTitle();
+    }
+
+    @Override
+    public void setTitle(final String title) {
+        if (blockedTitle) {
+            this.title = title;
+        } else {
+            super.setTitle(title);
+        }
+    }
+
+    private void unblockTitle() {
+        blockedTitle = false;
+        setTitle(title);
+        title = null;
     }
 
     /**
