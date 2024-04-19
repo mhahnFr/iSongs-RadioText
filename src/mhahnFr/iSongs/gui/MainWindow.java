@@ -271,6 +271,7 @@ public class MainWindow extends JFrame implements DarkModeListener {
      */
     private void showSettings() {
         loader.stop();
+        setTitle(Constants.NAME);
         final var settingsWindow = new SettingsWindow(this);
         settingsWindow.setLocationRelativeTo(this);
         settingsWindow.setVisible(true);
