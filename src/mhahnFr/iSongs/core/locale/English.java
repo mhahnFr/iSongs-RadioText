@@ -64,6 +64,10 @@ public class English extends Locale {
             case SETTINGS_REMOVE_ERROR          -> { return "Error occurred while deleting settings";                 }
             case SETTINGS_SAVE_ERROR            -> { return "Could not save settings";                                }
             case SETTINGS_LANGUAGE_RESTART      -> { return "Restart the app for the language change to take effect"; }
+            case SETTINGS_APPLESCRIPT_DESC      -> { return "Apple Event based recognition";                          }
+            case SETTINGS_APPLESCRIPT_OFF       -> { return "Disabled";                                               }
+            case SETTINGS_APPLESCRIPT_ON        -> { return "Activated";                                              }
+            case SETTINGS_APPLESCRIPT_ONLY      -> { return "Only (Internet based recognition disabled)";             }
             case SETTINGS_REMOVE_REALLY         -> { return """
                                                             Really delete settings?
                                                             This action cannot be undone.

@@ -142,14 +142,13 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
         if (!Settings.isMac) return Optional.empty();
 
         final var scriptSupportPanel = new DarkComponent<>(new JPanel(new GridLayout(1, 1)), components).getComponent();
-        // FIXME: Translations
-        scriptSupportPanel.setBorder(new TitledBorder("AppleScript support"));
+        scriptSupportPanel.setBorder(new TitledBorder(locale.get(StringID.SETTINGS_APPLESCRIPT_DESC) + ":"));
             final var scriptSupportButtonPanel = new DarkComponent<>(new JPanel(new GridLayout(3, 1)), components).getComponent();
-                final var scriptSupportOff = new DarkComponent<>(new JRadioButton("Off"), components).getComponent();
+                final var scriptSupportOff = new DarkComponent<>(new JRadioButton(locale.get(StringID.SETTINGS_APPLESCRIPT_OFF)), components).getComponent();
 
-                final var scriptSupportMixed = new DarkComponent<>(new JRadioButton("On"), components).getComponent();
+                final var scriptSupportMixed = new DarkComponent<>(new JRadioButton(locale.get(StringID.SETTINGS_APPLESCRIPT_ON)), components).getComponent();
 
-                final var scriptSupportOnly = new DarkComponent<>(new JRadioButton("Only"), components).getComponent();
+                final var scriptSupportOnly = new DarkComponent<>(new JRadioButton(locale.get(StringID.SETTINGS_APPLESCRIPT_ONLY)), components).getComponent();
             scriptSupportButtonPanel.add(scriptSupportOff);
             scriptSupportButtonPanel.add(scriptSupportMixed);
             scriptSupportButtonPanel.add(scriptSupportOnly);

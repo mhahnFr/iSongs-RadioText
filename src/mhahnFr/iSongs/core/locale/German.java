@@ -59,6 +59,10 @@ public class German extends Locale {
             case SETTINGS_REMOVE_ERROR          -> { return "Fehler beim Löschen der Einstellungen aufgetreten";           }
             case SETTINGS_SAVE_ERROR            -> { return "Konnte Einstellungen nicht sichern";                          }
             case SETTINGS_LANGUAGE_RESTART      -> { return "Anwendung neu starten zur Anwendung der Sprachänderung";      }
+            case SETTINGS_APPLESCRIPT_DESC      -> { return "Apple Event basierte Titelerkennung";                         }
+            case SETTINGS_APPLESCRIPT_OFF       -> { return "Deaktiviert";                                                 }
+            case SETTINGS_APPLESCRIPT_ON        -> { return "Aktiviert";                                                   }
+            case SETTINGS_APPLESCRIPT_ONLY      -> { return "Alleinig (Internet basierte Erkennung deaktiviert)";          }
             case SETTINGS_REMOVE_REALLY         -> { return """
                                                             Sollen die Einstellungen wirklich gelöscht werden?
                                                             Diese Aktion ist nicht widerruflich!
