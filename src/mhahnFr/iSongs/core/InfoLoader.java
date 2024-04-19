@@ -30,6 +30,7 @@ import mhahnFr.utils.StringStream;
 import mhahnFr.utils.json.JSONParser;
 
 import java.io.*;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -38,6 +39,7 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.*;
 
 /**
@@ -66,6 +68,11 @@ public class InfoLoader {
     /** The {@link Future} used to control the song fetching task. */
     private ScheduledFuture<?> updateFuture;
     private ScriptSupport support;
+    private Song previous;
+    private Song lastJson;
+    private Song lastScript;
+
+    // TODO: package_info.java for applescript package
 
     /**
      * Initializes this {@link InfoLoader}.
@@ -195,27 +202,68 @@ public class InfoLoader {
         return null;
     }
 
-    /**
-     * Constructs the URL used to fetch the song information.
-     * If the URL could not be constructed, {@code null} is
-     * returned.
-     *
-     * @return the URL
-     */
-    private URL createUrl() {
-        try {
-            return new URI(Settings.getInstance().getURL()).toURL();
-        } catch (Exception __) {
-            return null;
+    private void updateTrack() {
+        final Optional<Song> json, script;
+        switch (support) {
+            case off -> {
+                script = Optional.empty();
+                json   = Optional.ofNullable(getTrackJSON());
+            }
+            case on -> {
+                script = Optional.ofNullable(getTrackScript());
+                json   = Optional.ofNullable(getTrackJSON());
+            }
+            case only -> {
+                script = Optional.ofNullable(getTrackScript());
+                json   = Optional.empty();
+            }
+            default -> throw new IllegalStateException("Script support switch was not exhaustive");
+        }
+        final var current = getCurrentSong();
+
+        // FIXME: If no song played upon start up, this is not properly sent
+        final Optional<Optional<Song>> newJson, newScript;
+        if (!Objects.equals(json.orElse(null), lastJson) && (previous == null || !Objects.equals(json.orElse(null), previous)) && !Objects.equals(json.orElse(null), current)) {
+            newJson = Optional.of(json);
+        } else {
+            newJson = Optional.empty();
+        }
+        lastJson = json.orElse(null);
+
+        if (script.isPresent() && !Objects.equals(script.orElse(null), lastScript) && !Objects.equals(script.orElse(null), previous) && !Objects.equals(script.orElse(null), current)) {
+            newScript = Optional.of(script);
+        } else {
+            newScript = Optional.empty();
+        }
+        lastScript = script.orElse(null);
+
+        final Optional<Optional<Song>> newSong;
+        if (newJson.isPresent()) {
+            newSong = newJson;
+        } else {
+            newSong = newScript;
+        }
+
+        if (newSong.isPresent()) {
+            previous = current;
+            setCurrentSong(newSong.get().orElse(null));
+            trackUpdater.run();
         }
     }
 
-    private void updateTrack() {
-        final var url = createUrl();
-        if (url == null) {
-            setCurrentSong(new Pair<>(Settings.getInstance().getLocale().get(StringID.MAIN_UI_CHECK_SETTINGS), ""));
-            trackUpdater.run();
-            return;
+    private Song getTrackScript() {
+        final var result = scriptLoader.getScriptResult();
+        textUpdater.update(result.getFirst());
+        return result.getSecond();
+    }
+
+    private Song getTrackJSON() {
+        final URL url;
+        try {
+            url = new URI(Settings.getInstance().getURL()).toURL();
+        } catch (MalformedURLException | URISyntaxException e) {
+            errorHandler.update(e);
+            return null;
         }
 
         try (final var reader = new BufferedInputStream(url.openStream())) {
@@ -225,24 +273,7 @@ public class InfoLoader {
             return null;
         }
         final var playedSong = getPlayedSong(dto);
-
-        final var currentSong = getCurrentSong();
-        final boolean update;
-        if (playedSong == null) {
-            update = currentSong != null;
-            setCurrentSong(null);
-        } else if (currentSong == null                              ||
-                   !currentSong.getFirst().equals(playedSong.title) ||
-                   !currentSong.getSecond().equals(playedSong.artist)) {
-            setCurrentSong(new Pair<>(playedSong.title, playedSong.artist));
-            update = true;
-        } else {
-            update = false;
-        }
-
-        if (update) {
-            trackUpdater.run();
-        }
+        return playedSong == null ? null : new Song(playedSong.title, playedSong.artist);
     }
 
     /**
