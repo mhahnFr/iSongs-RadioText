@@ -138,6 +138,12 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
         pack();
     }
 
+    /**
+     * Creates the AppleScript support settings panel. The panel is only created on macOS.
+     *
+     * @param selection which radio button to select
+     * @return the optionally available AppleScript support settings panel
+     */
     private Optional<JPanel> getScriptSupportPanel(final ScriptSupport selection) {
         if (!Settings.isMac) return Optional.empty();
 
