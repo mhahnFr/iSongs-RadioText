@@ -34,7 +34,6 @@ import mhahnFr.utils.gui.components.DarkTextComponent;
 import mhahnFr.utils.gui.components.HintTextField;
 
 import javax.swing.*;
-import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ItemEvent;
@@ -76,25 +75,18 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
             scriptSupportPanel.ifPresent(jPanel -> northPanel.add(jPanel, BorderLayout.CENTER));
 
             final var centerPanel = new DarkComponent<>(new JPanel(new GridLayout(4, 1)), components).getComponent();
-                final var localePanel = new DarkComponent<>(new JPanel(new GridLayout(2, 1)), components).getComponent();
-                    final var localeLabel = new DarkComponent<>(new JLabel(locale.get(StringID.SETTINGS_CHOOSE_LANG) + ":"), components).getComponent();
-
+                final var localePanel = new DarkComponent<>(new JPanel(new GridLayout(1, 1)), components).getComponent();
+                localePanel.setBorder(new TitledBorder(locale.get(StringID.SETTINGS_CHOOSE_LANG) + ":"));
                     final var localeBox = new DarkComponent<>(new JComboBox<Locale>(), components).getComponent();
-                localePanel.add(localeLabel);
                 localePanel.add(localeBox);
-                localePanel.setBorder(new EtchedBorder());
 
-                final var urlPanel = new DarkComponent<>(new JPanel(new GridLayout(2, 1)), components).getComponent();
-                    final var urlLabel = new DarkComponent<>(new JLabel(locale.get(StringID.SETTINGS_JSON_URI_DESC) + ":"), components).getComponent();
-
+                final var urlPanel = new DarkComponent<>(new JPanel(new GridLayout(1, 1)), components).getComponent();
+                urlPanel.setBorder(new TitledBorder(locale.get(StringID.SETTINGS_JSON_URI_DESC) + ":"));
                     urlField = new DarkTextComponent<>(new HintTextField("https://www.example.org/infos.json"), components).getComponent();
-                urlPanel.add(urlLabel);
                 urlPanel.add(urlField);
-                urlPanel.setBorder(new EtchedBorder());
 
-                final var folderPanel = new DarkComponent<>(new JPanel(new GridLayout(2, 1)), components).getComponent();
-                    final var folderDescription = new DarkComponent<>(new JLabel(locale.get(StringID.SETTINGS_SONG_INFO_FOLDER_DESC) + ":"), components).getComponent();
-
+                final var folderPanel = new DarkComponent<>(new JPanel(new GridLayout(1, 1)), components).getComponent();
+                folderPanel.setBorder(new TitledBorder(locale.get(StringID.SETTINGS_SONG_INFO_FOLDER_DESC) + ":"));
                     final var folderChangePanel = new DarkComponent<>(new JPanel(new BorderLayout()), components).getComponent();
                         folderChangeLabel = new DarkComponent<>(new JLabel(), components).getComponent();
                         folderChangeLabel.setFont(folderChangeLabel.getFont().deriveFont(Font.BOLD));
@@ -102,17 +94,12 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
                         final var folderChangeButton = new JButton(locale.get(StringID.SETTINGS_CHANGE) + "...");
                     folderChangePanel.add(folderChangeLabel, BorderLayout.CENTER);
                     folderChangePanel.add(folderChangeButton, BorderLayout.EAST);
-                folderPanel.add(folderDescription);
                 folderPanel.add(folderChangePanel);
-                folderPanel.setBorder(new EtchedBorder());
 
-                final var delayPanel = new DarkComponent<>(new JPanel(new GridLayout(2, 1)), components).getComponent();
-                    final var delayLabel = new DarkComponent<>(new JLabel(locale.get(StringID.SETTINGS_SONG_REFRESH_RATE) + ":"), components).getComponent();
-
+                final var delayPanel = new DarkComponent<>(new JPanel(new GridLayout(1, 1)), components).getComponent();
+                delayPanel.setBorder(new TitledBorder(locale.get(StringID.SETTINGS_SONG_REFRESH_RATE) + ":"));
                     final var delaySpinner = new DarkComponent<>(new JSpinner(), components).getComponent();
-                delayPanel.add(delayLabel);
                 delayPanel.add(delaySpinner);
-                delayPanel.setBorder(new EtchedBorder());
             centerPanel.add(localePanel);
             centerPanel.add(urlPanel);
             centerPanel.add(folderPanel);
