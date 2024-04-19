@@ -68,7 +68,9 @@ public class MainWindow extends JFrame implements DarkModeListener {
     private final Locale locale = Settings.getInstance().getLocale();
     /** The last {@link Exception} that happened.                  */
     private Exception lastException;
+    /** Indicates whether the window title should not be changed.  */
     private boolean blockedTitle = false;
+    /** The title to be set once the window title is unblocked.    */
     private String title;
 
     /**
@@ -166,6 +168,11 @@ public class MainWindow extends JFrame implements DarkModeListener {
         });
     }
 
+    /**
+     * Runs the given {@link Runnable} in the {@link EventQueue}.
+     *
+     * @param cb the {@link Runnable} to be run on the UI thread
+     */
     private static void onUIThread(final Runnable cb) {
         if (!EventQueue.isDispatchThread()) {
             EventQueue.invokeLater(() -> onUIThread(cb));
@@ -174,10 +181,22 @@ public class MainWindow extends JFrame implements DarkModeListener {
         cb.run();
     }
 
+    /**
+     * Sets the window title to the given value. This method makes sure
+     * it runs on the UI thread.
+     *
+     * @param value the new window title
+     */
     private void radioTextCallback(final String value) {
         onUIThread(() -> setTitle(Objects.requireNonNullElse(value, Constants.NAME)));
     }
 
+    /**
+     * Shows the given {@link Exception} to the user. This method makes sure
+     * it runs on the UI thread.
+     *
+     * @param e the {@link Exception} to handle
+     */
     private void errorCallback(final Exception e) {
         onUIThread(() -> JOptionPane.showMessageDialog(this,
                 locale.get(StringID.MAIN_ERROR_HAPPENED) + ": " + e.getLocalizedMessage(),
@@ -208,6 +227,13 @@ public class MainWindow extends JFrame implements DarkModeListener {
         });
     }
 
+    /**
+     * Blocks the window title. The current title is saved for the unblocking.
+     *
+     * @see #unblockTitle()
+     * @see #blockedTitle
+     * @see #title
+     */
     private void blockTitle() {
         blockedTitle = true;
         title = getTitle();
@@ -222,6 +248,13 @@ public class MainWindow extends JFrame implements DarkModeListener {
         }
     }
 
+    /**
+     * Unblocks the window title. The previously stored title is reset.
+     *
+     * @see #blockTitle()
+     * @see #blockedTitle
+     * @see #title
+     */
     private void unblockTitle() {
         blockedTitle = false;
         setTitle(title);
@@ -229,8 +262,7 @@ public class MainWindow extends JFrame implements DarkModeListener {
     }
 
     /**
-     * Shows the last error that occurred during writing a song to
-     * disk.
+     * Shows the last error that occurred during writing a song to disk.
      *
      * @see #lastException
      */
@@ -267,7 +299,7 @@ public class MainWindow extends JFrame implements DarkModeListener {
     }
 
     /**
-     * Opens a {@link SettingsWindow}. Stops the song fetching.
+     * Opens a {@link SettingsWindow}. Stops the song fetching and resets the window title.
      */
     private void showSettings() {
         loader.stop();
