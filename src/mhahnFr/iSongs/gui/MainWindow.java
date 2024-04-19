@@ -27,7 +27,6 @@ import mhahnFr.iSongs.core.Settings;
 import mhahnFr.iSongs.core.Song;
 import mhahnFr.iSongs.core.locale.Locale;
 import mhahnFr.iSongs.core.locale.StringID;
-import mhahnFr.utils.Pair;
 import mhahnFr.utils.gui.components.DarkComponent;
 import mhahnFr.utils.gui.DarkModeListener;
 
@@ -40,8 +39,6 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 /**
  * This class represents the main window of the iSongs project.
@@ -167,14 +164,6 @@ public class MainWindow extends JFrame implements DarkModeListener {
                 saveButton.setEnabled(false);
             }
         });
-    }
-
-    private static <T, U> void onUIThread(final BiConsumer<T, U> cb, final T arg1, final U arg2) {
-        onUIThread(pair -> cb.accept(pair.getFirst(), pair.getSecond()), new Pair<>(arg1, arg2));
-    }
-
-    private static <T> void onUIThread(final Consumer<T> cb, final T args) {
-        onUIThread(() -> cb.accept(args));
     }
 
     private static void onUIThread(final Runnable cb) {
