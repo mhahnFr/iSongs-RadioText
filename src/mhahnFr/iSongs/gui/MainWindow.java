@@ -27,6 +27,7 @@ import mhahnFr.iSongs.core.Settings;
 import mhahnFr.iSongs.core.Song;
 import mhahnFr.iSongs.core.locale.Locale;
 import mhahnFr.iSongs.core.locale.StringID;
+import mhahnFr.utils.Pair;
 import mhahnFr.utils.gui.components.DarkComponent;
 import mhahnFr.utils.gui.DarkModeListener;
 
@@ -39,6 +40,8 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 /**
  * This class represents the main window of the iSongs project.
@@ -149,37 +152,49 @@ public class MainWindow extends JFrame implements DarkModeListener {
      * This method makes sure it runs in the {@link EventQueue}.
      */
     private void updateUI() {
+        onUIThread(() -> {
+            errorButton.setVisible(false);
+            final var displayedSong = loader.getCurrentSong();
+            if (displayedSong != null) {
+                titleLabel.setText(displayedSong.title());
+                interpreterLabel.setText(displayedSong.interpreter());
+                saveButton.setEnabled(true);
+            } else {
+                titleLabel.setText(locale.get(StringID.MAIN_NO_SONG));
+                interpreterLabel.setText(locale.get(StringID.MAIN_NO_INTERPRETER));
+                saveButton.setEnabled(false);
+            }
+        });
+    }
+
+    private static <T, U> void onUIThread(final BiConsumer<T, U> cb, final T arg1, final U arg2) {
+        onUIThread(pair -> cb.accept(pair.getFirst(), pair.getSecond()), new Pair<>(arg1, arg2));
+    }
+
+    private static <T> void onUIThread(final Consumer<T> cb, final T args) {
+        onUIThread(() -> cb.accept(args));
+    }
+
+    private static void onUIThread(final Runnable cb) {
         if (!EventQueue.isDispatchThread()) {
-            EventQueue.invokeLater(this::updateUI);
+            EventQueue.invokeLater(() -> onUIThread(cb));
             return;
         }
-        errorButton.setVisible(false);
-        final var displayedSong = loader.getCurrentSong();
-        if (displayedSong != null) {
-            titleLabel.setText(displayedSong.title());
-            interpreterLabel.setText(displayedSong.interpreter());
-            saveButton.setEnabled(true);
-        } else {
-            titleLabel.setText(locale.get(StringID.MAIN_NO_SONG));
-            interpreterLabel.setText(locale.get(StringID.MAIN_NO_INTERPRETER));
-            saveButton.setEnabled(false);
-        }
+        cb.run();
     }
 
     private void radioTextCallback(final String value) {
-        // TODO: Care about the other info displayed there
-        setTitle(Objects.requireNonNullElse(value, Constants.NAME));
+        onUIThread(() -> {
+            // TODO: Care about the other info displayed there
+            setTitle(Objects.requireNonNullElse(value, Constants.NAME));
+        });
     }
 
     private void errorCallback(final Exception e) {
-        if (!EventQueue.isDispatchThread()) {
-            EventQueue.invokeLater(() -> errorCallback(e));
-            return;
-        }
-        JOptionPane.showMessageDialog(this,
-                                      locale.get(StringID.MAIN_ERROR_HAPPENED) + ": " + e.getLocalizedMessage(),
-                                      Constants.NAME + ": " + locale.get(StringID.MAIN_ERROR),
-                                      JOptionPane.ERROR_MESSAGE);
+        onUIThread(() -> JOptionPane.showMessageDialog(this,
+                locale.get(StringID.MAIN_ERROR_HAPPENED) + ": " + e.getLocalizedMessage(),
+                Constants.NAME + ": " + locale.get(StringID.MAIN_ERROR),
+                JOptionPane.ERROR_MESSAGE));
     }
 
     /**
@@ -191,19 +206,17 @@ public class MainWindow extends JFrame implements DarkModeListener {
      */
     private void writeCallback(final Song      song,
                                final Exception error) {
-        if (!EventQueue.isDispatchThread()) {
-            EventQueue.invokeLater(() -> writeCallback(song, error));
-            return;
-        }
-        if (error == null) {
-            setTitle("\"" + song.title() + "\" " + locale.get(StringID.MAIN_STORED));
-            saveButton.setEnabled(false);
-        } else {
-            setTitle(locale.get(StringID.MAIN_SAVE_ERROR));
-            errorButton.setVisible(true);
-            lastException = error;
-        }
-        savedTimer.restart();
+        onUIThread(() -> {
+            if (error == null) {
+                setTitle("\"" + song.title() + "\" " + locale.get(StringID.MAIN_STORED));
+                saveButton.setEnabled(false);
+            } else {
+                setTitle(locale.get(StringID.MAIN_SAVE_ERROR));
+                errorButton.setVisible(true);
+                lastException = error;
+            }
+            savedTimer.restart();
+        });
     }
 
     /**
