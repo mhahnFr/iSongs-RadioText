@@ -27,7 +27,6 @@ import mhahnFr.iSongs.core.Settings;
 import mhahnFr.iSongs.core.Song;
 import mhahnFr.iSongs.core.locale.Locale;
 import mhahnFr.iSongs.core.locale.StringID;
-import mhahnFr.utils.gui.components.DarkComponent;
 import mhahnFr.utils.gui.DarkModeListener;
 
 import javax.swing.*;
@@ -36,8 +35,6 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -47,8 +44,6 @@ import java.util.Objects;
  * @since 14.03.23
  */
 public class MainWindow extends JFrame implements DarkModeListener {
-    /** The list with the components, enabling the dark mode.      */
-    private final List<DarkComponent<? extends JComponent>> components = new ArrayList<>();
     /** The {@link InfoLoader}.                                    */
     private final InfoLoader loader = new InfoLoader(this::updateUI,
                                                      this::writeCallback,
@@ -80,16 +75,16 @@ public class MainWindow extends JFrame implements DarkModeListener {
         super(Constants.NAME);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        final var panel = new DarkComponent<>(new JPanel(new GridLayout(4, 1)), components).getComponent();
-            final var label = new DarkComponent<>(new JLabel(" " + locale.get(StringID.MAIN_CURRENT_TITLE) + ":"), components).getComponent();
+        final var panel = new JPanel(new GridLayout(4, 1));
+            final var label = new JLabel(" " + locale.get(StringID.MAIN_CURRENT_TITLE) + ":");
 
-            titleLabel = new DarkComponent<>(new JLabel(locale.get(StringID.MAIN_LOADING) + "...", SwingConstants.CENTER), components).getComponent();
+            titleLabel = new JLabel(locale.get(StringID.MAIN_LOADING) + "...", SwingConstants.CENTER);
             titleLabel.setFont(titleLabel.getFont().deriveFont(Font.BOLD));
 
-            interpreterLabel = new DarkComponent<>(new JLabel(locale.get(StringID.MAIN_LOADING) + "...", SwingConstants.CENTER), components).getComponent();
+            interpreterLabel = new JLabel(locale.get(StringID.MAIN_LOADING) + "...", SwingConstants.CENTER);
 
-            final var wrapper = new DarkComponent<>(new JPanel(new BorderLayout()), components).getComponent();
-                final var toAdd = new DarkComponent<>(new JPanel(), components).getComponent();
+            final var wrapper = new JPanel(new BorderLayout());
+                final var toAdd = new JPanel();
                     saveButton = new JButton(locale.get(StringID.MAIN_SAVE_TITLE));
                     saveButton.addActionListener(__ -> saveTitle());
 
@@ -124,7 +119,6 @@ public class MainWindow extends JFrame implements DarkModeListener {
         savedTimer.setRepeats(false);
 
         Settings.getInstance().addDarkModeListener(this);
-        darkModeToggled(Settings.getInstance().getDarkMode());
         loader.start();
     }
 
@@ -143,9 +137,7 @@ public class MainWindow extends JFrame implements DarkModeListener {
 
     @Override
     public void darkModeToggled(boolean dark) {
-        for (final var component : components) {
-            component.setDark(dark);
-        }
+        SwingUtilities.updateComponentTreeUI(this);
     }
 
     /**
