@@ -3,22 +3,28 @@
  *
  * Copyright (C) 2023 - 2024  mhahnFr
  *
- * This file is part of the iSongs-RadioText. This program is free software:
- * you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation,
- * either version 3 of the License, or (at your option) any later version.
+ * This file is part of the iSongs-RadioText.
  *
- * This program is distributed in the hope that it will be useful,
+ * iSongs-RadioText is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * iSongs-RadioText is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along with
- * this program, see the file LICENSE.  If not, see <https://www.gnu.org/licenses/>.
+ * iSongs-RadioText, see the file LICENSE.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 package mhahnFr.iSongs.core;
 
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.themes.FlatMacDarkLaf;
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
 import mhahnFr.iSongs.core.appleScript.ScriptSupport;
 import mhahnFr.iSongs.core.locale.LanguageListener;
 import mhahnFr.iSongs.core.locale.Locale;
@@ -206,6 +212,7 @@ public class Settings {
      */
     public void setDarkMode(final boolean dark) {
         preferences.putInt(Key.DARK_MODE, dark ? 1 : 0);
+        setupLaf(dark);
         for (final var listener : listeners) {
             listener.darkModeToggled(dark);
         }
@@ -324,6 +331,16 @@ public class Settings {
     }
 
     public static final boolean isMac = System.getProperty("os.name").toLowerCase().contains("mac");
+
+    public static void setupLaf(final boolean dark) {
+        if (dark) {
+            if (isMac) FlatMacDarkLaf.setup();
+            else       FlatDarkLaf.setup();
+        } else {
+            if (isMac) FlatMacLightLaf.setup();
+            else       FlatLightLaf.setup();
+        }
+    }
 
     /**
      * Returns the one and only instance of this class.
