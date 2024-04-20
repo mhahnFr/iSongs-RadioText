@@ -61,6 +61,10 @@ tasks.register('deploy', Exec) {
         Files.copy(file.toPath(), new File('build/libs/' + file.name).toPath(), StandardCopyOption.REPLACE_EXISTING)
     }
 
+    configurations.runtimeClasspath.each {
+        Files.copy(it.toPath(), new File('build/libs/' + it.name).toPath(), StandardCopyOption.REPLACE_EXISTING)
+    }
+
     commandLine 'jpackage', '--input',        'build/libs',
                             '--name',         project.name,
                             '--main-jar',     project.name + '-' + version + '.jar',
@@ -82,19 +86,16 @@ tasks.register('maybeAppleScript', Exec) {
     }
 }
 
-jar {
-    dependsOn configurations.jutils
-    dependsOn maybeAppleScript
-    manifest {
-        attributes 'Main-Class': 'mhahnFr.iSongs.iSongs'
-    }
-    from {
-        configurations.jutils.collect { it.isDirectory() ? it : zipTree(it) }
-    }
-}
-
 dependencies {
     implementation 'com.formdev:flatlaf:3.4.1'
     implementation project(':JUtilities')
     jutils project(':JUtilities')
+}
+
+jar {
+    dependsOn configurations.jutils
+    dependsOn maybeAppleScript
+    manifest {
+        attributes 'Main-Class': 'mhahnFr.iSongs.iSongs', 'Class-Path': configurations.runtimeClasspath.collect { it.getName() }.join(' ')
+    }
 }
