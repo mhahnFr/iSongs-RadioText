@@ -28,17 +28,13 @@ import mhahnFr.iSongs.core.locale.English;
 import mhahnFr.iSongs.core.locale.German;
 import mhahnFr.iSongs.core.locale.Locale;
 import mhahnFr.iSongs.core.locale.StringID;
-import mhahnFr.utils.gui.components.DarkComponent;
 import mhahnFr.utils.gui.DarkModeListener;
-import mhahnFr.utils.gui.components.DarkTextComponent;
 import mhahnFr.utils.gui.components.HintTextField;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ItemEvent;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -48,8 +44,6 @@ import java.util.Optional;
  * @since 14.03.23
  */
 public class SettingsWindow extends JDialog implements DarkModeListener {
-    /** The list with the components, enabling the dark mode. */
-    private final List<DarkComponent<? extends JComponent>> components = new ArrayList<>();
     /** The label displaying the folder for saving songs.     */
     private final JLabel folderChangeLabel;
     /** The text field for the URL to the song information.   */
@@ -66,29 +60,29 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
     public SettingsWindow(final JFrame owner) {
         super(owner, Constants.NAME + ": " + Settings.getInstance().getLocale().get(StringID.MAIN_SETTINGS), true);
 
-        final var panel = new DarkComponent<>(new JPanel(new BorderLayout()), components).getComponent();
-            final var northPanel = new DarkComponent<>(new JPanel(new BorderLayout()), components).getComponent();
-                final var darkBox = new DarkComponent<>(new JCheckBox(locale.get(StringID.SETTINGS_ACTIVATE_DARK_MODE)), components).getComponent();
+        final var panel = new JPanel(new BorderLayout());
+            final var northPanel = new JPanel(new BorderLayout());
+                final var darkBox = new JCheckBox(locale.get(StringID.SETTINGS_ACTIVATE_DARK_MODE));
 
                 final var scriptSupportPanel = getScriptSupportPanel(Settings.getInstance().getScriptSupport());
             northPanel.add(darkBox, BorderLayout.NORTH);
             scriptSupportPanel.ifPresent(jPanel -> northPanel.add(jPanel, BorderLayout.CENTER));
 
-            final var centerPanel = new DarkComponent<>(new JPanel(new GridLayout(4, 1)), components).getComponent();
-                final var localePanel = new DarkComponent<>(new JPanel(new GridLayout(1, 1)), components).getComponent();
+            final var centerPanel = new JPanel(new GridLayout(4, 1));
+                final var localePanel = new JPanel(new GridLayout(1, 1));
                 localePanel.setBorder(new TitledBorder(locale.get(StringID.SETTINGS_CHOOSE_LANG) + ":"));
-                    final var localeBox = new DarkComponent<>(new JComboBox<Locale>(), components).getComponent();
+                    final var localeBox = new JComboBox<Locale>();
                 localePanel.add(localeBox);
 
-                final var urlPanel = new DarkComponent<>(new JPanel(new GridLayout(1, 1)), components).getComponent();
+                final var urlPanel = new JPanel(new GridLayout(1, 1));
                 urlPanel.setBorder(new TitledBorder(locale.get(StringID.SETTINGS_JSON_URI_DESC) + ":"));
-                    urlField = new DarkTextComponent<>(new HintTextField("https://www.example.org/infos.json"), components).getComponent();
+                    urlField = new HintTextField("https://www.example.org/infos.json");
                 urlPanel.add(urlField);
 
-                final var folderPanel = new DarkComponent<>(new JPanel(new GridLayout(1, 1)), components).getComponent();
+                final var folderPanel = new JPanel(new GridLayout(1, 1));
                 folderPanel.setBorder(new TitledBorder(locale.get(StringID.SETTINGS_SONG_INFO_FOLDER_DESC) + ":"));
-                    final var folderChangePanel = new DarkComponent<>(new JPanel(new BorderLayout()), components).getComponent();
-                        folderChangeLabel = new DarkComponent<>(new JLabel(), components).getComponent();
+                    final var folderChangePanel = new JPanel(new BorderLayout());
+                        folderChangeLabel = new JLabel();
                         folderChangeLabel.setFont(folderChangeLabel.getFont().deriveFont(Font.BOLD));
 
                         final var folderChangeButton = new JButton(locale.get(StringID.SETTINGS_CHANGE) + "...");
@@ -96,9 +90,9 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
                     folderChangePanel.add(folderChangeButton, BorderLayout.EAST);
                 folderPanel.add(folderChangePanel);
 
-                final var delayPanel = new DarkComponent<>(new JPanel(new GridLayout(1, 1)), components).getComponent();
+                final var delayPanel = new JPanel(new GridLayout(1, 1));
                 delayPanel.setBorder(new TitledBorder(locale.get(StringID.SETTINGS_SONG_REFRESH_RATE) + ":"));
-                    final var delaySpinner = new DarkComponent<>(new JSpinner(), components).getComponent();
+                    final var delaySpinner = new JSpinner();
                 delayPanel.add(delaySpinner);
             centerPanel.add(localePanel);
             centerPanel.add(urlPanel);
@@ -132,7 +126,6 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
         deleteButton.addActionListener(__ -> removeSettings());
 
         settings.addDarkModeListener(this);
-        darkModeToggled(settings.getDarkMode());
 
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         pack();
@@ -147,14 +140,14 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
     private Optional<JPanel> getScriptSupportPanel(final ScriptSupport selection) {
         if (!Settings.isMac) return Optional.empty();
 
-        final var scriptSupportPanel = new DarkComponent<>(new JPanel(new GridLayout(1, 1)), components).getComponent();
+        final var scriptSupportPanel = new JPanel(new GridLayout(1, 1));
         scriptSupportPanel.setBorder(new TitledBorder(locale.get(StringID.SETTINGS_APPLESCRIPT_DESC) + ":"));
-            final var scriptSupportButtonPanel = new DarkComponent<>(new JPanel(new GridLayout(3, 1)), components).getComponent();
-                final var scriptSupportOff = new DarkComponent<>(new JRadioButton(locale.get(StringID.SETTINGS_APPLESCRIPT_OFF)), components).getComponent();
+            final var scriptSupportButtonPanel = new JPanel(new GridLayout(3, 1));
+                final var scriptSupportOff = new JRadioButton(locale.get(StringID.SETTINGS_APPLESCRIPT_OFF));
 
-                final var scriptSupportMixed = new DarkComponent<>(new JRadioButton(locale.get(StringID.SETTINGS_APPLESCRIPT_ON)), components).getComponent();
+                final var scriptSupportMixed = new JRadioButton(locale.get(StringID.SETTINGS_APPLESCRIPT_ON));
 
-                final var scriptSupportOnly = new DarkComponent<>(new JRadioButton(locale.get(StringID.SETTINGS_APPLESCRIPT_ONLY)), components).getComponent();
+                final var scriptSupportOnly = new JRadioButton(locale.get(StringID.SETTINGS_APPLESCRIPT_ONLY));
             scriptSupportButtonPanel.add(scriptSupportOff);
             scriptSupportButtonPanel.add(scriptSupportMixed);
             scriptSupportButtonPanel.add(scriptSupportOnly);
@@ -235,9 +228,7 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
 
     @Override
     public void darkModeToggled(boolean dark) {
-        for (final var component : components) {
-            component.setDark(dark);
-        }
+        SwingUtilities.updateComponentTreeUI(this);
     }
 
     @Override
