@@ -3,18 +3,20 @@
  *
  * Copyright (C) 2023 - 2024  mhahnFr
  *
- * This file is part of the iSongs-RadioText. This program is free software:
- * you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation,
- * either version 3 of the License, or (at your option) any later version.
+ * This file is part of the iSongs-RadioText.
  *
- * This program is distributed in the hope that it will be useful,
+ * iSongs-RadioText is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * iSongs-RadioText is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License along with
- * this program, see the file LICENSE.  If not, see <https://www.gnu.org/licenses/>.
+ * iSongs-RadioText, see the file LICENSE.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 package mhahnFr.iSongs.core;
@@ -144,10 +146,20 @@ public class Settings {
         return locale;
     }
 
+    /**
+     * Returns the setting for the script support.
+     *
+     * @return the currently set script support level
+     */
     public ScriptSupport getScriptSupport() {
         return ScriptSupport.valueOf(preferences.get(Key.APPLE_SCRIPT, ScriptSupport.off.name()));
     }
 
+    /**
+     * Sets the script support level.
+     *
+     * @param support the new script support level
+     */
     public void setScriptSupport(final ScriptSupport support) {
         preferences.put(Key.APPLE_SCRIPT, support.name());
     }
@@ -323,6 +335,7 @@ public class Settings {
         languageListeners.remove(listener);
     }
 
+    /** Indicates whether the current OS is a version of macOS. */
     public static final boolean isMac = System.getProperty("os.name").toLowerCase().contains("mac");
 
     /**
@@ -367,6 +380,7 @@ public class Settings {
         public static final String PATH          = BUNDLE_ID + ".path";
         /** The key for the locale to be used.     */
         public static final String LOCALE        = BUNDLE_ID + ".locale";
+        /** The key for the script support.        */
         public static final String APPLE_SCRIPT  = BUNDLE_ID + ".scriptSupport";
     }
 }
