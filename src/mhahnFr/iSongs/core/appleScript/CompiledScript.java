@@ -24,9 +24,21 @@ package mhahnFr.iSongs.core.appleScript;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Represents a compiled AppleScript.
+ *
+ * @author mhahnFr
+ * @since 15.04.24
+ */
 public class CompiledScript extends Script {
+    /** The file representation of the compiled script. */
     final File location;
 
+    /**
+     * Constructs a compiled AppleScript.
+     *
+     * @param location the file of the compiled AppleScript
+     */
     public CompiledScript(final File location) {
         super(null);
 
