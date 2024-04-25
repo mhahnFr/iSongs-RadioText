@@ -23,13 +23,31 @@ package mhahnFr.iSongs.core.appleScript;
 
 import java.io.*;
 
+/**
+ * This class represents an executable AppleScript.
+ *
+ * @author mhahnFr
+ * @since 28.03.24
+ */
 public class Script {
+    /** The content of the script. */
     private final String content;
 
+    /**
+     * Constructs a script using the given content.
+     *
+     * @param content the content of the script
+     */
     public Script(final String content) {
         this.content = content;
     }
 
+    /**
+     * Executes this script. The script's content is passed to
+     * {@code osascript}, the regular result is returned.
+     *
+     * @return the regular result of the script
+     */
     public String execute() {
         try (final var stream = Runtime.getRuntime().exec(new String[] { "osascript", "-e", content }).getInputStream()) {
             return new String(stream.readAllBytes());
@@ -38,6 +56,12 @@ public class Script {
         }
     }
 
+    /**
+     * Loads an AppleScript from the given {@link InputStream}.
+     *
+     * @param stream the stream to load the script's content from
+     * @return the {@link Script} or {@code null} if the script could not be loaded
+     */
     private static Script load(final InputStream stream) {
         final String content;
         try (final var reader = new BufferedReader(new InputStreamReader(stream))) {
@@ -53,6 +77,12 @@ public class Script {
         return new Script(content);
     }
 
+    /**
+     * Loads an AppleScript from disk.
+     *
+     * @param fileName the name of the file to be loaded as the source code of an AppleScript
+     * @return the {@link Script} or {@code null} if the script could not be loaded
+     */
     public static Script loadScript(final String fileName) {
         try (final var stream = new FileInputStream(fileName)) {
             return load(stream);
@@ -61,6 +91,12 @@ public class Script {
         }
     }
 
+    /**
+     * Loads an AppleScript from the given {@link InputStream}.
+     *
+     * @param stream the stream to load the script's content from
+     * @return the {@link Script} or {@code null} if the script could not be loaded
+     */
     public static Script loadScript(final InputStream stream) {
         return load(stream);
     }

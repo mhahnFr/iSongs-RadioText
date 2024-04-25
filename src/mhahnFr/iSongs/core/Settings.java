@@ -150,10 +150,20 @@ public class Settings {
         return locale;
     }
 
+    /**
+     * Returns the setting for the script support.
+     *
+     * @return the currently set script support level
+     */
     public ScriptSupport getScriptSupport() {
         return ScriptSupport.valueOf(preferences.get(Key.APPLE_SCRIPT, ScriptSupport.off.name()));
     }
 
+    /**
+     * Sets the script support level.
+     *
+     * @param support the new script support level
+     */
     public void setScriptSupport(final ScriptSupport support) {
         preferences.put(Key.APPLE_SCRIPT, support.name());
     }
@@ -330,6 +340,7 @@ public class Settings {
         languageListeners.remove(listener);
     }
 
+    /** Indicates whether the current OS is a version of macOS. */
     public static final boolean isMac = System.getProperty("os.name").toLowerCase().contains("mac");
 
     public static void setupLaf(final boolean dark) {
@@ -384,6 +395,7 @@ public class Settings {
         public static final String PATH          = BUNDLE_ID + ".path";
         /** The key for the locale to be used.     */
         public static final String LOCALE        = BUNDLE_ID + ".locale";
+        /** The key for the script support.        */
         public static final String APPLE_SCRIPT  = BUNDLE_ID + ".scriptSupport";
     }
 }

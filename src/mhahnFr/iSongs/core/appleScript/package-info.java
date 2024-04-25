@@ -19,20 +19,11 @@
  * iSongs-RadioText, see the file LICENSE.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package mhahnFr.iSongs.core.appleScript;
-
 /**
- * This enumeration indicates the level of which the AppleScript based
- * song recognition should be used.
+ * This package contains the utility classes for the usage
+ * of AppleScript.
  *
  * @author mhahnFr
- * @since 09.04.24
+ * @since 08.04.24
  */
-public enum ScriptSupport {
-    /** No script support.                  */
-    off,
-    /** Script support used additionally.   */
-    on,
-    /** Only script based song recognition. */
-    only,
-}
+package mhahnFr.iSongs.core.appleScript;
