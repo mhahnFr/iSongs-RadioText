@@ -53,6 +53,6 @@ This project is licensed under the terms of the GNU GPL 3.0.
 © Copyright 2014, 2019, 2023 - 2024 [mhahnFr][1]
 
 [1]: https://github.com/mhahnFr
-[2]: https://github.com/mhanFr/iSongs-RadioText/releases/latest
+[2]: https://github.com/mhahnFr/iSongs-RadioText/releases/latest
 [3]: https://www.apple.com/de/apple-music/
 [4]: #settings
