@@ -50,7 +50,7 @@ import java.util.concurrent.*;
  * @since 14.03.23
  */
 public class InfoLoader {
-    /** The {@link ExecutorService} used for the multithreading.   */
+    /** The {@link ExecutorService} used for the multithreading.                        */
     private final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(2);
     /** The data transfer object.                                                       */
     private final WebPlayerDTO dto = new WebPlayerDTO();
@@ -60,16 +60,23 @@ public class InfoLoader {
     private final Runnable trackUpdater;
     /** The callback called when a song has been written.                               */
     private final WriteCallback writeCallback;
+    /** The callback called with the latest recognized radio text.                      */
     private final Callback<String> textUpdater;
+    /** The callback to be called when an unrelated exception happens.                  */
     private final Callback<Exception> errorHandler;
+    /** The AppleScript based info loader instance.                                     */
     private InfoLoaderAppleScript scriptLoader;
     /** The currently recognized song.                                                  */
     private Song currentSong;
-    /** The {@link Future} used to control the song fetching task. */
+    /** The {@link Future} used to control the song fetching task.                      */
     private ScheduledFuture<?> updateFuture;
+    /** The current level of script support to be used.                                 */
     private ScriptSupport support;
+    /** The previous song recognized.                                                   */
     private Song previous;
+    /** The last song recognized using the JSON recognition.                            */
     private Song lastJson;
+    /** The last song recognized by the AppleScript based loader.                       */
     private Song lastScript;
 
     // TODO: package_info.java for applescript package
@@ -79,6 +86,8 @@ public class InfoLoader {
      *
      * @param trackUpdater  the callback called when a new song is recognized
      * @param writeCallback the callback called when a song has been written
+     * @param textUpdater   the callback called when radio text is recognized
+     * @param errorHandler  the callback called when an unrelated exception happened
      */
     public InfoLoader(final Runnable            trackUpdater,
                       final WriteCallback       writeCallback,
@@ -90,7 +99,12 @@ public class InfoLoader {
         this.errorHandler  = errorHandler;
     }
 
-    public void setAppleScriptEnabled(final boolean enabled) {
+    /**
+     * Activates or deactivates the AppleScript based song recognition.
+     *
+     * @param enabled whether to enable the recognition
+     */
+    private void setAppleScriptEnabled(final boolean enabled) {
         if (enabled) {
             if (scriptLoader == null) {
                 scriptLoader = loadScriptLoader();
@@ -136,6 +150,11 @@ public class InfoLoader {
         synchronized (currentSongLock) { return currentSong; }
     }
 
+    /**
+     * Loads the AppleScript based song loader.
+     *
+     * @return the script based loader or {@code null} if the script was not found
+     */
     private InfoLoaderAppleScript loadScriptLoader() {
         final var location = findScriptLocation("streamTitle.scpt");
         if (location == null || !location.exists()) {
@@ -150,6 +169,14 @@ public class InfoLoader {
         return null;
     }
 
+    /**
+     * Constructs the location of the given file. The file is searched for in
+     * the folder this class has been loaded from.
+     *
+     * @param fileName the name of the file to be searched for
+     * @return the found file or {@code null} if not found
+     * @see Class#getProtectionDomain()
+     */
     private File findScriptLocation(final String fileName) {
         final var codeSource = InfoLoader.class.getProtectionDomain().getCodeSource();
         if (codeSource == null) {
@@ -168,6 +195,11 @@ public class InfoLoader {
         return new File(folder.getParentFile(), fileName);
     }
 
+    /**
+     * Sets the level of script support to be used.
+     *
+     * @param support the script support level
+     */
     private void setScriptSupport(final ScriptSupport support) {
         setAppleScriptEnabled(support != ScriptSupport.off);
         this.support = support;
@@ -202,6 +234,12 @@ public class InfoLoader {
         return null;
     }
 
+    // TODO: Allow JSON to fail if script support is enabled
+
+    /**
+     * Updates the currently played song. Uses the JSON and script based
+     * song recognition as set with {@link #setScriptSupport(ScriptSupport)}.
+     */
     private void updateTrack() {
         final Optional<Song> json, script;
         switch (support) {
@@ -251,12 +289,22 @@ public class InfoLoader {
         }
     }
 
+    /**
+     * Loads and returns the song currently recognized by the script based loader.
+     *
+     * @return the currently recognized song
+     */
     private Song getTrackScript() {
         final var result = scriptLoader.getScriptResult();
         textUpdater.update(result.getFirst());
         return result.getSecond();
     }
 
+    /**
+     * Loads and returns the song currently recognized by the JSON based recognition.
+     *
+     * @return the currently recognized song
+     */
     private Song getTrackJSON() {
         final URL url;
         try {
