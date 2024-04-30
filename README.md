@@ -23,11 +23,22 @@ iSongs-RadioText was rewritten in 2019 and 2023.
 ### Installation
 In order to get started, simply download the latest release [here][2] and install it.
 
-Alternatively, you can build it yourself using gradle (make sure you have installed Java in version 19 or higher):
+#### Building from source
+You can build iSongs-RadioText yourself using Gradle.
+
+Make sure you have installed a Java Development Kit in version 19 or higher. It should include `jmods`.
+
+> [!NOTE]
+> On **Linux** the package `rpm-build` (Red Hat Linux) or `fakeroot` (Ubuntu Linux) is
+> needed to create an installation archive.
+> 
+> On **macOS** the Xcode command line tools are required for creating an installation image.
+
+The following command creates an installation image for your platform:
 ```shell
 ./gradlew deploy
 ```
-Now, you can install the generated installation archive.
+After running the above command successfully, you can install the generated installation archive.
 
 ### Using iSongs-RadioText
 The songs are recognized by querying the JSON file from the web player of your radio station.
