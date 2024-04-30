@@ -70,18 +70,30 @@ sourceSets {
     }
 }
 
+static def assertBuildFolder() {
+    def build = new File('./build/')
+    if (!build.exists()) {
+        build.mkdir()
+    }
+    def libs = new File('./build/libs')
+    if (!libs.exists()) {
+        libs.mkdir()
+    }
+}
+
 tasks.register('deploy', Exec) {
     dependsOn(jar)
 
+    assertBuildFolder()
     for (final var file : appleScripts) {
         if (!file.name.endsWith('.scpt')) continue
 
-        Files.copy(file.toPath(), new File('build/libs/' + file.name).toPath(), StandardCopyOption.REPLACE_EXISTING)
+        Files.copy(file.toPath(), new File('./build/libs/' + file.name).toPath(), StandardCopyOption.REPLACE_EXISTING)
     }
     final String icon = 'resources/' + (isMac ? 'icon.icns' : 'icon.png')
 
     configurations.runtimeClasspath.each {
-        Files.copy(it.toPath(), new File('build/libs/' + it.name).toPath(), StandardCopyOption.REPLACE_EXISTING)
+        Files.copy(it.toPath(), new File('./build/libs/' + it.name).toPath(), StandardCopyOption.REPLACE_EXISTING)
     }
 
     commandLine 'jpackage', '--input',        'build/libs',
