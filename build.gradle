@@ -33,7 +33,28 @@ version '3.4'
 def isMac = System.getProperty('os.name').toLowerCase().contains('mac')
 def appleScripts = new File('scripts').listFiles()
 
+final String githubUsername = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+final String githubToken = project.findProperty("gpr.token") ?: System.getenv("TOKEN")
+
 repositories {
+    if (githubUsername != null && !githubUsername.isEmpty() &&
+        githubToken != null && !githubToken.isEmpty()) {
+        maven {
+            url = uri('https://maven.pkg.github.com/mhahnfr/jutilities')
+            credentials {
+                username = githubUsername
+                password = githubToken
+            }
+        }
+    } else {
+        ivy {
+            url 'https://github.com/'
+            patternLayout {
+                artifact '/[organisation]/[module]/releases/download/v[revision]/[module]-[revision].jar'
+            }
+            metadataSources { artifact() }
+        }
+    }
     mavenCentral()
 }
 
