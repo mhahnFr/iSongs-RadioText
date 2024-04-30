@@ -30,6 +30,7 @@ plugins {
 group 'mhahnFr'
 version '3.4'
 
+def isMac = System.getProperty('os.name').toLowerCase().contains('mac')
 def appleScripts = new File('scripts').listFiles()
 
 repositories {
@@ -56,6 +57,7 @@ tasks.register('deploy', Exec) {
 
         Files.copy(file.toPath(), new File('build/libs/' + file.name).toPath(), StandardCopyOption.REPLACE_EXISTING)
     }
+    final String icon = 'resources/' + (isMac ? 'icon.icns' : 'icon.png')
 
     configurations.runtimeClasspath.each {
         Files.copy(it.toPath(), new File('build/libs/' + it.name).toPath(), StandardCopyOption.REPLACE_EXISTING)
@@ -69,16 +71,18 @@ tasks.register('deploy', Exec) {
                             '--description',  'Radio-Text part of iSongs',
                             '--vendor',       project.group,
                             '--about-url',    'https://github.com/mhahnFr/iSongs-RadioText',
-                            '--icon',         'resources/icon.icns'
+                            '--icon',         icon
 }
 
 tasks.register('maybeAppleScript', Exec) {
-    if (System.getProperty('os.name').toLowerCase().contains('mac')) {
+    if (isMac) {
         for (final var script : appleScripts) {
             if (!script.name.endsWith('.applescript')) continue
 
             commandLine 'osacompile', '-xo', script.getParent() + File.separator + script.name.substring(0, script.name.lastIndexOf('.')) + '.scpt', script
         }
+    } else {
+        commandLine 'echo', 'AppleScript: Nothing to do.'
     }
 }
 
