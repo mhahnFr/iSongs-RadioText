@@ -36,10 +36,6 @@ repositories {
     mavenCentral()
 }
 
-configurations {
-    jutils
-}
-
 sourceSets {
     main {
         java {
@@ -88,12 +84,10 @@ tasks.register('maybeAppleScript', Exec) {
 
 dependencies {
     implementation 'com.formdev:flatlaf:3.4.1'
-    implementation project(':JUtilities')
-    jutils project(':JUtilities')
+    implementation 'mhahnfr:jutilities:0.1'
 }
 
 jar {
-    dependsOn configurations.jutils
     dependsOn maybeAppleScript
     manifest {
         attributes 'Main-Class': 'mhahnFr.iSongs.iSongs', 'Class-Path': configurations.runtimeClasspath.collect { it.getName() }.join(' ')
