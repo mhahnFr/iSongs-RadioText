@@ -32,6 +32,7 @@ import mhahnFr.utils.gui.DarkModeListener;
 import mhahnFr.utils.gui.components.HintTextField;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ItemEvent;
@@ -61,6 +62,7 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
         super(owner, Constants.NAME + ": " + Settings.getInstance().getLocale().get(StringID.MAIN_SETTINGS), true);
 
         final var panel = new JPanel(new BorderLayout());
+        panel.setBorder(new EmptyBorder(5, 5, 5, 5));
             final var northPanel = new JPanel(new BorderLayout());
                 final var darkBox = new JCheckBox(locale.get(StringID.SETTINGS_ACTIVATE_DARK_MODE));
 
