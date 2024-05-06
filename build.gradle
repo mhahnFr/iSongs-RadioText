@@ -28,7 +28,7 @@ plugins {
 }
 
 group 'mhahnFr'
-version '3.4'
+version '3.5-alpha'
 
 def isMac = System.getProperty('os.name').toLowerCase().contains('mac')
 def appleScripts = new File('scripts').listFiles()
@@ -121,7 +121,7 @@ tasks.register('maybeAppleScript', Exec) {
 
 dependencies {
     implementation 'com.formdev:flatlaf:3.4.1'
-    implementation 'mhahnfr:jutilities:0.1'
+    implementation 'mhahnfr:jutilities:0.1.1'
 }
 
 jar {
