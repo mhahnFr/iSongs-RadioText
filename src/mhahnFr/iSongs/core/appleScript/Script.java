@@ -48,9 +48,23 @@ public class Script {
      *
      * @return the regular result of the script
      */
-    public String execute() {
-        try (final var stream = Runtime.getRuntime().exec(new String[] { "osascript", "-e", content }).getInputStream()) {
-            return new String(stream.readAllBytes());
+    public String execute() throws ExecutionException {
+        return execute(new String[] { "osascript", "-e", content });
+    }
+
+    protected String execute(final String[] args) throws ExecutionException {
+        try {
+            final var p = Runtime.getRuntime().exec(args);
+            try (final var in  = p.getInputStream();
+                 final var err = p.getErrorStream()) {
+                final var allIn  = in.readAllBytes();
+                final var allErr = err.readAllBytes();
+
+                if (allErr.length != 0) {
+                    throw new ExecutionException(new String(allErr));
+                }
+                return new String(allIn);
+            }
         } catch (final IOException e) {
             return null;
         }

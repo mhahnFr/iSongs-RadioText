@@ -48,13 +48,9 @@ public class InfoLoaderAppleScript {
      *
      * @return the song and radio text
      */
-    public Pair<String, Song> getScriptResult() {
+    public Pair<String, Song> getScriptResult() throws ExecutionException {
         final String text;
-        try {
-            text = script.execute();
-        } catch (final Exception e) {
-            return null;
-        }
+        text = script.execute();
         final Song song;
         final var index = text.indexOf(" / ");
         if (index != -1) {

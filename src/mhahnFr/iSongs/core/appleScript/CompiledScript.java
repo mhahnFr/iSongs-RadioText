@@ -22,7 +22,6 @@
 package mhahnFr.iSongs.core.appleScript;
 
 import java.io.File;
-import java.io.IOException;
 
 /**
  * Represents a compiled AppleScript.
@@ -46,11 +45,7 @@ public class CompiledScript extends Script {
     }
 
     @Override
-    public String execute() {
-        try (final var stream = Runtime.getRuntime().exec(new String[] { "osascript", location.getAbsolutePath() }).getInputStream()) {
-            return new String(stream.readAllBytes());
-        } catch (final IOException e) {
-            return null;
-        }
+    public String execute() throws ExecutionException {
+        return execute(new String[] { "osascript", location.getAbsolutePath() });
     }
 }

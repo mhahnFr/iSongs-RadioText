@@ -21,11 +21,10 @@
 
 package mhahnFr.iSongs.core;
 
-import mhahnFr.iSongs.core.appleScript.CompiledScript;
-import mhahnFr.iSongs.core.appleScript.InfoLoaderAppleScript;
-import mhahnFr.iSongs.core.appleScript.Script;
-import mhahnFr.iSongs.core.appleScript.ScriptSupport;
+import mhahnFr.iSongs.core.appleScript.*;
+import mhahnFr.iSongs.core.appleScript.ExecutionException;
 import mhahnFr.iSongs.core.locale.StringID;
+import mhahnFr.utils.Pair;
 import mhahnFr.utils.StringStream;
 import mhahnFr.utils.json.JSONParser;
 
@@ -295,7 +294,13 @@ public class InfoLoader {
      * @return the currently recognized song
      */
     private Song getTrackScript() {
-        final var result = scriptLoader.getScriptResult();
+        final Pair<String, Song> result;
+        try {
+            result = scriptLoader.getScriptResult();
+        } catch (final ExecutionException e) {
+            errorHandler.update(e);
+            return null;
+        }
         textUpdater.update(result.getFirst());
         return result.getSecond();
     }
