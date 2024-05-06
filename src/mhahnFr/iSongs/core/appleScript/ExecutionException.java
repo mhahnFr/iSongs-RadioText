@@ -21,7 +21,18 @@
 
 package mhahnFr.iSongs.core.appleScript;
 
+/**
+ * This class represents the error that an executed program has returned.
+ *
+ * @author mhahnFr
+ * @since 06.05.24
+ */
 public class ExecutionException extends Exception {
+    /**
+     * Constructs this exception using the given message.
+     *
+     * @param message the message of the process
+     */
     public ExecutionException(final String message) {
         super(message);
     }
