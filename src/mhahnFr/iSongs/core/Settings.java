@@ -343,6 +343,11 @@ public class Settings {
     /** Indicates whether the current OS is a version of macOS. */
     public static final boolean isMac = System.getProperty("os.name").toLowerCase().contains("mac");
 
+    /**
+     * Activates the appropriate L&F. Uses a dark L&F if requested.
+     *
+     * @param dark whether to use a dark L&F
+     */
     public static void setupLaf(final boolean dark) {
         if (dark) {
             if (isMac) FlatMacDarkLaf.setup();
