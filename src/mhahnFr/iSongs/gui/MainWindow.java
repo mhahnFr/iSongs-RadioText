@@ -25,6 +25,7 @@ import mhahnFr.iSongs.core.Constants;
 import mhahnFr.iSongs.core.InfoLoader;
 import mhahnFr.iSongs.core.Settings;
 import mhahnFr.iSongs.core.Song;
+import mhahnFr.iSongs.core.appleScript.ExecutionException;
 import mhahnFr.iSongs.core.locale.Locale;
 import mhahnFr.iSongs.core.locale.StringID;
 import mhahnFr.utils.gui.DarkModeListener;
@@ -65,6 +66,7 @@ public class MainWindow extends JFrame implements DarkModeListener {
     private Exception lastException;
     /** Indicates whether the window title should not be changed.  */
     private boolean blockedTitle = false;
+    private boolean executionExceptionShown = false;
     /** The title to be set once the window title is unblocked.    */
     private String title;
 
@@ -180,7 +182,10 @@ public class MainWindow extends JFrame implements DarkModeListener {
      * @param value the new window title
      */
     private void radioTextCallback(final String value) {
-        onUIThread(() -> setTitle(Objects.requireNonNullElse(value, Constants.NAME)));
+        onUIThread(() -> {
+            executionExceptionShown = false;
+            setTitle(Objects.requireNonNullElse(value, Constants.NAME));
+        });
     }
 
     /**
@@ -190,10 +195,19 @@ public class MainWindow extends JFrame implements DarkModeListener {
      * @param e the {@link Exception} to handle
      */
     private void errorCallback(final Exception e) {
-        onUIThread(() -> JOptionPane.showMessageDialog(this,
-                locale.get(StringID.MAIN_ERROR_HAPPENED) + ": " + e.getLocalizedMessage(),
-                Constants.NAME + ": " + locale.get(StringID.MAIN_ERROR),
-                JOptionPane.ERROR_MESSAGE));
+        onUIThread(() -> {
+            if (e instanceof ExecutionException) {
+                if (executionExceptionShown) {
+                    return;
+                }
+                executionExceptionShown = true;
+                setTitle(Constants.NAME);
+            }
+            JOptionPane.showMessageDialog(this,
+                    locale.get(StringID.MAIN_ERROR_HAPPENED) + ": " + e.getLocalizedMessage(),
+                    Constants.NAME + ": " + locale.get(StringID.MAIN_ERROR),
+                    JOptionPane.ERROR_MESSAGE);
+        });
     }
 
     /**
