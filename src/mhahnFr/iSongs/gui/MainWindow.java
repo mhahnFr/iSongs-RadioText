@@ -45,29 +45,30 @@ import java.util.Objects;
  * @since 14.03.23
  */
 public class MainWindow extends JFrame implements DarkModeListener {
-    /** The {@link InfoLoader}.                                    */
+    /** The {@link InfoLoader}.                                                 */
     private final InfoLoader loader = new InfoLoader(this::updateUI,
                                                      this::writeCallback,
                                                      this::radioTextCallback,
                                                      this::errorCallback);
-    /** The timer for resetting the title bar.                     */
+    /** The timer for resetting the title bar.                                  */
     private final Timer savedTimer = new Timer(5000, __ -> unblockTitle());
-    /** The {@link JLabel} displaying the title of the song.       */
+    /** The {@link JLabel} displaying the title of the song.                    */
     private final JLabel titleLabel;
-    /** The {@link JLabel} displaying the interpreter of the song. */
+    /** The {@link JLabel} displaying the interpreter of the song.              */
     private final JLabel interpreterLabel;
-    /** The {@link JButton} used for saving the song.              */
+    /** The {@link JButton} used for saving the song.                           */
     private final JButton saveButton;
-    /** The {@link JButton} displaying the {@link #lastException}. */
+    /** The {@link JButton} displaying the {@link #lastException}.              */
     private final JButton errorButton;
-    /** The {@link Locale} to be used in this instance.            */
+    /** The {@link Locale} to be used in this instance.                         */
     private final Locale locale = Settings.getInstance().getLocale();
-    /** The last {@link Exception} that happened.                  */
+    /** The last {@link Exception} that happened.                               */
     private Exception lastException;
-    /** Indicates whether the window title should not be changed.  */
+    /** Indicates whether the window title should not be changed.               */
     private boolean blockedTitle = false;
+    /** Indicates whether an {@link ExecutionException} has already been shown. */
     private boolean executionExceptionShown = false;
-    /** The title to be set once the window title is unblocked.    */
+    /** The title to be set once the window title is unblocked.                 */
     private String title;
 
     /**
