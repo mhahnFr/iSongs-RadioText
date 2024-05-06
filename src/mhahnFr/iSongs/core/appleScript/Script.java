@@ -47,12 +47,20 @@ public class Script {
      * {@code osascript}, the regular result is returned.
      *
      * @return the regular result of the script
+     * @throws ExecutionException when {@code osascript} returns an error
      */
     public String execute() throws ExecutionException {
         return execute(new String[] { "osascript", "-e", content });
     }
 
-    protected String execute(final String[] args) throws ExecutionException {
+    /**
+     * Executes the given arguments.
+     *
+     * @param args the arguments to execute
+     * @return the result of the execution
+     * @throws ExecutionException when the executed program returned an error
+     */
+    protected static String execute(final String[] args) throws ExecutionException {
         try {
             final var p = Runtime.getRuntime().exec(args);
             try (final var in  = p.getInputStream();

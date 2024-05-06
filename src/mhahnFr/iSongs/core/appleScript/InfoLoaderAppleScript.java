@@ -47,6 +47,7 @@ public class InfoLoaderAppleScript {
      * Executes the {@link Script} and returns the recognized song and radio text.
      *
      * @return the song and radio text
+     * @throws ExecutionException when the script could not be executed
      */
     public Pair<String, Song> getScriptResult() throws ExecutionException {
         final String text;

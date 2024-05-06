@@ -78,8 +78,6 @@ public class InfoLoader {
     /** The last song recognized by the AppleScript based loader.                       */
     private Song lastScript;
 
-    // TODO: package_info.java for applescript package
-
     /**
      * Initializes this {@link InfoLoader}.
      *
