@@ -231,8 +231,6 @@ public class InfoLoader {
         return null;
     }
 
-    // TODO: Allow JSON to fail if script support is enabled
-
     /**
      * Updates the currently played song. Uses the JSON and script based
      * song recognition as set with {@link #setScriptSupport(ScriptSupport)}.
@@ -256,7 +254,9 @@ public class InfoLoader {
         }
         final var current = getCurrentSong();
 
-        // FIXME: If no song played upon start up, this is not properly sent
+        // TODO: Allow JSON to fail if script support is enabled
+        // TODO: Got via script, got nothing via JSON -> results in no title playing...
+        // TODO: If no song played upon start up, this is not properly sent
         final Optional<Optional<Song>> newJson, newScript;
         if (!Objects.equals(json.orElse(null), lastJson) && (previous == null || !Objects.equals(json.orElse(null), previous)) && !Objects.equals(json.orElse(null), current)) {
             newJson = Optional.of(json);
