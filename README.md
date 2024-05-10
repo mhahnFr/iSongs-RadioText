@@ -59,7 +59,7 @@ On macOS, the songs can alternatively or additionally be recognized by sending A
 > The Apple Events can be enabled in the [settings of iSongs-RadioText][4].
 
 ## Final notes
-This project is licensed under the terms of the GNU GPL 3.0.
+This project is licensed under the terms of the GNU GPL version 3 or later.
 
 © Copyright 2014, 2019, 2023 - 2024 [mhahnFr][1]
 
