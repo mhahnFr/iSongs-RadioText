@@ -62,6 +62,7 @@ public class German extends Locale {
             case SETTINGS_APPLESCRIPT_OFF       -> { return "Deaktiviert";                                                 }
             case SETTINGS_APPLESCRIPT_ON        -> { return "Aktiviert";                                                   }
             case SETTINGS_APPLESCRIPT_ONLY      -> { return "Alleinig (Internet basierte Erkennung deaktiviert)";          }
+            case SETTINGS_ALLOW_NO_SONG         -> { return "Kein Titel erkannt anzeigen";                                 }
             case SETTINGS_REMOVE_REALLY         -> { return """
                                                             Sollen die Einstellungen wirklich gelöscht werden?
                                                             Diese Aktion ist nicht widerruflich!

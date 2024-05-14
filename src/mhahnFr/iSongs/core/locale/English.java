@@ -67,6 +67,7 @@ public class English extends Locale {
             case SETTINGS_APPLESCRIPT_OFF       -> { return "Disabled";                                               }
             case SETTINGS_APPLESCRIPT_ON        -> { return "Activated";                                              }
             case SETTINGS_APPLESCRIPT_ONLY      -> { return "Only (Internet based recognition disabled)";             }
+            case SETTINGS_ALLOW_NO_SONG         -> { return "Show no song recognized";                                }
             case SETTINGS_REMOVE_REALLY         -> { return """
                                                             Really delete settings?
                                                             This action cannot be undone.

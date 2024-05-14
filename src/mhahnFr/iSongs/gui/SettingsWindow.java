@@ -66,9 +66,12 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
             final var northPanel = new JPanel(new BorderLayout());
                 final var darkBox = new JCheckBox(locale.get(StringID.SETTINGS_ACTIVATE_DARK_MODE));
 
+                final var noSongBox = new JCheckBox(locale.get(StringID.SETTINGS_ALLOW_NO_SONG));
+
                 final var scriptSupportPanel = getScriptSupportPanel(Settings.getInstance().getScriptSupport());
             northPanel.add(darkBox, BorderLayout.NORTH);
-            scriptSupportPanel.ifPresent(jPanel -> northPanel.add(jPanel, BorderLayout.CENTER));
+            northPanel.add(noSongBox, BorderLayout.CENTER);
+            scriptSupportPanel.ifPresent(jPanel -> northPanel.add(jPanel, BorderLayout.SOUTH));
 
             final var centerPanel = new JPanel(new GridLayout(4, 1));
                 final var localePanel = new JPanel(new GridLayout(1, 1));
@@ -111,6 +114,9 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
         final var settings = Settings.getInstance();
         darkBox.addItemListener(__ -> settings.setDarkMode(darkBox.isSelected()));
         darkBox.setSelected(settings.getDarkMode());
+
+        noSongBox.setSelected(settings.getNoSong());
+        noSongBox.addItemListener(__ -> settings.setNoSong(noSongBox.isSelected()));
 
         localeBox.addItem(locale instanceof English ? locale : new English());
         localeBox.addItem(locale instanceof German ? locale : new German());
