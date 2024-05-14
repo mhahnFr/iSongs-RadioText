@@ -51,7 +51,10 @@ public class InfoLoaderAppleScript {
      */
     public Pair<String, Song> getScriptResult() throws ExecutionException {
         final String text;
-        text = script.execute();
+        text = script.execute().strip();
+        if (text.equals("missing value")) {
+            return new Pair<>(null, null);
+        }
         final Song song;
         final var index = text.indexOf(" / ");
         if (index != -1) {
@@ -59,6 +62,6 @@ public class InfoLoaderAppleScript {
         } else {
             song = null;
         }
-        return new Pair<>(text.strip(), song);
+        return new Pair<>(text, song);
     }
 }
