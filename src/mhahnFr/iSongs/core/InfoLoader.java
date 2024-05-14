@@ -77,6 +77,9 @@ public class InfoLoader {
     private Song lastJson;
     /** The last song recognized by the AppleScript based loader.                       */
     private Song lastScript;
+    private boolean executionExceptionForwarded = false;
+    private boolean jsonExceptionForwarded = false;
+    private boolean uriExceptionForwarded = false;
 
     /**
      * Initializes this {@link InfoLoader}.
@@ -117,6 +120,9 @@ public class InfoLoader {
      * @see #stop()
      */
     public void start() {
+        executionExceptionForwarded = false;
+        jsonExceptionForwarded = false;
+        uriExceptionForwarded = false;
         setScriptSupport(Settings.getInstance().getScriptSupport());
         updateFuture = executorService.scheduleAtFixedRate(this::updateTrack,
                 0,
@@ -254,7 +260,6 @@ public class InfoLoader {
         }
         final var current = getCurrentSong();
 
-        // TODO: Allow JSON to fail if script support is enabled
         // TODO: Got via script, got nothing via JSON -> results in no title playing...
         final Optional<Optional<Song>> newJson, newScript;
         if (!Objects.equals(json.orElse(null), lastJson) && (previous == null || !Objects.equals(json.orElse(null), previous)) && !Objects.equals(json.orElse(null), current)) {
@@ -295,9 +300,13 @@ public class InfoLoader {
         try {
             result = scriptLoader.getScriptResult();
         } catch (final ExecutionException e) {
-            errorHandler.update(e);
+            if (!executionExceptionForwarded || support == ScriptSupport.only) {
+                executionExceptionForwarded = true;
+                errorHandler.update(e);
+            }
             return null;
         }
+        executionExceptionForwarded = false;
         textUpdater.update(result.getFirst());
         return result.getSecond();
     }
@@ -312,16 +321,24 @@ public class InfoLoader {
         try {
             url = new URI(Settings.getInstance().getURL()).toURL();
         } catch (MalformedURLException | URISyntaxException e) {
-            errorHandler.update(e);
+            if (!uriExceptionForwarded || support == ScriptSupport.off) {
+                uriExceptionForwarded = true;
+                errorHandler.update(e);
+            }
             return null;
         }
+        uriExceptionForwarded = false;
 
         try (final var reader = new BufferedInputStream(url.openStream())) {
             new JSONParser(new StringStream(new String(reader.readAllBytes(), StandardCharsets.UTF_8))).readInto(dto);
         } catch (final Exception e) {
-            errorHandler.update(e);
+            if (!jsonExceptionForwarded || support == ScriptSupport.off) {
+                jsonExceptionForwarded = true;
+                errorHandler.update(e);
+            }
             return null;
         }
+        jsonExceptionForwarded = false;
         final var playedSong = getPlayedSong(dto);
         return playedSong == null ? null : new Song(playedSong.title, playedSong.artist);
     }
