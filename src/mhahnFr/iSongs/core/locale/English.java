@@ -40,7 +40,6 @@ public class English extends Locale {
     public String get(final StringID id) {
         switch (id) {
             case MAIN_CURRENT_TITLE       -> { return "Current song";                            }
-            case MAIN_LOADING             -> { return "Loading";                                 }
             case MAIN_SAVE_TITLE          -> { return "Save song";                               }
             case MAIN_SHOW_ERROR          -> { return "Show error";                              }
             case MAIN_SETTINGS            -> { return "Settings";                                }

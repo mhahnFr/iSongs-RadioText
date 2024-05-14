@@ -35,7 +35,6 @@ public class German extends Locale {
     public String get(final StringID id) {
         switch (id) {
             case MAIN_CURRENT_TITLE       -> { return "Aktueller Titel";                                                }
-            case MAIN_LOADING             -> { return "Laden";                                                          }
             case MAIN_SAVE_TITLE          -> { return "Titel merken";                                                   }
             case MAIN_SHOW_ERROR          -> { return "Fehler anzeigen";                                                }
             case MAIN_SETTINGS            -> { return "Einstellungen";                                                  }

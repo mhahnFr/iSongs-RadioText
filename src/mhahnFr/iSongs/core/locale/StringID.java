@@ -30,7 +30,6 @@ package mhahnFr.iSongs.core.locale;
  */
 public enum StringID {
     MAIN_CURRENT_TITLE,
-    MAIN_LOADING,
     MAIN_SAVE_TITLE,
     MAIN_SHOW_ERROR,
     MAIN_SETTINGS,

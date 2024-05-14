@@ -81,15 +81,16 @@ public class MainWindow extends JFrame implements DarkModeListener {
         final var panel = new JPanel(new GridLayout(4, 1));
             final var label = new JLabel(" " + locale.get(StringID.MAIN_CURRENT_TITLE) + ":");
 
-            titleLabel = new JLabel(locale.get(StringID.MAIN_LOADING) + "...", SwingConstants.CENTER);
+            titleLabel = new JLabel(locale.get(StringID.MAIN_NO_SONG), SwingConstants.CENTER);
             titleLabel.setFont(titleLabel.getFont().deriveFont(Font.BOLD));
 
-            interpreterLabel = new JLabel(locale.get(StringID.MAIN_LOADING) + "...", SwingConstants.CENTER);
+            interpreterLabel = new JLabel(locale.get(StringID.MAIN_NO_INTERPRETER), SwingConstants.CENTER);
 
             final var wrapper = new JPanel(new BorderLayout());
                 final var toAdd = new JPanel();
                     saveButton = new JButton(locale.get(StringID.MAIN_SAVE_TITLE));
                     saveButton.addActionListener(__ -> saveTitle());
+                    saveButton.setEnabled(false);
 
                     errorButton = new JButton(locale.get(StringID.MAIN_SHOW_ERROR));
                     errorButton.addActionListener(__ -> showLastError());

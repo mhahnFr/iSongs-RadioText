@@ -256,7 +256,6 @@ public class InfoLoader {
 
         // TODO: Allow JSON to fail if script support is enabled
         // TODO: Got via script, got nothing via JSON -> results in no title playing...
-        // TODO: If no song played upon start up, this is not properly sent
         final Optional<Optional<Song>> newJson, newScript;
         if (!Objects.equals(json.orElse(null), lastJson) && (previous == null || !Objects.equals(json.orElse(null), previous)) && !Objects.equals(json.orElse(null), current)) {
             newJson = Optional.of(json);
