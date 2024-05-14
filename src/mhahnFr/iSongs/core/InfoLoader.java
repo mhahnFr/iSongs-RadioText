@@ -77,9 +77,10 @@ public class InfoLoader {
     private Song lastJson;
     /** The last song recognized by the AppleScript based loader.                       */
     private Song lastScript;
-    private boolean executionExceptionForwarded = false;
-    private boolean jsonExceptionForwarded = false;
-    private boolean uriExceptionForwarded = false;
+    private boolean allowNoSong;
+    private boolean executionExceptionForwarded;
+    private boolean jsonExceptionForwarded;
+    private boolean uriExceptionForwarded;
 
     /**
      * Initializes this {@link InfoLoader}.
@@ -123,6 +124,7 @@ public class InfoLoader {
         executionExceptionForwarded = false;
         jsonExceptionForwarded = false;
         uriExceptionForwarded = false;
+        allowNoSong = Settings.getInstance().getNoSong();
         setScriptSupport(Settings.getInstance().getScriptSupport());
         updateFuture = executorService.scheduleAtFixedRate(this::updateTrack,
                 0,
@@ -260,9 +262,8 @@ public class InfoLoader {
         }
         final var current = getCurrentSong();
 
-        // TODO: Got via script, got nothing via JSON -> results in no title playing...
         final Optional<Optional<Song>> newJson, newScript;
-        if (!Objects.equals(json.orElse(null), lastJson) && (previous == null || !Objects.equals(json.orElse(null), previous)) && !Objects.equals(json.orElse(null), current)) {
+        if ((allowNoSong || json.isPresent()) && !Objects.equals(json.orElse(null), lastJson) && ((allowNoSong && previous == null) || !Objects.equals(json.orElse(null), previous)) && !Objects.equals(json.orElse(null), current)) {
             newJson = Optional.of(json);
         } else {
             newJson = Optional.empty();
