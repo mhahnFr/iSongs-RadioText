@@ -34,8 +34,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.Objects;
 
 /**
@@ -58,12 +56,8 @@ public class MainWindow extends JFrame implements DarkModeListener {
     private final JLabel interpreterLabel;
     /** The {@link JButton} used for saving the song.                           */
     private final JButton saveButton;
-    /** The {@link JButton} displaying the {@link #lastException}.              */
-    private final JButton errorButton;
     /** The {@link Locale} to be used in this instance.                         */
     private final Locale locale = Settings.getInstance().getLocale();
-    /** The last {@link Exception} that happened.                               */
-    private Exception lastException;
     /** Indicates whether the window title should not be changed.               */
     private boolean blockedTitle = false;
     /** Indicates whether an {@link ExecutionException} has already been shown. */
@@ -92,9 +86,6 @@ public class MainWindow extends JFrame implements DarkModeListener {
                     saveButton.addActionListener(__ -> saveTitle());
                     saveButton.setEnabled(false);
 
-                    errorButton = new JButton(locale.get(StringID.MAIN_SHOW_ERROR));
-                    errorButton.addActionListener(__ -> showLastError());
-
                     if (hasSettings()) {
                         addSettingsHook();
                     } else {
@@ -103,7 +94,6 @@ public class MainWindow extends JFrame implements DarkModeListener {
                         toAdd.add(settingsButton);
                     }
                 toAdd.add(saveButton);
-                toAdd.add(errorButton);
             wrapper.add(toAdd, BorderLayout.CENTER);
         panel.add(label);
         panel.add(titleLabel);
@@ -150,7 +140,6 @@ public class MainWindow extends JFrame implements DarkModeListener {
      */
     private void updateUI() {
         onUIThread(() -> {
-            errorButton.setVisible(false);
             final var displayedSong = loader.getCurrentSong();
             if (displayedSong != null) {
                 titleLabel.setText(displayedSong.title());
@@ -217,19 +206,15 @@ public class MainWindow extends JFrame implements DarkModeListener {
      * sure it runs in the {@link EventQueue}.
      *
      * @param song  the saved song
-     * @param error the {@link Exception} that happened
      */
-    private void writeCallback(final Song      song,
-                               final Exception error) {
+    private void writeCallback(final Song song) {
         onUIThread(() -> {
             blockTitle();
-            if (error == null) {
+            if (song != null) {
                 super.setTitle("\"" + song.title() + "\" " + locale.get(StringID.MAIN_STORED));
                 saveButton.setEnabled(false);
             } else {
                 super.setTitle(locale.get(StringID.MAIN_SAVE_ERROR));
-                errorButton.setVisible(true);
-                lastException = error;
             }
             savedTimer.restart();
         });
@@ -267,27 +252,6 @@ public class MainWindow extends JFrame implements DarkModeListener {
         blockedTitle = false;
         setTitle(title);
         title = null;
-    }
-
-    /**
-     * Shows the last error that occurred during writing a song to disk.
-     *
-     * @see #lastException
-     */
-    private void showLastError() {
-        if (lastException == null) {
-            JOptionPane.showMessageDialog(this,
-                                          locale.get(StringID.MAIN_NO_ERROR) + ".",
-                                          Constants.NAME,
-                                          JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            final var sw = new StringWriter();
-            lastException.printStackTrace(new PrintWriter(sw));
-            JOptionPane.showMessageDialog(this,
-                                          sw,
-                                          Constants.NAME + ": " + locale.get(StringID.MAIN_ERROR),
-                                          JOptionPane.ERROR_MESSAGE);
-        }
     }
 
     /**

@@ -58,7 +58,7 @@ public class InfoLoader {
     /** The callback called when a new song is recognized.                              */
     private final Runnable trackUpdater;
     /** The callback called when a song has been written.                               */
-    private final WriteCallback writeCallback;
+    private final Callback<Song> writeCallback;
     /** The callback called with the latest recognized radio text.                      */
     private final Callback<String> textUpdater;
     /** The callback to be called when an unrelated exception happens.                  */
@@ -87,7 +87,7 @@ public class InfoLoader {
      * @param errorHandler  the callback called when an unrelated exception happened
      */
     public InfoLoader(final Runnable            trackUpdater,
-                      final WriteCallback       writeCallback,
+                      final Callback<Song>      writeCallback,
                       final Callback<String>    textUpdater,
                       final Callback<Exception> errorHandler) {
         this.trackUpdater  = trackUpdater;
@@ -345,14 +345,17 @@ public class InfoLoader {
      * @see #writeCallback
      */
     private void saveSongImpl(final Song song) {
-        Song      savedSong = null;
-        Exception e         = null;
+        Song      written = null;
+        Exception error   = null;
         try {
-            savedSong = saveTrack(song);
-        } catch (Exception exception) {
-            e = exception;
+            written = saveTrack(song);
+        } catch (final Exception e) {
+            error = e;
         }
-        writeCallback.songWritten(savedSong, e);
+        writeCallback.update(written);
+        if (error != null) {
+            errorHandler.update(error);
+        }
     }
 
     /**
