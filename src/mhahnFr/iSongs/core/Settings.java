@@ -159,6 +159,14 @@ public class Settings {
         return ScriptSupport.valueOf(preferences.get(Key.APPLE_SCRIPT, ScriptSupport.off.name()));
     }
 
+    public boolean getNoSong() {
+        return preferences.getInt(Key.NO_SONG, 1) == 1;
+    }
+
+    public void setNoSong(final boolean noSong) {
+        preferences.putInt(Key.NO_SONG, noSong ? 1 : 0);
+    }
+
     /**
      * Sets the script support level.
      *
@@ -402,5 +410,6 @@ public class Settings {
         public static final String LOCALE        = BUNDLE_ID + ".locale";
         /** The key for the script support.        */
         public static final String APPLE_SCRIPT  = BUNDLE_ID + ".scriptSupport";
+        public static final String NO_SONG       = BUNDLE_ID + ".noSong";
     }
 }
