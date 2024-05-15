@@ -28,7 +28,7 @@ plugins {
 }
 
 group 'mhahnFr'
-version '3.5'
+version '3.5.1'
 
 def isMac = System.getProperty('os.name').toLowerCase().contains('mac')
 def appleScripts = new File('scripts').listFiles()
