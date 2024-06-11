@@ -10,3 +10,11 @@ See the file ApacheLicense2.txt in the folder licenses.
 This distribution includes JUtilities, Copyright (C) mhahnFr, which is licensed under the terms of
 the GNU GPL version 3 or later. The source code can be found at: https://github.com/mhahnFr/JUtilities
 See the file GPLv3.txt in the folder licenses.
+
+This distribution includes NDL4Java, Copyright (C) mhahnFr, which is licensed under the terms of
+the GNU LGPL version 3 or later. The source code can be found at: https://github.com/mhahnFr/NDL4Java
+See the file GPLv3.txt and LGPLv3.txt in the folder licenses.
+
+This distribution includes NDL, Copyright (C) mhahnFr, which is licensed under the terms of
+the GNU LGPL version 3 or later. The source code can be found at: https://github.com/mhahnFr/NDL
+See the files GPLv3.txt and LGPLv3.txt in the folder licenses.
