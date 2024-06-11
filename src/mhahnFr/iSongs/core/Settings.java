@@ -61,8 +61,7 @@ public class Settings implements DarkModeCallback {
      * The default constructor. Can only be used internally.
      */
     private Settings() {
-        // TODO: Check availability
-        NDL.registerCallback(this);
+        NDL.ifAvailable(() -> NDL.registerCallback(this));
     }
 
     /**
@@ -111,7 +110,8 @@ public class Settings implements DarkModeCallback {
      * @return the state of the activation of the dark mode
      */
     public DarkMode getDarkMode() {
-        return DarkMode.createDarkMode(preferences.getInt(Key.DARK_MODE, DarkMode.AUTO.ordinal()));
+        return DarkMode.createDarkMode(preferences.getInt(Key.DARK_MODE, NDL.isAvailable() ? DarkMode.AUTO.ordinal()
+                                                                                           : DarkMode.LIGHT.ordinal()));
     }
 
     @Override
@@ -129,9 +129,11 @@ public class Settings implements DarkModeCallback {
 
     public boolean getRenderDarkMode() {
         switch (getDarkMode()) {
-            case LIGHT -> { return false;               }
-            case DARK  -> { return true;                }
-            case AUTO  -> { return NDL.queryDarkMode(); }
+            case LIGHT -> { return false; }
+            case DARK  -> { return true;  }
+            case AUTO  -> {
+                return NDL.isAvailable() && NDL.queryDarkMode();
+            }
         }
         return false;
     }

@@ -21,6 +21,7 @@
 
 package mhahnFr.iSongs.gui;
 
+import mhahnFr.NDL.NDL;
 import mhahnFr.iSongs.core.Constants;
 import mhahnFr.iSongs.core.DarkMode;
 import mhahnFr.iSongs.core.Settings;
@@ -117,8 +118,8 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
         getContentPane().add(panel);
 
         final var settings = Settings.getInstance();
+        NDL.ifAvailable(() -> darkChooser.addItem(DarkMode.AUTO));
         darkChooser.addItem(DarkMode.DARK);
-        darkChooser.addItem(DarkMode.AUTO); // TODO: Only if NDL is available
         darkChooser.addItem(DarkMode.LIGHT);
         darkChooser.setEditable(false);
         darkChooser.setSelectedItem(settings.getDarkMode());
