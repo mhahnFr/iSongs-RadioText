@@ -25,12 +25,15 @@ import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import com.formdev.flatlaf.themes.FlatMacLightLaf;
+import mhahnFr.NDL.DarkModeCallback;
+import mhahnFr.NDL.NDL;
 import mhahnFr.iSongs.core.appleScript.ScriptSupport;
 import mhahnFr.iSongs.core.locale.LanguageListener;
 import mhahnFr.iSongs.core.locale.Locale;
 import mhahnFr.iSongs.iSongs;
 import mhahnFr.utils.gui.DarkModeListener;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.prefs.Preferences;
@@ -41,7 +44,7 @@ import java.util.prefs.Preferences;
  * @author mhahnFr
  * @since 14.03.23
  */
-public class Settings {
+public class Settings implements DarkModeCallback {
     /** The one and only instance of this class.              */
     private static Settings instance;
     /** The underlying {@link Preferences}.                   */
@@ -57,7 +60,10 @@ public class Settings {
     /**
      * The default constructor. Can only be used internally.
      */
-    private Settings() {}
+    private Settings() {
+        // TODO: Check availability
+        NDL.registerCallback(this);
+    }
 
     /**
      * Returns the height of the window. If no data was set,
@@ -104,8 +110,30 @@ public class Settings {
      *
      * @return the state of the activation of the dark mode
      */
-    public boolean getDarkMode() {
-        return preferences.getInt(Key.DARK_MODE, 0) == 1;
+    public DarkMode getDarkMode() {
+        return DarkMode.createDarkMode(preferences.getInt(Key.DARK_MODE, DarkMode.AUTO.ordinal()));
+    }
+
+    @Override
+    public void darkModeChanged() {
+        if (getDarkMode() != DarkMode.AUTO) return;
+
+        EventQueue.invokeLater(() -> {
+            final var dark = getRenderDarkMode();
+            setupLaf(dark);
+            for (final var listener : listeners) {
+                listener.darkModeToggled(dark);
+            }
+        });
+    }
+
+    public boolean getRenderDarkMode() {
+        switch (getDarkMode()) {
+            case LIGHT -> { return false;               }
+            case DARK  -> { return true;                }
+            case AUTO  -> { return NDL.queryDarkMode(); }
+        }
+        return false;
     }
 
     /**
@@ -228,11 +256,17 @@ public class Settings {
      * @see #removeDarkModeListener(DarkModeListener)
      * @see DarkModeListener
      */
-    public void setDarkMode(final boolean dark) {
-        preferences.putInt(Key.DARK_MODE, dark ? 1 : 0);
-        setupLaf(dark);
-        for (final var listener : listeners) {
-            listener.darkModeToggled(dark);
+    public void setDarkMode(final DarkMode dark) {
+        final var old = getDarkMode();
+
+        preferences.putInt(Key.DARK_MODE, dark.ordinal());
+
+        if (old != dark) {
+            final var actuallyDark = getRenderDarkMode();
+            setupLaf(actuallyDark);
+            for (final var listener : listeners) {
+                listener.darkModeToggled(actuallyDark);
+            }
         }
     }
 
