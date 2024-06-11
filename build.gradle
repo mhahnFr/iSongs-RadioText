@@ -28,8 +28,15 @@ plugins {
 }
 
 group 'mhahnFr'
-version '3.5.1'
+version '3.6'
 
+// Adapt this path to the folder of the native NDL library file!
+def NDL_PATH = '<path/to/NDL/>'
+if (!new File(NDL_PATH).exists()) {
+    throw new RuntimeException('Path to NDL not set! Set the variable "NDL_PATH" in the file "build.gradle" to the path to the NDL!')
+}
+
+def nativeNdlFile = new File(NDL_PATH + File.separatorChar + System.mapLibraryName('ndl'))
 def isMac = System.getProperty('os.name').toLowerCase().contains('mac')
 def appleScripts = new File('scripts').listFiles()
 
@@ -85,6 +92,7 @@ tasks.register('deploy', Exec) {
     dependsOn(jar)
 
     assertBuildFolder()
+    Files.copy(nativeNdlFile.toPath(), new File('./build/libs/' + nativeNdlFile.name).toPath(), StandardCopyOption.REPLACE_EXISTING)
     for (final var file : appleScripts) {
         if (!file.name.endsWith('.scpt')) continue
 
@@ -122,6 +130,7 @@ tasks.register('maybeAppleScript', Exec) {
 dependencies {
     implementation 'com.formdev:flatlaf:3.4.1'
     implementation 'mhahnfr:jutilities:0.1.1'
+    implementation 'mhahnfr:ndl4java:0.1'
 }
 
 jar {
