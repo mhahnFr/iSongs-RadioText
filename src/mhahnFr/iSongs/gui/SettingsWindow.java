@@ -22,6 +22,7 @@
 package mhahnFr.iSongs.gui;
 
 import mhahnFr.iSongs.core.Constants;
+import mhahnFr.iSongs.core.DarkMode;
 import mhahnFr.iSongs.core.Settings;
 import mhahnFr.iSongs.core.appleScript.ScriptSupport;
 import mhahnFr.iSongs.core.locale.English;
@@ -36,6 +37,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.ItemEvent;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -64,16 +66,18 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
         final var panel = new JPanel(new BorderLayout());
         panel.setBorder(new EmptyBorder(5, 5, 5, 5));
             final var northPanel = new JPanel(new BorderLayout());
-                final var darkBox = new JCheckBox(locale.get(StringID.SETTINGS_ACTIVATE_DARK_MODE));
-
                 final var noSongBox = new JCheckBox(locale.get(StringID.SETTINGS_ALLOW_NO_SONG));
 
                 final var scriptSupportPanel = getScriptSupportPanel(Settings.getInstance().getScriptSupport());
-            northPanel.add(darkBox, BorderLayout.NORTH);
             northPanel.add(noSongBox, BorderLayout.CENTER);
             scriptSupportPanel.ifPresent(jPanel -> northPanel.add(jPanel, BorderLayout.SOUTH));
 
-            final var centerPanel = new JPanel(new GridLayout(4, 1));
+            final var centerPanel = new JPanel(new GridLayout(5, 1));
+                final var themePanel = new JPanel(new GridLayout(1, 1));
+                themePanel.setBorder(new TitledBorder(locale.get(StringID.SETTINGS_CHOOSE_THEME) + ":"));
+                final var darkChooser = new JComboBox<DarkMode>();
+                themePanel.add(darkChooser);
+
                 final var localePanel = new JPanel(new GridLayout(1, 1));
                 localePanel.setBorder(new TitledBorder(locale.get(StringID.SETTINGS_CHOOSE_LANG) + ":"));
                     final var localeBox = new JComboBox<Locale>();
@@ -99,6 +103,7 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
                 delayPanel.setBorder(new TitledBorder(locale.get(StringID.SETTINGS_SONG_REFRESH_RATE) + ":"));
                     final var delaySpinner = new JSpinner();
                 delayPanel.add(delaySpinner);
+            centerPanel.add(themePanel);
             centerPanel.add(localePanel);
             centerPanel.add(urlPanel);
             centerPanel.add(folderPanel);
@@ -112,8 +117,12 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
         getContentPane().add(panel);
 
         final var settings = Settings.getInstance();
-        darkBox.addItemListener(__ -> settings.setDarkMode(darkBox.isSelected()));
-        darkBox.setSelected(settings.getDarkMode());
+        darkChooser.addItem(DarkMode.DARK);
+        darkChooser.addItem(DarkMode.AUTO); // TODO: Only if NDL is available
+        darkChooser.addItem(DarkMode.LIGHT);
+        darkChooser.setEditable(false);
+        darkChooser.setSelectedItem(settings.getDarkMode());
+        darkChooser.addActionListener(_ -> settings.setDarkMode((DarkMode) Objects.requireNonNull(darkChooser.getSelectedItem())));
 
         noSongBox.setSelected(settings.getNoSong());
         noSongBox.addItemListener(__ -> settings.setNoSong(noSongBox.isSelected()));
