@@ -194,7 +194,7 @@ public class InfoLoader {
         final File folder;
         try {
             folder = new File(location.toURI());
-        } catch (final URISyntaxException e) {
+        } catch (final URISyntaxException _) {
             return null;
         }
         return new File(folder.getParentFile(), fileName);

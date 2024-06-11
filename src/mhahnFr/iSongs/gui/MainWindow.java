@@ -48,7 +48,7 @@ public class MainWindow extends JFrame implements DarkModeListener {
                                                      this::radioTextCallback,
                                                      this::errorCallback);
     /** The timer for resetting the title bar.                                  */
-    private final Timer savedTimer = new Timer(5000, __ -> unblockTitle());
+    private final Timer savedTimer = new Timer(5000, _ -> unblockTitle());
     /** The {@link JLabel} displaying the title of the song.                    */
     private final JLabel titleLabel;
     /** The {@link JLabel} displaying the interpreter of the song.              */
@@ -80,14 +80,14 @@ public class MainWindow extends JFrame implements DarkModeListener {
             final var wrapper = new JPanel(new BorderLayout());
                 final var toAdd = new JPanel();
                     saveButton = new JButton(locale.get(StringID.MAIN_SAVE_TITLE));
-                    saveButton.addActionListener(__ -> saveTitle());
+                    saveButton.addActionListener(_ -> saveTitle());
                     saveButton.setEnabled(false);
 
                     if (hasSettings()) {
                         addSettingsHook();
                     } else {
                         final var settingsButton = new JButton(locale.get(StringID.MAIN_SETTINGS));
-                        settingsButton.addActionListener(__ -> showSettings());
+                        settingsButton.addActionListener(_ -> showSettings());
                         toAdd.add(settingsButton);
                     }
                 toAdd.add(saveButton);
@@ -119,7 +119,7 @@ public class MainWindow extends JFrame implements DarkModeListener {
      */
     private void maybeAddQuitHandler() {
         if (Desktop.getDesktop().isSupported(Desktop.Action.APP_QUIT_HANDLER)) {
-            Desktop.getDesktop().setQuitHandler((__, response) -> {
+            Desktop.getDesktop().setQuitHandler((_, response) -> {
                 saveSettings();
                 response.performQuit();
             });
@@ -243,7 +243,7 @@ public class MainWindow extends JFrame implements DarkModeListener {
      * Adds the settings hook.
      */
     private void addSettingsHook() {
-        Desktop.getDesktop().setPreferencesHandler(__ -> showSettings());
+        Desktop.getDesktop().setPreferencesHandler(_ -> showSettings());
     }
 
     /**

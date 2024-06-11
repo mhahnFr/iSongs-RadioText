@@ -125,7 +125,7 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
         darkChooser.addActionListener(_ -> settings.setDarkMode((DarkMode) Objects.requireNonNull(darkChooser.getSelectedItem())));
 
         noSongBox.setSelected(settings.getNoSong());
-        noSongBox.addItemListener(__ -> settings.setNoSong(noSongBox.isSelected()));
+        noSongBox.addItemListener(_ -> settings.setNoSong(noSongBox.isSelected()));
 
         localeBox.addItem(locale instanceof English ? locale : new English());
         localeBox.addItem(locale instanceof German ? locale : new German());
@@ -135,12 +135,12 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
         urlField.setText(settings.getURL());
 
         delaySpinner.setValue(settings.getDelay());
-        delaySpinner.addChangeListener(__ -> settings.setDelay((Integer) delaySpinner.getValue()));
+        delaySpinner.addChangeListener(_ -> settings.setDelay((Integer) delaySpinner.getValue()));
 
         folderChangeLabel.setText(settings.getSavePath());
-        folderChangeButton.addActionListener(__ -> chooseSaveFolder());
+        folderChangeButton.addActionListener(_ -> chooseSaveFolder());
 
-        deleteButton.addActionListener(__ -> removeSettings());
+        deleteButton.addActionListener(_ -> removeSettings());
 
         settings.addDarkModeListener(this);
 
@@ -181,9 +181,9 @@ public class SettingsWindow extends JDialog implements DarkModeListener {
             case only -> scriptSupportOnly.setSelected(true);
         }
 
-        scriptSupportOff  .addItemListener(__ -> Settings.getInstance().setScriptSupport(ScriptSupport.off));
-        scriptSupportMixed.addItemListener(__ -> Settings.getInstance().setScriptSupport(ScriptSupport.on));
-        scriptSupportOnly .addItemListener(__ -> Settings.getInstance().setScriptSupport(ScriptSupport.only));
+        scriptSupportOff  .addItemListener(_ -> Settings.getInstance().setScriptSupport(ScriptSupport.off));
+        scriptSupportMixed.addItemListener(_ -> Settings.getInstance().setScriptSupport(ScriptSupport.on));
+        scriptSupportOnly .addItemListener(_ -> Settings.getInstance().setScriptSupport(ScriptSupport.only));
 
         return Optional.of(scriptSupportPanel);
     }

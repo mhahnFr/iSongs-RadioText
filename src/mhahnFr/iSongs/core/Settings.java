@@ -323,7 +323,7 @@ public class Settings implements DarkModeCallback {
     public boolean flush() {
         try {
             preferences.flush();
-        } catch (Exception __) {
+        } catch (Exception _) {
             return false;
         }
         return true;
@@ -340,7 +340,7 @@ public class Settings implements DarkModeCallback {
     public boolean remove() {
         try {
             preferences.removeNode();
-        } catch (Exception __) {
+        } catch (Exception _) {
             return false;
         }
         return true;

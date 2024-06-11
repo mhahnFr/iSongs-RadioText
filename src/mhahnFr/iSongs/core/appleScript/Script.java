@@ -73,7 +73,7 @@ public class Script {
                 }
                 return new String(allIn);
             }
-        } catch (final IOException e) {
+        } catch (final IOException _) {
             return null;
         }
     }
@@ -93,7 +93,7 @@ public class Script {
                 buffer.append((char) c);
             }
             content = buffer.toString();
-        } catch (final IOException e) {
+        } catch (final IOException _) {
             return null;
         }
         return new Script(content);
@@ -108,7 +108,7 @@ public class Script {
     public static Script loadScript(final String fileName) {
         try (final var stream = new FileInputStream(fileName)) {
             return load(stream);
-        } catch (final IOException e) {
+        } catch (final IOException _) {
             return null;
         }
     }
