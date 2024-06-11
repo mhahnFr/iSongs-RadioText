@@ -38,7 +38,9 @@ public class iSongs {
             System.setProperty("apple.awt.application.appearance", "system");
         }
 
-        Settings.setupLaf(Settings.getInstance().getDarkMode());
-        EventQueue.invokeLater(() -> new MainWindow().setVisible(true));
+        EventQueue.invokeLater(() -> {
+            Settings.setupLaf(Settings.getInstance().getRenderDarkMode());
+            new MainWindow().setVisible(true);
+        });
     }
 }
