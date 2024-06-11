@@ -53,7 +53,7 @@ public class English extends Locale {
             case MAIN_UI_CHECK_SETTINGS   -> { return "Please check the settings!";              }
             case MAIN_ERROR_HAPPENED      -> { return "Error happened";                          }
 
-            case SETTINGS_ACTIVATE_DARK_MODE    -> { return "Activate dark-mode";                                     }
+            case SETTINGS_CHOOSE_THEME          -> { return "Choose theme";                                           }
             case SETTINGS_CHOOSE_LANG           -> { return "Choose language";                                        }
             case SETTINGS_JSON_URI_DESC         -> { return "URL to the file containing the song data";               }
             case SETTINGS_SONG_INFO_FOLDER_DESC -> { return "The path where to store the song info";                  }

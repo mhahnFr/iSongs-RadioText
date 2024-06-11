@@ -48,7 +48,7 @@ public class German extends Locale {
             case MAIN_UI_CHECK_SETTINGS   -> { return "Bitte Einstellungen überprüfen!";                                }
             case MAIN_ERROR_HAPPENED      -> { return "Fehler aufgetreten";                                             }
 
-            case SETTINGS_ACTIVATE_DARK_MODE    -> { return "Dunkelmodus aktivieren";                                      }
+            case SETTINGS_CHOOSE_THEME          -> { return "Design wählen";                                               }
             case SETTINGS_CHOOSE_LANG           -> { return "Sprache wählen";                                              }
             case SETTINGS_JSON_URI_DESC         -> { return "Die URL zur Datei mit den aktuellen Titelinformationen";      }
             case SETTINGS_SONG_INFO_FOLDER_DESC -> { return "Der Ordner, in dem die Titelinfos gespeichert werden sollen"; }
