@@ -21,6 +21,8 @@
 
 package mhahnFr.iSongs.core;
 
+import mhahnFr.iSongs.core.locale.StringID;
+
 public enum DarkMode {
     DARK,
     LIGHT,
@@ -29,13 +31,12 @@ public enum DarkMode {
     private static final DarkMode[] values = DarkMode.values();
 
     public String toString() {
-        switch (this) {
-            // TODO: Translate!!!
-            case DARK  -> { return "dark";  }
-            case LIGHT -> { return "light"; }
-            case AUTO  -> { return "auto";  }
-        }
-        throw new IllegalStateException("Unhandled dark mode value!");
+        final var locale = Settings.getInstance().getLocale();
+        return switch (this) {
+            case DARK  -> locale.get(StringID.DARK_MODE_DARK);
+            case LIGHT -> locale.get(StringID.DARK_MODE_LIGHT);
+            case AUTO  -> locale.get(StringID.DARK_MODE_AUTO);
+        };
     }
 
     public static DarkMode createDarkMode(final int ordinal) {

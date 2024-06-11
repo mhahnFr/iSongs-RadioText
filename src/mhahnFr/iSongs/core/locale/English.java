@@ -38,45 +38,48 @@ public class English extends Locale {
 
     @Override
     public String get(final StringID id) {
-        switch (id) {
-            case MAIN_CURRENT_TITLE       -> { return "Current song";                            }
-            case MAIN_SAVE_TITLE          -> { return "Save song";                               }
-            case MAIN_SHOW_ERROR          -> { return "Show error";                              }
-            case MAIN_SETTINGS            -> { return "Settings";                                }
-            case MAIN_NO_SONG             -> { return "No title";                                }
-            case MAIN_NO_INTERPRETER      -> { return "No interpreter";                          }
-            case MAIN_STORED              -> { return "saved";                                   }
-            case MAIN_SAVE_ERROR          -> { return "Could not save song! Validate settings!"; }
-            case MAIN_ERROR               -> { return "Error";                                   }
-            case MAIN_NO_ERROR            -> { return "No error occurred";                       }
-            case MAIN_UI_STATE_SAVE_ERROR -> { return "Could not save UI state";                 }
-            case MAIN_UI_CHECK_SETTINGS   -> { return "Please check the settings!";              }
-            case MAIN_ERROR_HAPPENED      -> { return "Error happened";                          }
+        return switch (id) {
+            case MAIN_CURRENT_TITLE       -> "Current song";
+            case MAIN_SAVE_TITLE          -> "Save song";
+            case MAIN_SHOW_ERROR          -> "Show error";
+            case MAIN_SETTINGS            -> "Settings";
+            case MAIN_NO_SONG             -> "No title";
+            case MAIN_NO_INTERPRETER      -> "No interpreter";
+            case MAIN_STORED              -> "saved";
+            case MAIN_SAVE_ERROR          -> "Could not save song! Validate settings!";
+            case MAIN_ERROR               -> "Error";
+            case MAIN_NO_ERROR            -> "No error occurred";
+            case MAIN_UI_STATE_SAVE_ERROR -> "Could not save UI state";
+            case MAIN_UI_CHECK_SETTINGS   -> "Please check the settings!";
+            case MAIN_ERROR_HAPPENED      -> "Error happened";
 
-            case SETTINGS_CHOOSE_THEME          -> { return "Choose theme";                                           }
-            case SETTINGS_CHOOSE_LANG           -> { return "Choose language";                                        }
-            case SETTINGS_JSON_URI_DESC         -> { return "URL to the file containing the song data";               }
-            case SETTINGS_SONG_INFO_FOLDER_DESC -> { return "The path where to store the song info";                  }
-            case SETTINGS_CHANGE                -> { return "Change";                                                 }
-            case SETTINGS_SONG_REFRESH_RATE     -> { return "Refresh rate for fetching song data (in milliseconds)";  }
-            case SETTINGS_REMOVE                -> { return "Delete settings";                                        }
-            case SETTINGS_REMOVE_ERROR          -> { return "Error occurred while deleting settings";                 }
-            case SETTINGS_SAVE_ERROR            -> { return "Could not save settings";                                }
-            case SETTINGS_LANGUAGE_RESTART      -> { return "Restart the app for the language change to take effect"; }
-            case SETTINGS_APPLESCRIPT_DESC      -> { return "Apple Event based recognition";                          }
-            case SETTINGS_APPLESCRIPT_OFF       -> { return "Disabled";                                               }
-            case SETTINGS_APPLESCRIPT_ON        -> { return "Activated";                                              }
-            case SETTINGS_APPLESCRIPT_ONLY      -> { return "Only (Internet based recognition disabled)";             }
-            case SETTINGS_ALLOW_NO_SONG         -> { return "Show no song recognized";                                }
-            case SETTINGS_REMOVE_REALLY         -> { return """
-                                                            Really delete settings?
-                                                            This action cannot be undone.
-                                                            The application will quit afterwards.
-                                                            """; }
+            case SETTINGS_CHOOSE_THEME          -> "Choose theme";
+            case SETTINGS_CHOOSE_LANG           -> "Choose language";
+            case SETTINGS_JSON_URI_DESC         -> "URL to the file containing the song data";
+            case SETTINGS_SONG_INFO_FOLDER_DESC -> "The path where to store the song info";
+            case SETTINGS_CHANGE                -> "Change";
+            case SETTINGS_SONG_REFRESH_RATE     -> "Refresh rate for fetching song data (in milliseconds)";
+            case SETTINGS_REMOVE                -> "Delete settings";
+            case SETTINGS_REMOVE_ERROR          -> "Error occurred while deleting settings";
+            case SETTINGS_SAVE_ERROR            -> "Could not save settings";
+            case SETTINGS_LANGUAGE_RESTART      -> "Restart the app for the language change to take effect";
+            case SETTINGS_APPLESCRIPT_DESC      -> "Apple Event based recognition";
+            case SETTINGS_APPLESCRIPT_OFF       -> "Disabled";
+            case SETTINGS_APPLESCRIPT_ON        -> "Activated";
+            case SETTINGS_APPLESCRIPT_ONLY      -> "Only (Internet based recognition disabled)";
+            case SETTINGS_ALLOW_NO_SONG         -> "Show no song recognized";
+            case SETTINGS_REMOVE_REALLY         -> """
+                                                   Really delete settings?
+                                                   This action cannot be undone.
+                                                   The application will quit afterwards.
+                                                   """;
 
-            case INTERNAL_NO_TRACK_RECOGNIZED -> { return "No track recognized!"; }
-            case INTERNAL_SAVE_FOLDER_UNSET   -> { return "Save folder not set!"; }
-        }
-        throw new IllegalStateException("Missing an english word for: " + id + "!");
+            case DARK_MODE_AUTO  -> "automatic";
+            case DARK_MODE_LIGHT -> "light";
+            case DARK_MODE_DARK  -> "dark";
+
+            case INTERNAL_NO_TRACK_RECOGNIZED -> "No track recognized!";
+            case INTERNAL_SAVE_FOLDER_UNSET   -> "Save folder not set!";
+        };
     }
 }
