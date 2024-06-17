@@ -26,7 +26,7 @@ In order to get started, simply download the latest release [here][2] and instal
 #### Building from source
 You can build iSongs-RadioText yourself using Gradle.
 
-Make sure you have installed a Java Development Kit in version 19 or higher. It should include `jmods`.
+Make sure you have installed a Java Development Kit in version 22 or higher. It should include `jmods`.
 
 > [!NOTE]
 > On **Linux** the package `rpm-build` (Red Hat Linux) or `fakeroot` (Ubuntu Linux) is
