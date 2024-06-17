@@ -77,9 +77,13 @@ public class InfoLoader {
     private Song lastJson;
     /** The last song recognized by the AppleScript based loader.                       */
     private Song lastScript;
+    /** Caches whether to display no song recognized.                                   */
     private boolean allowNoSong;
+    /** Indicates whether an {@link ExecutionException} has already been forwarded.     */
     private boolean executionExceptionForwarded;
+    /** Indicates whether an JSON related exception has already been forwarded.         */
     private boolean jsonExceptionForwarded;
+    /** Indicates whether a URI related exception has already been forwarded.           */
     private boolean uriExceptionForwarded;
 
     /**
