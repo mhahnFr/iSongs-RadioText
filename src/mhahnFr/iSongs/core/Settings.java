@@ -110,8 +110,8 @@ public class Settings implements DarkModeCallback {
      * @return the state of the activation of the dark mode
      */
     public DarkMode getDarkMode() {
-        return DarkMode.createDarkMode(preferences.getInt(Key.DARK_MODE, NDL.isAvailable() ? DarkMode.AUTO.ordinal()
-                                                                                           : DarkMode.LIGHT.ordinal()));
+        return DarkMode.createDarkMode(preferences.getInt(Key.DARK_MODE, NDL.couldLoad() ? DarkMode.AUTO.ordinal()
+                                                                                         : DarkMode.LIGHT.ordinal()));
     }
 
     @Override
@@ -137,7 +137,7 @@ public class Settings implements DarkModeCallback {
             case LIGHT -> { return false; }
             case DARK  -> { return true;  }
             case AUTO  -> {
-                return NDL.isAvailable() && NDL.queryDarkMode();
+                return NDL.couldLoad() && NDL.queryDarkMode();
             }
         }
         return false;

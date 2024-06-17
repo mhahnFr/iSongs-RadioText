@@ -130,7 +130,7 @@ tasks.register('maybeAppleScript', Exec) {
 dependencies {
     implementation 'com.formdev:flatlaf:3.4.1'
     implementation 'mhahnfr:jutilities:0.1.1'
-    implementation 'mhahnfr:ndl4java:0.1'
+    implementation 'mhahnfr:ndl4java:0.2'
 }
 
 jar {
