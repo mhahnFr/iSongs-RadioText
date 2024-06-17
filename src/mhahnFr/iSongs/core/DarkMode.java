@@ -23,13 +23,24 @@ package mhahnFr.iSongs.core;
 
 import mhahnFr.iSongs.core.locale.StringID;
 
+/**
+ * This enumeration contains the possible dark mode states.
+ *
+ * @author mhahnFr
+ * @since 11.06.24
+ */
 public enum DarkMode {
+    /** Indicates the dark state.      */
     DARK,
+    /** Indicates the light state.     */
     LIGHT,
+    /** Indicates the automatic state. */
     AUTO;
 
+    /** The cached possible values.    */
     private static final DarkMode[] values = DarkMode.values();
 
+    @Override
     public String toString() {
         final var locale = Settings.getInstance().getLocale();
         return switch (this) {
@@ -39,6 +50,13 @@ public enum DarkMode {
         };
     }
 
+    /**
+     * Returns the {@link DarkMode} value corresponding to the given ordinal value.
+     * The lookup list is cached.
+     *
+     * @param ordinal the ordinal value of the enumeration value
+     * @return the appropriate enumeration value
+     */
     public static DarkMode createDarkMode(final int ordinal) {
         return values[ordinal];
     }
