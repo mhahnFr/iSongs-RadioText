@@ -28,7 +28,7 @@ plugins {
 }
 
 group 'mhahnFr'
-version '3.6'
+version '3.6.1'
 
 // Adapt this path to the folder of the native NDL library file!
 def NDL_PATH = '<path/to/NDL/>'
@@ -111,7 +111,8 @@ tasks.register('deploy', Exec) {
                             '--description',  'Radio-Text part of iSongs',
                             '--vendor',       project.group,
                             '--about-url',    'https://github.com/mhahnFr/iSongs-RadioText',
-                            '--icon',         icon
+                            '--icon',         icon,
+                            '--java-options', '--enable-native-access=ALL-UNNAMED'
 }
 
 tasks.register('maybeAppleScript', Exec) {
