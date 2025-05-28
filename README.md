@@ -61,7 +61,7 @@ On macOS, the songs can alternatively or additionally be recognized by sending A
 ## Final notes
 This project is licensed under the terms of the GNU GPL version 3 or later.
 
-© Copyright 2014, 2019, 2023 - 2024 [mhahnFr][1]
+© Copyright 2014, 2019, 2023 - 2025 [mhahnFr][1]
 
 [1]: https://github.com/mhahnFr
 [2]: https://github.com/mhahnFr/iSongs-RadioText/releases/latest

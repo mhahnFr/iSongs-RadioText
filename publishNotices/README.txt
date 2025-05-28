@@ -1,4 +1,4 @@
-This distribution of iSongs-RadioText: Copyright (C) 2024 mhahnFr
+This distribution of iSongs-RadioText: Copyright (C) 2025 mhahnFr
 
 This distribution of iSongs-RadioText is licensed under the terms of the GNU GPL version 3 or later.
 See the file GPLv3.txt in the folder licenses.

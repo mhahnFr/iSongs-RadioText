@@ -1,7 +1,7 @@
 /*
  * iSongs-RadioText - Radio-text part of iSongs.
  *
- * Copyright (C) 2024  mhahnFr
+ * Copyright (C) 2024 - 2025  mhahnFr
  *
  * This file is part of the iSongs-RadioText.
  *
@@ -106,7 +106,7 @@ tasks.register('deploy', Exec) {
     commandLine 'jpackage', '--input',        'build/libs',
                             '--name',         project.name,
                             '--main-jar',     project.name + '-' + version + '.jar',
-                            '--copyright',    'Copyright © 2014 - 2024 mhahnFr',
+                            '--copyright',    'Copyright © 2014 - 2025 mhahnFr',
                             '--app-version',  version,
                             '--description',  'Radio-Text part of iSongs',
                             '--vendor',       project.group,
