@@ -1,7 +1,7 @@
 /*
  * iSongs-RadioText - Radio-text part of iSongs.
  *
- * Copyright (C) 2023 - 2024  mhahnFr
+ * Copyright (C) 2023 - 2025  mhahnFr
  *
  * This file is part of the iSongs-RadioText.
  *
@@ -290,7 +290,7 @@ public class MainWindow extends JFrame implements DarkModeListener {
         } else {
             setSize(width, height);
         }
-        if (x < 0 || y < 0) {
+        if (x == Integer.MIN_VALUE || y == Integer.MIN_VALUE) {
             setLocationRelativeTo(null);
         } else {
             setLocation(x, y);

@@ -1,7 +1,7 @@
 /*
  * iSongs-RadioText - Radio-text part of iSongs.
  *
- * Copyright (C) 2023 - 2024  mhahnFr
+ * Copyright (C) 2023 - 2025  mhahnFr
  *
  * This file is part of the iSongs-RadioText.
  *
@@ -91,7 +91,7 @@ public class Settings implements DarkModeCallback {
      * @return the X-coordinate of the window's location
      */
     public int getWindowX() {
-        return preferences.getInt(Key.WINDOW_X, -1);
+        return preferences.getInt(Key.WINDOW_X, Integer.MIN_VALUE);
     }
 
     /**
@@ -101,7 +101,7 @@ public class Settings implements DarkModeCallback {
      * @return the Y-coordinate of the window's location
      */
     public int getWindowY() {
-        return preferences.getInt(Key.WINDOW_Y, -1);
+        return preferences.getInt(Key.WINDOW_Y, Integer.MIN_VALUE);
     }
 
     /**
